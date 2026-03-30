@@ -1012,7 +1012,7 @@
 
     try {
       // SUBSTITUA PELA SUA URL DO RAILWAY
-      const RAILWAY_URL = 'ghl-backend-production-a810.up.railway.app'; 
+      const RAILWAY_URL = 'https://apply.joseoliveirafilms.com/lead';
       
       const response = await fetch(RAILWAY_URL, {
         method: 'POST',
@@ -1028,45 +1028,4 @@
     }
   }
 ;
-  var inputs = document.querySelectorAll('input[type=text], input[type=email], input[type=url]');
-  inputs.forEach(function(el) {
-    if (el.placeholder === 'José') data['first_name'] = el.value;
-    else if (el.placeholder === 'Oliveira') data['last_name'] = el.value;
-    else if (el.placeholder === 'jose@yourbrand.com') data['email'] = el.value;
-    else if (el.placeholder === 'www.yourbrand.com') data['website'] = el.value;
-    else if (el.placeholder === '@yourbrand') data['instagram'] = el.value;
-  });
-
-  var country = document.getElementById('phone-country');
-  var phone = document.getElementById('phone');
-  if (country && phone) data['phone'] = country.value + ' ' + phone.value;
-
-  var tas = document.querySelectorAll('textarea');
-  if (tas[0]) data['ideal_client'] = tas[0].value;
-  if (tas[1]) data['vision'] = tas[1].value;
-  if (tas[2]) data['additional'] = tas[2].value;
-
-  var sels = document.querySelectorAll('select');
-  sels.forEach(function(sel) {
-    if (sel.id === 'phone-country') return;
-    var label = sel.previousElementSibling;
-    if (label) data[label.textContent.replace('*','').trim().toLowerCase().replace(/ /g,'_')] = sel.value;
-  });
-
   
-  var timelineVal = document.getElementById('timeline-input') ? document.getElementById('timeline-input').value : '';
-  if (timelineVal) data['timeline'] = timelineVal;
-
-  data['results_matter'] = Array.from(document.querySelectorAll('#results-select input:checked')).map(i => i.parentElement.innerText).join(', ');
-  data['usage'] = Array.from(document.querySelectorAll('#usage-select input:checked')).map(i => i.parentElement.innerText).join(', ');
-  data['decision_makers'] = Array.from(document.querySelectorAll('#decision-select input:checked')).map(i => i.parentElement.innerText).join(', ');
-
-  // Send via XMLHttpRequest
-
-  // Send via XMLHttpRequest with no-cors equivalent
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'https://services.leadconnectorhq.com/hooks/miVDl3ZCyFKR8jskk3jV/webhook-trigger/f602cc7f-baf7-40d9-957a-27273f3b563a', true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(JSON.stringify(data));
-}
-</script>
