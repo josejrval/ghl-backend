@@ -37,7 +37,7 @@ app.post('/lead', async (req, res) => {
 
 // ✅ fallback (qualquer rota volta pro form)
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
+  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5_updated.html'));
 });
 
 app.listen(PORT, () => {
