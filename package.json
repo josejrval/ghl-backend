@@ -10,7 +10,3 @@
     "cors": "^2.8.5"
   }
 }
-
-git add .
-git commit -m "remove node-fetch"
-git push
