@@ -1,4 +1,4 @@
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const express = require('express');
 const cors = require('cors');
@@ -10,20 +10,15 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// 👉 SERVE ARQUIVOS DA PASTA PUBLIC
+// ✅ servir arquivos da pasta public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 👉 ROTA PRINCIPAL
+// ✅ rota principal (abre o form)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
 });
 
-// ✅ fallback (resolve Not Found)
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
-});
-
-// 👉 RECEBE LEAD
+// ✅ receber leads (ANTES do fallback)
 app.post('/lead', async (req, res) => {
   const leadData = req.body;
   console.log('NOVO LEAD:', leadData);
@@ -37,10 +32,16 @@ app.post('/lead', async (req, res) => {
 
     res.json({ status: 'ok' });
   } catch (e) {
-    res.status(500).json({ error: 'erro' });
+    console.error('Erro:', e);
+    res.status(500).json({ error: 'erro ao enviar lead' });
   }
 });
 
+// ✅ fallback (SEMPRE POR ÚLTIMO)
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
+});
+
 app.listen(PORT, () => {
-  console.log(`Rodando na porta ${PORT}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
