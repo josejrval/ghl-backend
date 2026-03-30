@@ -7,7 +7,6 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
@@ -16,8 +15,12 @@ app.get('/', (req, res) => {
 
 app.post('/lead', async (req, res) => {
   const leadData = req.body;
-  console.log('NOVO LEAD:', leadData);
+  console.log('NOVO LEAD:', JSON.stringify(leadData, null, 2));
 
+  // Responde ao frontend IMEDIATAMENTE (evita timeout/erro no form)
+  res.json({ status: 'ok' });
+
+  // Envia pro Make em background (sem bloquear a resposta)
   try {
     const fetch = (await import('node-fetch')).default;
 
@@ -28,11 +31,10 @@ app.post('/lead', async (req, res) => {
     });
 
     console.log('✅ Make respondeu:', response.status);
-    res.json({ status: 'ok' });
 
   } catch (error) {
-    console.error('❌ Erro ao enviar:', error);
-    res.status(500).json({ error: 'erro ao enviar lead' });
+    console.error('❌ Erro ao enviar pro Make:', error.message);
+    // Não afeta o usuário — já recebeu "ok"
   }
 });
 
