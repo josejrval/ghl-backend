@@ -18,6 +18,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
 });
 
+// ✅ fallback (resolve Not Found)
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
+});
+
 // 👉 RECEBE LEAD
 app.post('/lead', async (req, res) => {
   const leadData = req.body;
