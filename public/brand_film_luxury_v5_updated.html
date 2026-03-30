@@ -23,14 +23,12 @@
     min-height: 100vh;
   }
 
-  /* Layout */
   .page { background: #F7F4EF !important; width: 100%; min-height: 100vh;
     display: grid;
     grid-template-columns: 380px 1fr;
     min-height: 100vh;
   }
 
-  /* Left panel */
   .sidebar {
     background: var(--ink); min-height: 100vh;
     padding: 60px 48px;
@@ -93,33 +91,12 @@
     margin-bottom: 40px;
   }
 
-  .sidebar-stat {
-    border-top: 1px solid rgba(255,255,255,0.08);
-    padding-top: 28px;
-  }
-
-  .sidebar-stat-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 36px;
-    font-weight: 300;
-    color: var(--gold-light);
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-
-  .sidebar-stat-label {
-    font-size: 11px;
-    color: rgba(255,255,255,0.6);
-    letter-spacing: .06em;
-  }
-
   .sidebar-footer {
     font-size: 11px;
     color: rgba(255,255,255,0.5);
     line-height: 1.6;
   }
 
-  /* Right panel — form */
   .form-panel { background: #F7F4EF !important; min-height: 100vh;
     padding: 60px 64px 80px;
     max-width: 780px;
@@ -155,10 +132,7 @@
     line-height: 1.7;
   }
 
-  /* Sections */
-  .section {
-    margin-bottom: 48px;
-  }
+  .section { margin-bottom: 48px; }
 
   .section-header {
     display: flex;
@@ -192,7 +166,6 @@
     background: var(--border);
   }
 
-  /* Fields */
   .field { margin-bottom: 22px; }
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
@@ -256,18 +229,8 @@
     line-height: 1.7;
   }
 
-  /* Checkboxes & Radios */
-  .options-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .options-col {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+  .options-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .options-col { display: flex; flex-direction: column; gap: 8px; }
 
   .option-item {
     display: inline-flex;
@@ -282,15 +245,8 @@
     user-select: none;
   }
 
-  .option-item:hover {
-    border-color: var(--gold);
-    background: var(--white);
-  }
-
-  .option-item input[type=checkbox],
-  .option-item input[type=radio] {
-    display: none;
-  }
+  .option-item:hover { border-color: var(--gold); background: var(--white); }
+  .option-item input[type=checkbox], .option-item input[type=radio] { display: none; }
 
   .option-item::before {
     content: '';
@@ -302,23 +258,10 @@
     transition: background .2s;
   }
 
-  .option-item:has(input:checked) {
-    border-color: var(--gold);
-    background: var(--ink);
-  }
-
-  .option-item:has(input:checked)::before {
-    background: var(--gold);
-  }
-
-  .option-item:has(input:checked) span {
-    color: var(--white);
-  }
-
-  .options-col .option-item {
-    border-radius: 2px;
-    width: 100%;
-  }
+  .option-item:has(input:checked) { border-color: var(--gold); background: var(--ink); }
+  .option-item:has(input:checked)::before { background: var(--gold); }
+  .option-item:has(input:checked) span { color: var(--white); }
+  .options-col .option-item { border-radius: 2px; width: 100%; }
 
   .option-item span {
     font-family: 'DM Sans', sans-serif;
@@ -330,13 +273,6 @@
     transition: color .2s;
   }
 
-  .options-col {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  /* Anchor box */
   .anchor-box {
     background: var(--ink);
     border-radius: 2px;
@@ -364,17 +300,7 @@
     line-height: 1.7;
   }
 
-  .anchor-text strong {
-    color: var(--gold-light);
-    font-weight: 400;
-  }
-
-  /* Submit */
-  .submit-section {
-    border-top: 1px solid var(--border);
-    padding-top: 36px;
-    margin-top: 12px;
-  }
+  .anchor-text strong { color: var(--gold-light); font-weight: 400; }
 
   .submit-btn {
     display: flex;
@@ -407,7 +333,6 @@
   }
 
   .submit-btn:hover { background: #2A2520; }
-
   .submit-btn svg { width: 16px; height: 16px; opacity: .6; }
 
   .consent-text {
@@ -418,30 +343,19 @@
     text-align: center;
   }
 
-  /* Responsive */
   @media (max-width: 900px) {
-    .page { background: #F7F4EF !important; width: 100%; min-height: 100vh; grid-template-columns: 1fr; }
+    .page { grid-template-columns: 1fr; }
     .sidebar { position: relative; height: auto; padding: 48px 32px; }
-    .form-panel { background: #F7F4EF !important; min-height: 100vh; padding: 40px 32px 60px; }
-    .options-grid { grid-template-columns: 1fr; }
+    .form-panel { padding: 40px 32px 60px; }
     .field-row { grid-template-columns: 1fr; }
   }
 
-  textarea::placeholder {
-    color: transparent;
-  }
-  textarea:focus::placeholder {
-    color: #C4C0B8;
-    transition: color .2s;
-  }
-  input::placeholder {
-    color: #C4C0B8;
-  }
+  textarea::placeholder { color: transparent; }
+  textarea:focus::placeholder { color: #C4C0B8; transition: color .2s; }
+  input::placeholder { color: #C4C0B8; }
 
-
-  /* Custom Dropdown Styles */
   .custom-select { position: relative; user-select: none; margin-bottom: 8px; }
-  .select-trigger { 
+  .select-trigger {
     background: var(--white); border: 1px solid var(--border); padding: 12px 16px; cursor: pointer;
     display: flex; justify-content: space-between; align-items: center; font-size: 13px; border-radius: 2px;
     color: var(--ink); font-weight: 300;
@@ -468,8 +382,6 @@
   .option-row span { font-size: 12px; color: var(--ink-light); font-weight: 300; }
   .option-row.selected { background: var(--gold-faint); }
 
-
-  /* Luxury UX Enhancements */
   .form-step { display: none; animation: fadeIn 0.6s ease-out forwards; }
   .form-step.active { display: block; }
 
@@ -490,36 +402,19 @@
     content: ''; position: absolute; bottom: -21px; left: 0; width: 100%; height: 2px; background: var(--gold);
   }
 
-  
   .nav-buttons { display: flex; gap: 16px; margin-top: 40px; width: 100%; }
   .btn-outline {
     flex: 1; padding: 18px; background: transparent; border: 1px solid var(--border);
     color: var(--ink-light); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
     cursor: pointer; transition: all .3s; border-radius: 2px;
   }
-  .submit-btn {
-    flex: 2; display: flex; align-items: center; justify-content: center; gap: 12px;
-    padding: 18px; background: var(--ink); color: var(--white); border: none;
-    border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 11px;
-    font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
-    cursor: pointer; transition: background .2s; position: relative; overflow: hidden;
-  }
-
-  .btn-outline {
-    flex: 1; padding: 18px; background: transparent; border: 1px solid var(--border);
-    color: var(--ink-light); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
-    cursor: pointer; transition: all .3s;
-  }
+  .submit-btn { flex: 2; }
   .btn-outline:hover { border-color: var(--ink); color: var(--ink); }
 
-  .submit-btn { flex: 2; }
-
-  /* Refined Inputs */
   .field input:focus, .field select:focus, .field textarea:focus {
     border-color: var(--gold);
     box-shadow: 0 4px 20px rgba(168,132,74,0.05);
   }
-
 
   .field.error input, .field.error select, .field.error textarea {
     border-color: var(--error) !important;
@@ -530,17 +425,14 @@
     text-transform: uppercase; letter-spacing: 0.05em;
   }
   .field.error .error-msg { display: block; }
-
 </style>
-<div class="page">
 
-  <!-- Sidebar -->
+<div class="page">
   <aside class="sidebar">
     <div>
       <div class="sidebar-logo">José Oliveira Films</div>
       <div class="sidebar-eyebrow" style="margin-top:6px;margin-bottom:0;">Brand Film Application</div>
     </div>
-
     <div class="sidebar-main">
       <h1 class="sidebar-title">We don't make videos.<br><em>We build desire.</em></h1>
       <p class="sidebar-body">
@@ -549,15 +441,12 @@
         and whether your brand is the right fit for us.
       </p>
     </div>
-
     <div class="sidebar-footer">
       All information is kept strictly confidential<br>and reviewed only by our internal team.
     </div>
   </aside>
 
-  <!-- Form -->
   <main class="form-panel">
-
     <div class="form-header">
       <div class="form-step-label">Application — 2026</div>
       <h2>Tell us about your brand<br>and your vision.</h2>
@@ -565,344 +454,314 @@
     </div>
 
     <form>
-
       <div class="form-step active" id="step1">
-    <div class="step-indicator">
-      <div class="step-dot active">01 Identity</div>
-      <div class="step-dot">02 Vision</div>
-      <div class="step-dot">03 Alignment</div>
-    </div>
-<!-- Section 1 -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">1</div>
-          <div class="section-title">About you</div>
-          <div class="section-divider"></div>
+        <div class="step-indicator">
+          <div class="step-dot active">01 Identity</div>
+          <div class="step-dot">02 Vision</div>
+          <div class="step-dot">03 Alignment</div>
         </div>
-
-        <div class="field field-row">
-          <div>
-            <label>First name *</label>
-            <input type="text" placeholder="José">
+        <div class="section">
+          <div class="section-header">
+            <div class="section-num">1</div>
+            <div class="section-title">About you</div>
+            <div class="section-divider"></div>
           </div>
-          <div>
-            <label>Last name *</label>
-            <input type="text" placeholder="Oliveira">
+          <div class="field field-row">
+            <div>
+              <label>First name *</label>
+              <input type="text" name="first_name" placeholder="José">
+            </div>
+            <div>
+              <label>Last name *</label>
+              <input type="text" name="last_name" placeholder="Oliveira">
+            </div>
           </div>
-        </div>
-
-        <div class="field field-row">
-          <div>
-            <label>Email *</label>
-            <input type="email" placeholder="jose@yourbrand.com">
+          <div class="field field-row">
+            <div>
+              <label>Email *</label>
+              <input type="email" name="email" placeholder="jose@yourbrand.com">
+            </div>
+            <div>
+              <label>Phone *</label>
+              <div style="display:flex;gap:0;width:100%;">
+                <select id="phone-country" style="padding:11px 10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-right:none;border-radius:2px 0 0 2px;outline:none;cursor:pointer;min-width:110px;">
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+55">🇧🇷 +55</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+1-CA">🇨🇦 +1</option>
+                  <option value="+61">🇦🇺 +61</option>
+                  <option value="+33">🇫🇷 +33</option>
+                  <option value="+49">🇩🇪 +49</option>
+                  <option value="+34">🇪🇸 +34</option>
+                  <option value="+39">🇮🇹 +39</option>
+                  <option value="+351">🇵🇹 +351</option>
+                  <option value="+971">🇦🇪 +971</option>
+                  <option value="+52">🇲🇽 +52</option>
+                  <option value="+54">🇦🇷 +54</option>
+                  <option value="+57">🇨🇴 +57</option>
+                  <option value="+56">🇨🇱 +56</option>
+                  <option value="+81">🇯🇵 +81</option>
+                  <option value="+86">🇨🇳 +86</option>
+                  <option value="+91">🇮🇳 +91</option>
+                  <option value="+27">🇿🇦 +27</option>
+                </select>
+                <input type="tel" id="phone" placeholder="(000) 000-0000" style="width:100%;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-left:none;border-radius:0 2px 2px 0;outline:none;box-sizing:border-box;">
+              </div>
+            </div>
           </div>
-          <div>
-            <label>Phone *</label>
-            <div style="display:flex;gap:0;width:100%;">
-        <select id="phone-country" style="padding:11px 10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-right:none;border-radius:2px 0 0 2px;outline:none;cursor:pointer;min-width:110px;">
-          <option value="+1">🇺🇸 +1</option>
-          <option value="+55">🇧🇷 +55</option>
-          <option value="+44">🇬🇧 +44</option>
-          <option value="+1-CA">🇨🇦 +1</option>
-          <option value="+61">🇦🇺 +61</option>
-          <option value="+33">🇫🇷 +33</option>
-          <option value="+49">🇩🇪 +49</option>
-          <option value="+34">🇪🇸 +34</option>
-          <option value="+39">🇮🇹 +39</option>
-          <option value="+351">🇵🇹 +351</option>
-          <option value="+971">🇦🇪 +971</option>
-          <option value="+52">🇲🇽 +52</option>
-          <option value="+54">🇦🇷 +54</option>
-          <option value="+57">🇨🇴 +57</option>
-          <option value="+56">🇨🇱 +56</option>
-          <option value="+81">🇯🇵 +81</option>
-          <option value="+86">🇨🇳 +86</option>
-          <option value="+91">🇮🇳 +91</option>
-          <option value="+27">🇿🇦 +27</option>
-        </select>
-        <input type="tel" id="phone" placeholder="(000) 000-0000"
-        style="width:100%;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-left:none;border-radius:0 2px 2px 0;outline:none;box-sizing:border-box;"></div
-          </div>
-        </div>
-
-        <div class="field field-row">
-          <div>
-            <label>Website</label>
-            <input type="url" placeholder="www.yourbrand.com">
-          </div>
-          <div>
-            <label>Instagram *</label>
-            <input type="text" placeholder="@yourbrand">
+          <div class="field field-row">
+            <div>
+              <label>Website</label>
+              <input type="url" name="website" placeholder="www.yourbrand.com">
+            </div>
+            <div>
+              <label>Instagram *</label>
+              <input type="text" name="instagram" placeholder="@yourbrand">
+            </div>
           </div>
         </div>
-      </div>
-
-      
         <div class="nav-buttons">
-          <button type="button" onclick="goToStep(2)" class="submit-btn">Continue to Vision</button></div>
-        </div>
-</div><div class="form-step" id="step2">
-    <div class="step-indicator">
-      <div class="step-dot" onclick="goToStep(1)">01 Identity</div>
-      <div class="step-dot active">02 Vision</div>
-      <div class="step-dot">03 Alignment</div>
-    </div>
-<!-- Section 2 -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">2</div>
-          <div class="section-title">Your vision</div>
-          <div class="section-divider"></div>
-        </div>
-
-        <div class="field">
-          <label>Filming Location *</label>
-          <input type="text" id="project_location" placeholder="City, Country or Venue">
-          <span class="error-msg">This field is required.</span>
-        </div>
-
-        <div class="field">
-          <label>Cinematic Direction *</label>
-          <select>
-            <option value="">Select...</option>
-            <option>Founder / Personal Brand Film</option>
-            <option>Cinematic Bio Film</option>
-            <option>Luxury Property Film</option>
-            <option>Developer / Project Presentation</option>
-            <option>Brand Documentary / Legacy Film</option>
-            <option>Campaign / Launch Film</option>
-            <option>Recruitment / Team Film</option>
-            <option>Event / Conference Film</option>
-            <option>Other</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Describe the client you most want to attract *</label>
-          <span class="sublabel">Who are they, what do they value, and what needs to be true about your brand for them to choose you over anyone else?</span>
-          <textarea placeholder="My ideal client is someone who..."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Describe your concept and vision for the film *</label>
-          <span class="sublabel">Don't worry about production details. Focus on the feeling, the story, and what you want people to experience when they watch it.</span>
-          <textarea placeholder="I want this film to feel like..."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Primary goal of this film *</label>
-          <select>
-            <option value="">Select...</option>
-            <option>Establish Brand Authority</option>
-            <option>Position Myself Within The Luxury Market</option>
-            <option>Build Emotional Connection With My Audience</option>
-            <option>Humanize My Brand Through Storytelling</option>
-            <option>Attract High-Level Clients & Opportunities</option>
-            <option>Elevate Brand Perception</option>
-            <option>Support Brand Expansion & Growth</option>
-            <option>Launch / Reintroduce My Brand</option>
-            <option>Create A Long-Term Brand Asset</option>
-            <option>Other</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>What results matter most? *</label>
-          <span class="sublabel">Select all that apply.</span>
-          <div class="custom-select" id="results-select">
-            <div class="select-trigger">Select options...</div>
-            <div class="options-menu">
-              <div class="option-row"><input type="checkbox" value="Attract HNW Clients"><span>Attract High-Net-Worth Clients</span></div>
-              <div class="option-row"><input type="checkbox" value="Build Trust"><span>Build Trust Before First Contact</span></div>
-              <div class="option-row"><input type="checkbox" value="Market Leader"><span>Position Myself As A Market Leader</span></div>
-              <div class="option-row"><input type="checkbox" value="Differentiate"><span>Differentiate From Competitors</span></div>
-              <div class="option-row"><input type="checkbox" value="Elevate Perception"><span>Elevate Brand Perception</span></div>
-              <div class="option-row"><input type="checkbox" value="Luxury Authority"><span>Establish Luxury Market Authority</span></div>
-              <div class="option-row"><input type="checkbox" value="Emotional Connection"><span>Strengthen Emotional Connection</span></div>
-              <div class="option-row"><input type="checkbox" value="Long-Term Asset"><span>Create A Long-Term Brand Asset</span></div>
-              <div class="option-row"><input type="checkbox" value="Brand Expansion"><span>Support Brand Expansion</span></div>
-              <div class="option-row"><input type="checkbox" value="Higher-Level Opps"><span>Open Higher-Level Opportunities</span></div>
-              <div class="option-row"><input type="checkbox" value="Media Exposure"><span>Gain Media / Press Exposure</span></div>
-              <div class="option-row"><input type="checkbox" value="Legacy Piece"><span>Leave A Cinematic Legacy Piece</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Where will this film be used? *</label>
-          <span class="sublabel">Select all that apply.</span>
-          <div class="custom-select" id="usage-select">
-            <div class="select-trigger">Select platforms...</div>
-            <div class="options-menu">
-              <div class="option-row"><input type="checkbox" value="Website"><span>Website / Homepage</span></div>
-              <div class="option-row"><input type="checkbox" value="Instagram"><span>Instagram</span></div>
-              <div class="option-row"><input type="checkbox" value="YouTube"><span>YouTube</span></div>
-              <div class="option-row"><input type="checkbox" value="LinkedIn"><span>LinkedIn</span></div>
-              <div class="option-row"><input type="checkbox" value="Paid Ads"><span>Paid Advertising</span></div>
-              <div class="option-row"><input type="checkbox" value="Listing Presentations"><span>Listing Presentations</span></div>
-              <div class="option-row"><input type="checkbox" value="Investor Decks"><span>Investor / Developer Decks</span></div>
-              <div class="option-row"><input type="checkbox" value="Brand Launch"><span>Brand Launch / Campaign</span></div>
-              <div class="option-row"><input type="checkbox" value="Recruitment"><span>Recruitment / Team Growth</span></div>
-              <div class="option-row"><input type="checkbox" value="Multi-Platform"><span>Multi-Platform Campaign</span></div>
-            </div>
-          </div>
+          <button type="button" onclick="goToStep(2)" class="submit-btn">Continue to Vision</button>
         </div>
       </div>
 
-      
+      <div class="form-step" id="step2">
+        <div class="step-indicator">
+          <div class="step-dot" onclick="goToStep(1)">01 Identity</div>
+          <div class="step-dot active">02 Vision</div>
+          <div class="step-dot">03 Alignment</div>
+        </div>
+        <div class="section">
+          <div class="section-header">
+            <div class="section-num">2</div>
+            <div class="section-title">Your vision</div>
+            <div class="section-divider"></div>
+          </div>
+          <div class="field">
+            <label>Filming Location *</label>
+            <input type="text" id="project_location" placeholder="City, Country or Venue">
+            <span class="error-msg">This field is required.</span>
+          </div>
+          <div class="field">
+            <label>Cinematic Direction *</label>
+            <select>
+              <option value="">Select...</option>
+              <option>Founder / Personal Brand Film</option>
+              <option>Cinematic Bio Film</option>
+              <option>Luxury Property Film</option>
+              <option>Developer / Project Presentation</option>
+              <option>Brand Documentary / Legacy Film</option>
+              <option>Campaign / Launch Film</option>
+              <option>Recruitment / Team Film</option>
+              <option>Event / Conference Film</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Describe the client you most want to attract *</label>
+            <span class="sublabel">Who are they, what do they value, and what needs to be true about your brand for them to choose you over anyone else?</span>
+            <textarea placeholder="My ideal client is someone who..."></textarea>
+          </div>
+          <div class="field">
+            <label>Describe your concept and vision for the film *</label>
+            <span class="sublabel">Don't worry about production details. Focus on the feeling, the story, and what you want people to experience when they watch it.</span>
+            <textarea placeholder="I want this film to feel like..."></textarea>
+          </div>
+          <div class="field">
+            <label>Primary goal of this film *</label>
+            <select>
+              <option value="">Select...</option>
+              <option>Establish Brand Authority</option>
+              <option>Position Myself Within The Luxury Market</option>
+              <option>Build Emotional Connection With My Audience</option>
+              <option>Humanize My Brand Through Storytelling</option>
+              <option>Attract High-Level Clients &amp; Opportunities</option>
+              <option>Elevate Brand Perception</option>
+              <option>Support Brand Expansion &amp; Growth</option>
+              <option>Launch / Reintroduce My Brand</option>
+              <option>Create A Long-Term Brand Asset</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>What results matter most? *</label>
+            <span class="sublabel">Select all that apply.</span>
+            <div class="custom-select" id="results-select">
+              <div class="select-trigger">Select options...</div>
+              <div class="options-menu">
+                <div class="option-row"><input type="checkbox" value="Attract HNW Clients"><span>Attract High-Net-Worth Clients</span></div>
+                <div class="option-row"><input type="checkbox" value="Build Trust"><span>Build Trust Before First Contact</span></div>
+                <div class="option-row"><input type="checkbox" value="Market Leader"><span>Position Myself As A Market Leader</span></div>
+                <div class="option-row"><input type="checkbox" value="Differentiate"><span>Differentiate From Competitors</span></div>
+                <div class="option-row"><input type="checkbox" value="Elevate Perception"><span>Elevate Brand Perception</span></div>
+                <div class="option-row"><input type="checkbox" value="Luxury Authority"><span>Establish Luxury Market Authority</span></div>
+                <div class="option-row"><input type="checkbox" value="Emotional Connection"><span>Strengthen Emotional Connection</span></div>
+                <div class="option-row"><input type="checkbox" value="Long-Term Asset"><span>Create A Long-Term Brand Asset</span></div>
+                <div class="option-row"><input type="checkbox" value="Brand Expansion"><span>Support Brand Expansion</span></div>
+                <div class="option-row"><input type="checkbox" value="Higher-Level Opps"><span>Open Higher-Level Opportunities</span></div>
+                <div class="option-row"><input type="checkbox" value="Media Exposure"><span>Gain Media / Press Exposure</span></div>
+                <div class="option-row"><input type="checkbox" value="Legacy Piece"><span>Leave A Cinematic Legacy Piece</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Where will this film be used? *</label>
+            <span class="sublabel">Select all that apply.</span>
+            <div class="custom-select" id="usage-select">
+              <div class="select-trigger">Select platforms...</div>
+              <div class="options-menu">
+                <div class="option-row"><input type="checkbox" value="Website"><span>Website / Homepage</span></div>
+                <div class="option-row"><input type="checkbox" value="Instagram"><span>Instagram</span></div>
+                <div class="option-row"><input type="checkbox" value="YouTube"><span>YouTube</span></div>
+                <div class="option-row"><input type="checkbox" value="LinkedIn"><span>LinkedIn</span></div>
+                <div class="option-row"><input type="checkbox" value="Paid Ads"><span>Paid Advertising</span></div>
+                <div class="option-row"><input type="checkbox" value="Listing Presentations"><span>Listing Presentations</span></div>
+                <div class="option-row"><input type="checkbox" value="Investor Decks"><span>Investor / Developer Decks</span></div>
+                <div class="option-row"><input type="checkbox" value="Brand Launch"><span>Brand Launch / Campaign</span></div>
+                <div class="option-row"><input type="checkbox" value="Recruitment"><span>Recruitment / Team Growth</span></div>
+                <div class="option-row"><input type="checkbox" value="Multi-Platform"><span>Multi-Platform Campaign</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="nav-buttons">
           <button type="button" onclick="goToStep(1)" class="btn-outline">Back</button>
           <button type="button" onclick="goToStep(3)" class="submit-btn">Continue to Alignment</button>
         </div>
-</div><div class="form-step" id="step3">
-    <div class="step-indicator">
-      <div class="step-dot" onclick="goToStep(1)">01 Identity</div>
-      <div class="step-dot" onclick="goToStep(2)">02 Vision</div>
-      <div class="step-dot active">03 Alignment</div>
-    </div>
-<!-- Section 3 — Investment -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">3</div>
-          <div class="section-title">Investment</div>
-          <div class="section-divider"></div>
-        </div>
-
-        <div class="anchor-box">
-          <div class="anchor-icon">
-            <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="7" cy="7" r="6" stroke="#A8844A" stroke-width="1"/>
-              <path d="M7 4v3.5l2 2" stroke="#A8844A" stroke-width="1" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="anchor-text">
-            Our projects are built for brands serious about standing out in the luxury market. 
-            Engagements <strong>typically begin at $15,000</strong> and are scoped individually 
-            based on your vision, location, and deliverables. If you're exploring options, 
-            we respect that — please select the range that reflects your current thinking.
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Intended investment for this production *</label>
-          <select>
-            <option value="">Select...</option>
-            
-            <option>$10,000 – $15,000</option>
-            <option>$15,000 – $25,000</option>
-            <option>$25,000 – $40,000</option>
-            <option>$40,000 – $60,000</option>
-            <option>$60,000+</option>
-            <option>Open to discussing based on scope</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Annual marketing investment *</label>
-          <select>
-            <option value="">Select...</option>
-            <option>Under $5,000</option>
-            <option>$5,000 – $15,000</option>
-            <option>$15,000 – $30,000</option>
-            <option>$30,000 – $60,000</option>
-            <option>$60,000 – $100,000</option>
-            <option>$100,000+</option>
-          </select>
-        </div>
       </div>
 
-      <!-- Section 4 — Decision -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">4</div>
-          <div class="section-title">Decision & timeline</div>
-          <div class="section-divider"></div>
+      <div class="form-step" id="step3">
+        <div class="step-indicator">
+          <div class="step-dot" onclick="goToStep(1)">01 Identity</div>
+          <div class="step-dot" onclick="goToStep(2)">02 Vision</div>
+          <div class="step-dot active">03 Alignment</div>
         </div>
-
-        <div class="field">
-          <label>Who is involved in this decision? *</label>
-          <span class="sublabel">Select all that apply.</span>
-          <div class="custom-select" id="decision-select">
-            <div class="select-trigger">Select all that apply...</div>
-            <div class="options-menu">
-              <div class="option-row"><input type="checkbox" value="Myself"><span>Myself — Sole Decision-Maker</span></div>
-              <div class="option-row"><input type="checkbox" value="Partner"><span>Business Partner</span></div>
-              <div class="option-row"><input type="checkbox" value="Spouse"><span>Spouse / Family Member</span></div>
-              <div class="option-row"><input type="checkbox" value="Board"><span>Board / Executive Team</span></div>
-              <div class="option-row"><input type="checkbox" value="Marketing"><span>Marketing Director / Team</span></div>
-              <div class="option-row"><input type="checkbox" value="Brokerage"><span>Brokerage Leadership</span></div>
-              <div class="option-row"><input type="checkbox" value="Developer"><span>Developer / Investor Group</span></div>
+        <div class="section">
+          <div class="section-header">
+            <div class="section-num">3</div>
+            <div class="section-title">Investment</div>
+            <div class="section-divider"></div>
+          </div>
+          <div class="anchor-box">
+            <div class="anchor-icon">
+              <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7" cy="7" r="6" stroke="#A8844A" stroke-width="1"/>
+                <path d="M7 4v3.5l2 2" stroke="#A8844A" stroke-width="1" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="anchor-text">
+              Our projects are built for brands serious about standing out in the luxury market.
+              Engagements <strong>typically begin at $15,000</strong> and are scoped individually
+              based on your vision, location, and deliverables. If you're exploring options,
+              we respect that — please select the range that reflects your current thinking.
             </div>
           </div>
+          <div class="field">
+            <label>Intended investment for this production *</label>
+            <select>
+              <option value="">Select...</option>
+              <option>$10,000 – $15,000</option>
+              <option>$15,000 – $25,000</option>
+              <option>$25,000 – $40,000</option>
+              <option>$40,000 – $60,000</option>
+              <option>$60,000+</option>
+              <option>Open to discussing based on scope</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Annual marketing investment *</label>
+            <select>
+              <option value="">Select...</option>
+              <option>Under $5,000</option>
+              <option>$5,000 – $15,000</option>
+              <option>$15,000 – $30,000</option>
+              <option>$30,000 – $60,000</option>
+              <option>$60,000 – $100,000</option>
+              <option>$100,000+</option>
+            </select>
+          </div>
         </div>
-
-        <div class="field">
-          <label>If we're aligned, when are you ready to move forward? *</label>
-          <div class="custom-select" id="timeline-select">
-            <div class="select-trigger">Select timeline...</div>
-            <div class="options-menu">
-              <div class="option-row" data-val="Now"><span>Yes — Ready To Move Forward Now</span></div>
-              <div class="option-row" data-val="30 Days"><span>Within 30 Days</span></div>
-              <div class="option-row" data-val="60 Days"><span>30 – 60 Days</span></div>
-              <div class="option-row" data-val="Exploring"><span>Not At This Time — Still Exploring</span></div>
+        <div class="section">
+          <div class="section-header">
+            <div class="section-num">4</div>
+            <div class="section-title">Decision &amp; timeline</div>
+            <div class="section-divider"></div>
+          </div>
+          <div class="field">
+            <label>Who is involved in this decision? *</label>
+            <span class="sublabel">Select all that apply.</span>
+            <div class="custom-select" id="decision-select">
+              <div class="select-trigger">Select all that apply...</div>
+              <div class="options-menu">
+                <div class="option-row"><input type="checkbox" value="Myself"><span>Myself — Sole Decision-Maker</span></div>
+                <div class="option-row"><input type="checkbox" value="Partner"><span>Business Partner</span></div>
+                <div class="option-row"><input type="checkbox" value="Spouse"><span>Spouse / Family Member</span></div>
+                <div class="option-row"><input type="checkbox" value="Board"><span>Board / Executive Team</span></div>
+                <div class="option-row"><input type="checkbox" value="Marketing"><span>Marketing Director / Team</span></div>
+                <div class="option-row"><input type="checkbox" value="Brokerage"><span>Brokerage Leadership</span></div>
+                <div class="option-row"><input type="checkbox" value="Developer"><span>Developer / Investor Group</span></div>
+              </div>
             </div>
           </div>
-          <input type="hidden" name="timeline" id="timeline-input">
+          <div class="field">
+            <label>If we're aligned, when are you ready to move forward? *</label>
+            <div class="custom-select" id="timeline-select">
+              <div class="select-trigger">Select timeline...</div>
+              <div class="options-menu">
+                <div class="option-row" data-val="Now"><span>Yes — Ready To Move Forward Now</span></div>
+                <div class="option-row" data-val="30 Days"><span>Within 30 Days</span></div>
+                <div class="option-row" data-val="60 Days"><span>30 – 60 Days</span></div>
+                <div class="option-row" data-val="Exploring"><span>Not At This Time — Still Exploring</span></div>
+              </div>
+            </div>
+            <input type="hidden" name="timeline" id="timeline-input">
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-header">
+            <div class="section-num">5</div>
+            <div class="section-title">Final details</div>
+            <div class="section-divider"></div>
+          </div>
+          <div class="field">
+            <label>Anything else we should know?</label>
+            <span class="sublabel">Additional context, preferences, special considerations, or anything that would help us understand your brand and vision.</span>
+            <textarea placeholder="Feel free to share anything relevant..."></textarea>
+          </div>
+          <div class="field">
+            <label>How did you find us?</label>
+            <select>
+              <option value="">Select...</option>
+              <option>Instagram</option>
+              <option>YouTube</option>
+              <option>Referral</option>
+              <option>Google Search</option>
+              <option>Event / Conference</option>
+              <option>Past Client</option>
+              <option>Brokerage / Team</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="submit-section">
+          <div class="nav-buttons">
+            <button type="button" onclick="goToStep(2)" class="btn-outline">Back</button>
+            <button type="button" onclick="handleSubmit()" class="submit-btn">
+              Request Private Consultation
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;opacity:.6;">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="consent-text">
+            By submitting, you consent to receive SMS messages from José Oliveira Films regarding project updates and scheduling.
+            Message and data rates may apply. Reply STOP to unsubscribe.
+          </p>
         </div>
       </div>
-
-      <!-- Section 5 — Final -->
-      <div class="section">
-        <div class="section-header">
-          <div class="section-num">5</div>
-          <div class="section-title">Final details</div>
-          <div class="section-divider"></div>
-        </div>
-
-        <div class="field">
-          <label>Anything else we should know?</label>
-          <span class="sublabel">Additional context, preferences, special considerations, or anything that would help us understand your brand and vision.</span>
-          <textarea placeholder="Feel free to share anything relevant..."></textarea>
-        </div>
-
-        <div class="field">
-          <label>How did you find us?</label>
-          <select>
-            <option value="">Select...</option>
-            <option>Instagram</option>
-            <option>YouTube</option>
-            <option>Referral</option>
-            <option>Google Search</option>
-            <option>Event / Conference</option>
-            <option>Past Client</option>
-            <option>Brokerage / Team</option>
-            <option>Other</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Submit -->
-      <div class="submit-section"><div class="nav-buttons">
-          <button type="button" onclick="goToStep(2)" class="btn-outline">Back</button>
-          <button type="button" onclick="handleSubmit()" class="submit-btn">
-            Request Private Consultation
-            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:16px; height:16px; opacity:.6;">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
-        <p class="consent-text">
-          By submitting, you consent to receive SMS messages from José Oliveira Films regarding project updates and scheduling.
-          Message and data rates may apply. Reply STOP to unsubscribe.
-        </p>
-      </div>
-
-    </div></form>
-  
-</main>
+    </form>
+  </main>
 </div>
-
-
 
 <div id="thankyou" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#F7F4EF;z-index:9999;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;">
   <div style="max-width:480px;">
@@ -914,165 +773,142 @@
   </div>
 </div>
 
-
 <script>
+document.addEventListener('DOMContentLoaded', function() {
 
-  
-  
-  function validateStep(stepNum) {
-    let isValid = true;
-    const stepEl = document.getElementById('step' + stepNum);
-    const fields = stepEl.querySelectorAll('.field');
+  // Abre/fecha dropdowns customizados
+  document.querySelectorAll('.custom-select').forEach(function(sel) {
+    sel.querySelector('.select-trigger').addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.querySelectorAll('.custom-select').forEach(s => s !== sel && s.classList.remove('active'));
+      sel.classList.toggle('active');
+    });
+  });
 
-    fields.forEach(field => {
-      const label = field.querySelector('label');
-      if (label && label.innerText.includes('*')) {
-        const input = field.querySelector('input:not([type=hidden]), select, textarea');
-        if (input) {
-          const isValueEmpty = !input.value || input.value.trim() === "" || (input.tagName === 'SELECT' && input.value === "");
-          const isHiddenEmpty = input.type === 'hidden' && !input.value;
+  // Checkboxes (results, usage, decision)
+  document.querySelectorAll('#results-select .option-row, #usage-select .option-row, #decision-select .option-row').forEach(function(row) {
+    row.addEventListener('click', function() {
+      const cb = row.querySelector('input[type=checkbox]');
+      cb.checked = !cb.checked;
+      row.classList.toggle('selected', cb.checked);
+      const sel = row.closest('.custom-select');
+      const checked = Array.from(sel.querySelectorAll('input:checked')).map(i => i.value);
+      sel.querySelector('.select-trigger').textContent = checked.length ? checked.join(', ') : 'Select...';
+    });
+  });
 
-          // Ensure error-msg span exists
-          let errMsg = field.querySelector('.error-msg');
-          if (!errMsg) {
-            errMsg = document.createElement('span');
-            errMsg.className = 'error-msg';
-            errMsg.innerText = 'This field is required.';
-            field.appendChild(errMsg);
-          }
+  // Timeline (radio single)
+  document.querySelectorAll('#timeline-select .option-row').forEach(function(row) {
+    row.addEventListener('click', function() {
+      document.querySelectorAll('#timeline-select .option-row').forEach(r => r.classList.remove('selected'));
+      row.classList.add('selected');
+      const val = row.dataset.val;
+      document.getElementById('timeline-input').value = val;
+      document.getElementById('timeline-select').querySelector('.select-trigger').textContent = row.querySelector('span').textContent;
+      document.getElementById('timeline-select').classList.remove('active');
+    });
+  });
 
-          if (isValueEmpty || isHiddenEmpty) {
-            field.classList.add('error');
-            isValid = false;
-          } else {
-            field.classList.remove('error');
-          }
+  // Fecha dropdowns ao clicar fora
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('active'));
+  });
+
+});
+
+function validateStep(stepNum) {
+  let isValid = true;
+  const stepEl = document.getElementById('step' + stepNum);
+  const fields = stepEl.querySelectorAll('.field');
+
+  fields.forEach(field => {
+    const label = field.querySelector('label');
+    if (label && label.innerText.includes('*')) {
+      const input = field.querySelector('input:not([type=hidden]), select, textarea');
+      if (input) {
+        const isEmpty = !input.value || input.value.trim() === '' || (input.tagName === 'SELECT' && input.value === '');
+
+        let errMsg = field.querySelector('.error-msg');
+        if (!errMsg) {
+          errMsg = document.createElement('span');
+          errMsg.className = 'error-msg';
+          errMsg.innerText = 'This field is required.';
+          field.appendChild(errMsg);
+        }
+
+        if (isEmpty) {
+          field.classList.add('error');
+          isValid = false;
+        } else {
+          field.classList.remove('error');
         }
       }
-    });
-    return isValid;
-  }
-
-  function goToStep(step) {
-    // Se estiver tentando avançar, valida o passo atual primeiro
-    const currentStep = document.querySelector('.form-step.active');
-    const currentStepNum = parseInt(currentStep.id.replace('step', ''));
-
-    if (step > currentStepNum) {
-      if (!validateStep(currentStepNum)) {
-        // Scroll para o primeiro erro
-        const firstError = currentStep.querySelector('.field.error');
-        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
     }
+  });
+  return isValid;
+}
 
-    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
-    document.getElementById('step' + step).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+function goToStep(step) {
+  const currentStep = document.querySelector('.form-step.active');
+  const currentStepNum = parseInt(currentStep.id.replace('step', ''));
+
+  if (step > currentStepNum) {
+    if (!validateStep(currentStepNum)) {
+      const firstError = currentStep.querySelector('.field.error');
+      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
   }
 
-  async function handleSubmit() {
-    // Valida o último passo antes de enviar
-    if (!validateStep(3)) return;
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + step).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-    // Mostra o "Thank You" imediatamente para UX de luxo
+async function handleSubmit() {
+  if (!validateStep(3)) return;
+
+  const data = {};
+
+  data.first_name = document.querySelector('[name="first_name"]').value;
+  data.last_name = document.querySelector('[name="last_name"]').value;
+  data.email = document.querySelector('[name="email"]').value;
+  data.instagram = document.querySelector('[name="instagram"]').value;
+  data.website = document.querySelector('[name="website"]').value;
+
+  const country = document.getElementById('phone-country');
+  const phone = document.getElementById('phone');
+  if (country && phone) data.phone = country.value + ' ' + phone.value;
+
+  const tas = document.querySelectorAll('textarea');
+  data.ideal_client = tas[0]?.value || '';
+  data.vision = tas[1]?.value || '';
+  data.additional_context = tas[2]?.value || '';
+
+  data.cinematic_direction = document.querySelector('#step2 select').value;
+  data.primary_goal = document.querySelectorAll('#step2 select')[1].value;
+  data.intended_investment = document.querySelector('#step3 select').value;
+  data.marketing_investment = document.querySelectorAll('#step3 select')[1].value;
+
+  data.results_matter = Array.from(document.querySelectorAll('#results-select input:checked')).map(i => i.value).join(', ');
+  data.usage_platforms = Array.from(document.querySelectorAll('#usage-select input:checked')).map(i => i.value).join(', ');
+  data.decision_makers = Array.from(document.querySelectorAll('#decision-select input:checked')).map(i => i.value).join(', ');
+  data.timeline = document.getElementById('timeline-input').value;
+
+  try {
+    const response = await fetch('https://apply.joseoliveirafilms.com/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) throw new Error('Erro no envio');
+
     document.getElementById('thankyou').style.display = 'flex';
 
-    // Coleta de dados aprimorada
-    var data = {};
-
-    // Dados básicos
-    data['first_name'] = document.querySelector('input[placeholder="José"]').value;
-    data['last_name'] = document.querySelector('input[placeholder="Oliveira"]').value;
-    data['email'] = document.querySelector('input[placeholder="jose@yourbrand.com"]').value;
-    data['instagram'] = document.querySelector('input[placeholder="@yourbrand"]').value;
-    data['website'] = document.querySelector('input[placeholder="www.yourbrand.com"]').value;
-
-    var country = document.getElementById('phone-country');
-    var phone = document.getElementById('phone');
-    if (country && phone) data['phone'] = country.value + ' ' + phone.value;
-
-    // Textareas
-    var tas = document.querySelectorAll('textarea');
-    data['ideal_client'] = tas[0].value;
-    data['vision'] = tas[1].value;
-    data['additional_context'] = tas[2].value;
-
-    // Selects e Dropdowns Customizados
-    data['cinematic_direction'] = document.querySelector('#step2 select').value;
-    data['primary_goal'] = document.querySelectorAll('#step2 select')[1].value;
-    data['intended_investment'] = document.querySelector('#step3 select').value;
-    data['marketing_investment'] = document.querySelectorAll('#step3 select')[1].value;
-    data['how_found_us'] = document.querySelectorAll('select')[document.querySelectorAll('select').length - 1].value;
-
-    // Checkboxes (Resultados, Uso, Decisores)
-    data['results_matter'] = Array.from(document.querySelectorAll('#results-select input:checked')).map(i => i.parentElement.innerText).join(', ');
-    data['usage_platforms'] = Array.from(document.querySelectorAll('#usage-select input:checked')).map(i => i.parentElement.innerText).join(', ');
-    data['decision_makers'] = Array.from(document.querySelectorAll('#decision-select input:checked')).map(i => i.parentElement.innerText).join(', ');
-
-    // Timeline (Radio/Hidden)
-    data['timeline'] = document.getElementById('timeline-input').value;
-
-    console.log('Enviando dados:', data);
-
-    try {
-      // SUBSTITUA PELA SUA URL DO RAILWAY
-      const RAILWAY_URL = 'ghl-backend-production-a810.up.railway.app'; 
-      
-      const response = await fetch(RAILWAY_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-
-      if (!response.ok) throw new Error('Erro no envio');
-      console.log('Sucesso!');
-    } catch (err) {
-      console.error('Erro ao enviar para o Railway:', err);
-      // Opcional: Mostrar erro se falhar, mas no luxo geralmente mantemos o "Thank You" para não frustrar
-    }
+  } catch (err) {
+    console.error('❌ Erro:', err);
+    alert('Erro ao enviar. Tente novamente.');
   }
-;
-  var inputs = document.querySelectorAll('input[type=text], input[type=email], input[type=url]');
-  inputs.forEach(function(el) {
-    if (el.placeholder === 'José') data['first_name'] = el.value;
-    else if (el.placeholder === 'Oliveira') data['last_name'] = el.value;
-    else if (el.placeholder === 'jose@yourbrand.com') data['email'] = el.value;
-    else if (el.placeholder === 'www.yourbrand.com') data['website'] = el.value;
-    else if (el.placeholder === '@yourbrand') data['instagram'] = el.value;
-  });
-
-  var country = document.getElementById('phone-country');
-  var phone = document.getElementById('phone');
-  if (country && phone) data['phone'] = country.value + ' ' + phone.value;
-
-  var tas = document.querySelectorAll('textarea');
-  if (tas[0]) data['ideal_client'] = tas[0].value;
-  if (tas[1]) data['vision'] = tas[1].value;
-  if (tas[2]) data['additional'] = tas[2].value;
-
-  var sels = document.querySelectorAll('select');
-  sels.forEach(function(sel) {
-    if (sel.id === 'phone-country') return;
-    var label = sel.previousElementSibling;
-    if (label) data[label.textContent.replace('*','').trim().toLowerCase().replace(/ /g,'_')] = sel.value;
-  });
-
-  
-  var timelineVal = document.getElementById('timeline-input') ? document.getElementById('timeline-input').value : '';
-  if (timelineVal) data['timeline'] = timelineVal;
-
-  data['results_matter'] = Array.from(document.querySelectorAll('#results-select input:checked')).map(i => i.parentElement.innerText).join(', ');
-  data['usage'] = Array.from(document.querySelectorAll('#usage-select input:checked')).map(i => i.parentElement.innerText).join(', ');
-  data['decision_makers'] = Array.from(document.querySelectorAll('#decision-select input:checked')).map(i => i.parentElement.innerText).join(', ');
-
-  // Send via XMLHttpRequest
-
-  // Send via XMLHttpRequest with no-cors equivalent
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'https://services.leadconnectorhq.com/hooks/miVDl3ZCyFKR8jskk3jV/webhook-trigger/f602cc7f-baf7-40d9-957a-27273f3b563a', true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(JSON.stringify(data));
 }
 </script>
