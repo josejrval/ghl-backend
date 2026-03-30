@@ -1,31 +1,25 @@
 const express = require('express');
 const cors = require('cors');
-const fetch = require('node-fetch');
 const app = express();
+
+// Porta que o Railway espera (process.env.PORT) ou 3000 como padrão
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => res.send('Sistema de Leads Ativo ✅'));
-
-app.post('/lead', async (req, res) => {
-  const leadData = req.body;
-  console.log('NOVO LEAD:', leadData);
-
-  // URL do Webhook do Make.com (que envia para o Google Sheets)
-  const MAKE_WEBHOOK_URL = 'SUA_URL_DO_MAKE_AQUI'; 
-
-  try {
-    await fetch(MAKE_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(leadData)
-    });
-    res.json({ status: 'sucesso' });
-  } catch (error) {
-    res.status(500).json({ status: 'erro' });
-  }
+// Rota principal para testar o domínio
+app.get('/', (req, res) => {
+  res.send('<h1>Servidor de Luxo Ativo ✅</h1><p>O domínio apply.joseoliveirafilms.com está conectado com sucesso.</p>');
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Rodando na porta ${PORT}`));
+// Rota para receber os leads
+app.post('/lead', (req, res) => {
+  console.log('NOVO LEAD RECEBIDO:', req.body);
+  // Por enquanto, apenas confirmamos o recebimento
+  res.json({ status: 'sucesso', message: 'Lead recebido pelo servidor!' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
