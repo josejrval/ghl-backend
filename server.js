@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ✅ rota principal (abre o formulário)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
+  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5_updated.html'));
 });
 
 // ✅ endpoint do formulário
@@ -35,7 +35,7 @@ app.post('/lead', async (req, res) => {
   }
 });
 
-// ✅ fallback (qualquer rota volta pro form)
+// ✅ fallback
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5_updated.html'));
 });
