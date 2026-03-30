@@ -13,18 +13,18 @@ app.use(express.json());
 // ✅ servir arquivos da pasta public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ✅ rota principal (abre direto no domínio)
+// ✅ abrir direto no domínio
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
 });
 
-// ✅ endpoint para receber leads
+// ✅ receber leads e enviar pro Make
 app.post('/lead', async (req, res) => {
   const leadData = req.body;
   console.log('NOVO LEAD:', leadData);
 
   try {
-    await fetch('https://hook.us2.make.com/6n477rbaq6fqqw30myrbtw0w57v3ktxv', {
+    await fetch('https://hook.us2.make.com/vviwoc9nobfi8lkyt1fl6odvr9x1404t', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(leadData)
@@ -37,7 +37,7 @@ app.post('/lead', async (req, res) => {
   }
 });
 
-// ✅ fallback (garante que SEMPRE abre o form)
+// ✅ fallback (garante sempre abrir o form)
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
 });
