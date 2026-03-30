@@ -13,12 +13,12 @@ app.use(express.json());
 // ✅ servir arquivos da pasta public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ✅ rota principal (abre o form)
+// ✅ rota principal (abre direto no domínio)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
 });
 
-// ✅ receber leads (ANTES do fallback)
+// ✅ endpoint para receber leads
 app.post('/lead', async (req, res) => {
   const leadData = req.body;
   console.log('NOVO LEAD:', leadData);
@@ -32,12 +32,12 @@ app.post('/lead', async (req, res) => {
 
     res.json({ status: 'ok' });
   } catch (e) {
-    console.error('Erro:', e);
+    console.error('Erro ao enviar:', e);
     res.status(500).json({ error: 'erro ao enviar lead' });
   }
 });
 
-// ✅ fallback (SEMPRE POR ÚLTIMO)
+// ✅ fallback (garante que SEMPRE abre o form)
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
 });
