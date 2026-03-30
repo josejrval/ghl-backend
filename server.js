@@ -9,9 +9,12 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// 👉 SERVE O HTML DIRETO
+// 👉 SERVE ARQUIVOS DA PASTA PUBLIC
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 👉 ROTA PRINCIPAL
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'brand_film_luxury_v5.html'));
+  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
 });
 
 // 👉 RECEBE LEAD
