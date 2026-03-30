@@ -1,0 +1,1078 @@
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F4EF;
+    --ink: #1A1814;
+    --ink-light: #6B6760;
+    --ink-faint: #C4C0B8;
+    --gold: #A8844A;
+    --gold-light: #D4B97A;
+    --gold-faint: #F0E8D8;
+    --border: #E2DDD4;
+    --white: #FFFF;
+    --error: #8B3A2A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* Layout */
+  .page { background: #F7F4EF !important; width: 100%; min-height: 100vh;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    min-height: 100vh;
+  }
+
+  /* Left panel */
+  .sidebar {
+    background: var(--ink); min-height: 100vh;
+    padding: 60px 48px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  .sidebar::before {
+    content: '';
+    position: absolute;
+    top: -120px; left: -120px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(168,132,74,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .sidebar-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .sidebar-main { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+  .sidebar-eyebrow {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .sidebar-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--white);
+    margin-bottom: 28px;
+  }
+
+  .sidebar-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .sidebar-body {
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 40px;
+  }
+
+  .sidebar-stat {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 28px;
+  }
+
+  .sidebar-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .sidebar-stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: .06em;
+  }
+
+  .sidebar-footer {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+  }
+
+  /* Right panel — form */
+  .form-panel { background: #F7F4EF !important; min-height: 100vh;
+    padding: 60px 64px 80px;
+    max-width: 780px;
+  }
+
+  .form-header {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .form-step-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .form-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .form-header p {
+    font-size: 13px;
+    color: var(--ink-light);
+    line-height: 1.7;
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .section-num {
+    width: 28px; height: 28px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: .02em;
+  }
+
+  .section-divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Fields */
+  .field { margin-bottom: 22px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 8px;
+  }
+
+  .field .sublabel {
+    display: block;
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #8C8880;
+    margin-bottom: 8px;
+    margin-top: -4px;
+    line-height: 1.5;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--ink);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    appearance: none;
+  }
+
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23A8844A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(168,132,74,0.08);
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.7;
+  }
+
+  /* Checkboxes & Radios */
+  .options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .options-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .option-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s, color .2s;
+    background: var(--white);
+    user-select: none;
+  }
+
+  .option-item:hover {
+    border-color: var(--gold);
+    background: var(--white);
+  }
+
+  .option-item input[type=checkbox],
+  .option-item input[type=radio] {
+    display: none;
+  }
+
+  .option-item::before {
+    content: '';
+    display: block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+    transition: background .2s;
+  }
+
+  .option-item:has(input:checked) {
+    border-color: var(--gold);
+    background: var(--ink);
+  }
+
+  .option-item:has(input:checked)::before {
+    background: var(--gold);
+  }
+
+  .option-item:has(input:checked) span {
+    color: var(--white);
+  }
+
+  .options-col .option-item {
+    border-radius: 2px;
+    width: 100%;
+  }
+
+  .option-item span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--ink-light);
+    line-height: 1;
+    letter-spacing: .02em;
+    transition: color .2s;
+  }
+
+  .options-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Anchor box */
+  .anchor-box {
+    background: var(--ink);
+    border-radius: 2px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .anchor-icon {
+    width: 32px; height: 32px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .anchor-icon svg { width: 14px; height: 14px; }
+
+  .anchor-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+  }
+
+  .anchor-text strong {
+    color: var(--gold-light);
+    font-weight: 400;
+  }
+
+  /* Submit */
+  .submit-section {
+    border-top: 1px solid var(--border);
+    padding-top: 36px;
+    margin-top: 12px;
+  }
+
+  .submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 18px 32px;
+    background: var(--ink);
+    color: var(--white);
+    border: none;
+    border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  }
+
+  .submit-btn:hover { background: #2A2520; }
+
+  .submit-btn svg { width: 16px; height: 16px; opacity: .6; }
+
+  .consent-text {
+    margin-top: 16px;
+    font-size: 11px;
+    color: #8C8880;
+    line-height: 1.7;
+    text-align: center;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .page { background: #F7F4EF !important; width: 100%; min-height: 100vh; grid-template-columns: 1fr; }
+    .sidebar { position: relative; height: auto; padding: 48px 32px; }
+    .form-panel { background: #F7F4EF !important; min-height: 100vh; padding: 40px 32px 60px; }
+    .options-grid { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 1fr; }
+  }
+
+  textarea::placeholder {
+    color: transparent;
+  }
+  textarea:focus::placeholder {
+    color: #C4C0B8;
+    transition: color .2s;
+  }
+  input::placeholder {
+    color: #C4C0B8;
+  }
+
+
+  /* Custom Dropdown Styles */
+  .custom-select { position: relative; user-select: none; margin-bottom: 8px; }
+  .select-trigger { 
+    background: var(--white); border: 1px solid var(--border); padding: 12px 16px; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center; font-size: 13px; border-radius: 2px;
+    color: var(--ink); font-weight: 300;
+  }
+  .select-trigger::after {
+    content: ''; width: 7px; height: 7px; border-right: 1.5px solid var(--gold); border-bottom: 1.5px solid var(--gold);
+    transform: rotate(45deg); transition: transform .3s; margin-right: 4px; margin-top: -4px;
+  }
+  .custom-select.active .select-trigger::after { transform: rotate(-135deg); margin-top: 2px; }
+
+  .options-menu {
+    position: absolute; top: 100%; left: 0; width: 100%; background: var(--white);
+    border: 1px solid var(--gold); border-top: none; z-index: 100; display: none;
+    max-height: 250px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+  .custom-select.active .options-menu { display: block; }
+
+  .option-row {
+    padding: 10px 16px; border-bottom: 1px solid var(--cream); cursor: pointer;
+    display: flex; align-items: center; gap: 12px; transition: background .2s;
+  }
+  .option-row:hover { background: var(--cream); }
+  .option-row input { width: auto !important; cursor: pointer; accent-color: var(--gold); margin: 0 !important; }
+  .option-row span { font-size: 12px; color: var(--ink-light); font-weight: 300; }
+  .option-row.selected { background: var(--gold-faint); }
+
+
+  /* Luxury UX Enhancements */
+  .form-step { display: none; animation: fadeIn 0.6s ease-out forwards; }
+  .form-step.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-indicator {
+    display: flex; gap: 40px; margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 20px;
+  }
+  .step-dot {
+    font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink-faint); position: relative; cursor: pointer; transition: color .3s;
+  }
+  .step-dot.active { color: var(--gold); }
+  .step-dot.active::after {
+    content: ''; position: absolute; bottom: -21px; left: 0; width: 100%; height: 2px; background: var(--gold);
+  }
+
+  
+  .nav-buttons { display: flex; gap: 16px; margin-top: 40px; width: 100%; }
+  .btn-outline {
+    flex: 1; padding: 18px; background: transparent; border: 1px solid var(--border);
+    color: var(--ink-light); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    cursor: pointer; transition: all .3s; border-radius: 2px;
+  }
+  .submit-btn {
+    flex: 2; display: flex; align-items: center; justify-content: center; gap: 12px;
+    padding: 18px; background: var(--ink); color: var(--white); border: none;
+    border-radius: 2px; font-family: 'DM Sans', sans-serif; font-size: 11px;
+    font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
+    cursor: pointer; transition: background .2s; position: relative; overflow: hidden;
+  }
+
+  .btn-outline {
+    flex: 1; padding: 18px; background: transparent; border: 1px solid var(--border);
+    color: var(--ink-light); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    cursor: pointer; transition: all .3s;
+  }
+  .btn-outline:hover { border-color: var(--ink); color: var(--ink); }
+
+  .submit-btn { flex: 2; }
+
+  /* Refined Inputs */
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 4px 20px rgba(168,132,74,0.05);
+  }
+
+
+  .field.error input, .field.error select, .field.error textarea {
+    border-color: var(--error) !important;
+    box-shadow: 0 0 0 3px rgba(139, 58, 42, 0.1) !important;
+  }
+  .error-msg {
+    color: var(--error); font-size: 10px; margin-top: 4px; display: none;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .field.error .error-msg { display: block; }
+
+</style>
+<div class="page">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">José Oliveira Films</div>
+      <div class="sidebar-eyebrow" style="margin-top:6px;margin-bottom:0;">Brand Film Application</div>
+    </div>
+
+    <div class="sidebar-main">
+      <h1 class="sidebar-title">We don't make videos.<br><em>We build desire.</em></h1>
+      <p class="sidebar-body">
+        We take on a limited number of projects each year — each one chosen with intention.
+        This application helps us understand whether we're the right creative fit for your brand,
+        and whether your brand is the right fit for us.
+      </p>
+    </div>
+
+    <div class="sidebar-footer">
+      All information is kept strictly confidential<br>and reviewed only by our internal team.
+    </div>
+  </aside>
+
+  <!-- Form -->
+  <main class="form-panel">
+
+    <div class="form-header">
+      <div class="form-step-label">Application — 2026</div>
+      <h2>Tell us about your brand<br>and your vision.</h2>
+      <p>Take your time. The quality of your answers helps us understand how seriously you're approaching this investment — and gives us the foundation to build something remarkable together.</p>
+    </div>
+
+    <form>
+
+      <div class="form-step active" id="step1">
+    <div class="step-indicator">
+      <div class="step-dot active">01 Identity</div>
+      <div class="step-dot">02 Vision</div>
+      <div class="step-dot">03 Alignment</div>
+    </div>
+<!-- Section 1 -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">1</div>
+          <div class="section-title">About you</div>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="field field-row">
+          <div>
+            <label>First name *</label>
+            <input type="text" placeholder="José">
+          </div>
+          <div>
+            <label>Last name *</label>
+            <input type="text" placeholder="Oliveira">
+          </div>
+        </div>
+
+        <div class="field field-row">
+          <div>
+            <label>Email *</label>
+            <input type="email" placeholder="jose@yourbrand.com">
+          </div>
+          <div>
+            <label>Phone *</label>
+            <div style="display:flex;gap:0;width:100%;">
+        <select id="phone-country" style="padding:11px 10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-right:none;border-radius:2px 0 0 2px;outline:none;cursor:pointer;min-width:110px;">
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+55">🇧🇷 +55</option>
+          <option value="+44">🇬🇧 +44</option>
+          <option value="+1-CA">🇨🇦 +1</option>
+          <option value="+61">🇦🇺 +61</option>
+          <option value="+33">🇫🇷 +33</option>
+          <option value="+49">🇩🇪 +49</option>
+          <option value="+34">🇪🇸 +34</option>
+          <option value="+39">🇮🇹 +39</option>
+          <option value="+351">🇵🇹 +351</option>
+          <option value="+971">🇦🇪 +971</option>
+          <option value="+52">🇲🇽 +52</option>
+          <option value="+54">🇦🇷 +54</option>
+          <option value="+57">🇨🇴 +57</option>
+          <option value="+56">🇨🇱 +56</option>
+          <option value="+81">🇯🇵 +81</option>
+          <option value="+86">🇨🇳 +86</option>
+          <option value="+91">🇮🇳 +91</option>
+          <option value="+27">🇿🇦 +27</option>
+        </select>
+        <input type="tel" id="phone" placeholder="(000) 000-0000"
+        style="width:100%;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-left:none;border-radius:0 2px 2px 0;outline:none;box-sizing:border-box;"></div
+          </div>
+        </div>
+
+        <div class="field field-row">
+          <div>
+            <label>Website</label>
+            <input type="url" placeholder="www.yourbrand.com">
+          </div>
+          <div>
+            <label>Instagram *</label>
+            <input type="text" placeholder="@yourbrand">
+          </div>
+        </div>
+      </div>
+
+      
+        <div class="nav-buttons">
+          <button type="button" onclick="goToStep(2)" class="submit-btn">Continue to Vision</button></div>
+        </div>
+</div><div class="form-step" id="step2">
+    <div class="step-indicator">
+      <div class="step-dot" onclick="goToStep(1)">01 Identity</div>
+      <div class="step-dot active">02 Vision</div>
+      <div class="step-dot">03 Alignment</div>
+    </div>
+<!-- Section 2 -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">2</div>
+          <div class="section-title">Your vision</div>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="field">
+          <label>Filming Location *</label>
+          <input type="text" id="project_location" placeholder="City, Country or Venue">
+          <span class="error-msg">This field is required.</span>
+        </div>
+
+        <div class="field">
+          <label>Cinematic Direction *</label>
+          <select>
+            <option value="">Select...</option>
+            <option>Founder / Personal Brand Film</option>
+            <option>Cinematic Bio Film</option>
+            <option>Luxury Property Film</option>
+            <option>Developer / Project Presentation</option>
+            <option>Brand Documentary / Legacy Film</option>
+            <option>Campaign / Launch Film</option>
+            <option>Recruitment / Team Film</option>
+            <option>Event / Conference Film</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Describe the client you most want to attract *</label>
+          <span class="sublabel">Who are they, what do they value, and what needs to be true about your brand for them to choose you over anyone else?</span>
+          <textarea placeholder="My ideal client is someone who..."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Describe your concept and vision for the film *</label>
+          <span class="sublabel">Don't worry about production details. Focus on the feeling, the story, and what you want people to experience when they watch it.</span>
+          <textarea placeholder="I want this film to feel like..."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Primary goal of this film *</label>
+          <select>
+            <option value="">Select...</option>
+            <option>Establish Brand Authority</option>
+            <option>Position Myself Within The Luxury Market</option>
+            <option>Build Emotional Connection With My Audience</option>
+            <option>Humanize My Brand Through Storytelling</option>
+            <option>Attract High-Level Clients & Opportunities</option>
+            <option>Elevate Brand Perception</option>
+            <option>Support Brand Expansion & Growth</option>
+            <option>Launch / Reintroduce My Brand</option>
+            <option>Create A Long-Term Brand Asset</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>What results matter most? *</label>
+          <span class="sublabel">Select all that apply.</span>
+          <div class="custom-select" id="results-select">
+            <div class="select-trigger">Select options...</div>
+            <div class="options-menu">
+              <div class="option-row"><input type="checkbox" value="Attract HNW Clients"><span>Attract High-Net-Worth Clients</span></div>
+              <div class="option-row"><input type="checkbox" value="Build Trust"><span>Build Trust Before First Contact</span></div>
+              <div class="option-row"><input type="checkbox" value="Market Leader"><span>Position Myself As A Market Leader</span></div>
+              <div class="option-row"><input type="checkbox" value="Differentiate"><span>Differentiate From Competitors</span></div>
+              <div class="option-row"><input type="checkbox" value="Elevate Perception"><span>Elevate Brand Perception</span></div>
+              <div class="option-row"><input type="checkbox" value="Luxury Authority"><span>Establish Luxury Market Authority</span></div>
+              <div class="option-row"><input type="checkbox" value="Emotional Connection"><span>Strengthen Emotional Connection</span></div>
+              <div class="option-row"><input type="checkbox" value="Long-Term Asset"><span>Create A Long-Term Brand Asset</span></div>
+              <div class="option-row"><input type="checkbox" value="Brand Expansion"><span>Support Brand Expansion</span></div>
+              <div class="option-row"><input type="checkbox" value="Higher-Level Opps"><span>Open Higher-Level Opportunities</span></div>
+              <div class="option-row"><input type="checkbox" value="Media Exposure"><span>Gain Media / Press Exposure</span></div>
+              <div class="option-row"><input type="checkbox" value="Legacy Piece"><span>Leave A Cinematic Legacy Piece</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Where will this film be used? *</label>
+          <span class="sublabel">Select all that apply.</span>
+          <div class="custom-select" id="usage-select">
+            <div class="select-trigger">Select platforms...</div>
+            <div class="options-menu">
+              <div class="option-row"><input type="checkbox" value="Website"><span>Website / Homepage</span></div>
+              <div class="option-row"><input type="checkbox" value="Instagram"><span>Instagram</span></div>
+              <div class="option-row"><input type="checkbox" value="YouTube"><span>YouTube</span></div>
+              <div class="option-row"><input type="checkbox" value="LinkedIn"><span>LinkedIn</span></div>
+              <div class="option-row"><input type="checkbox" value="Paid Ads"><span>Paid Advertising</span></div>
+              <div class="option-row"><input type="checkbox" value="Listing Presentations"><span>Listing Presentations</span></div>
+              <div class="option-row"><input type="checkbox" value="Investor Decks"><span>Investor / Developer Decks</span></div>
+              <div class="option-row"><input type="checkbox" value="Brand Launch"><span>Brand Launch / Campaign</span></div>
+              <div class="option-row"><input type="checkbox" value="Recruitment"><span>Recruitment / Team Growth</span></div>
+              <div class="option-row"><input type="checkbox" value="Multi-Platform"><span>Multi-Platform Campaign</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+        <div class="nav-buttons">
+          <button type="button" onclick="goToStep(1)" class="btn-outline">Back</button>
+          <button type="button" onclick="goToStep(3)" class="submit-btn">Continue to Alignment</button>
+        </div>
+</div><div class="form-step" id="step3">
+    <div class="step-indicator">
+      <div class="step-dot" onclick="goToStep(1)">01 Identity</div>
+      <div class="step-dot" onclick="goToStep(2)">02 Vision</div>
+      <div class="step-dot active">03 Alignment</div>
+    </div>
+<!-- Section 3 — Investment -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">3</div>
+          <div class="section-title">Investment</div>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="anchor-box">
+          <div class="anchor-icon">
+            <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="7" cy="7" r="6" stroke="#A8844A" stroke-width="1"/>
+              <path d="M7 4v3.5l2 2" stroke="#A8844A" stroke-width="1" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="anchor-text">
+            Our projects are built for brands serious about standing out in the luxury market. 
+            Engagements <strong>typically begin at $15,000</strong> and are scoped individually 
+            based on your vision, location, and deliverables. If you're exploring options, 
+            we respect that — please select the range that reflects your current thinking.
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Intended investment for this production *</label>
+          <select>
+            <option value="">Select...</option>
+            
+            <option>$10,000 – $15,000</option>
+            <option>$15,000 – $25,000</option>
+            <option>$25,000 – $40,000</option>
+            <option>$40,000 – $60,000</option>
+            <option>$60,000+</option>
+            <option>Open to discussing based on scope</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Annual marketing investment *</label>
+          <select>
+            <option value="">Select...</option>
+            <option>Under $5,000</option>
+            <option>$5,000 – $15,000</option>
+            <option>$15,000 – $30,000</option>
+            <option>$30,000 – $60,000</option>
+            <option>$60,000 – $100,000</option>
+            <option>$100,000+</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Section 4 — Decision -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">4</div>
+          <div class="section-title">Decision & timeline</div>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="field">
+          <label>Who is involved in this decision? *</label>
+          <span class="sublabel">Select all that apply.</span>
+          <div class="custom-select" id="decision-select">
+            <div class="select-trigger">Select all that apply...</div>
+            <div class="options-menu">
+              <div class="option-row"><input type="checkbox" value="Myself"><span>Myself — Sole Decision-Maker</span></div>
+              <div class="option-row"><input type="checkbox" value="Partner"><span>Business Partner</span></div>
+              <div class="option-row"><input type="checkbox" value="Spouse"><span>Spouse / Family Member</span></div>
+              <div class="option-row"><input type="checkbox" value="Board"><span>Board / Executive Team</span></div>
+              <div class="option-row"><input type="checkbox" value="Marketing"><span>Marketing Director / Team</span></div>
+              <div class="option-row"><input type="checkbox" value="Brokerage"><span>Brokerage Leadership</span></div>
+              <div class="option-row"><input type="checkbox" value="Developer"><span>Developer / Investor Group</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>If we're aligned, when are you ready to move forward? *</label>
+          <div class="custom-select" id="timeline-select">
+            <div class="select-trigger">Select timeline...</div>
+            <div class="options-menu">
+              <div class="option-row" data-val="Now"><span>Yes — Ready To Move Forward Now</span></div>
+              <div class="option-row" data-val="30 Days"><span>Within 30 Days</span></div>
+              <div class="option-row" data-val="60 Days"><span>30 – 60 Days</span></div>
+              <div class="option-row" data-val="Exploring"><span>Not At This Time — Still Exploring</span></div>
+            </div>
+          </div>
+          <input type="hidden" name="timeline" id="timeline-input">
+        </div>
+      </div>
+
+      <!-- Section 5 — Final -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">5</div>
+          <div class="section-title">Final details</div>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="field">
+          <label>Anything else we should know?</label>
+          <span class="sublabel">Additional context, preferences, special considerations, or anything that would help us understand your brand and vision.</span>
+          <textarea placeholder="Feel free to share anything relevant..."></textarea>
+        </div>
+
+        <div class="field">
+          <label>How did you find us?</label>
+          <select>
+            <option value="">Select...</option>
+            <option>Instagram</option>
+            <option>YouTube</option>
+            <option>Referral</option>
+            <option>Google Search</option>
+            <option>Event / Conference</option>
+            <option>Past Client</option>
+            <option>Brokerage / Team</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-section"><div class="nav-buttons">
+          <button type="button" onclick="goToStep(2)" class="btn-outline">Back</button>
+          <button type="button" onclick="handleSubmit()" class="submit-btn">
+            Request Private Consultation
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:16px; height:16px; opacity:.6;">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <p class="consent-text">
+          By submitting, you consent to receive SMS messages from José Oliveira Films regarding project updates and scheduling.
+          Message and data rates may apply. Reply STOP to unsubscribe.
+        </p>
+      </div>
+
+    </div></form>
+  
+</main>
+</div>
+
+
+
+<div id="thankyou" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#F7F4EF;z-index:9999;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;">
+  <div style="max-width:480px;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#A8844A;margin-bottom:24px;">Application Received</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:#1A1814;line-height:1.2;margin-bottom:28px;">Thank you.</h2>
+    <p style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#6B6760;line-height:1.85;">We take on a limited number of projects each year, and every application is reviewed personally. If we believe we can build something remarkable together, we'll be in touch.</p>
+    <div style="width:40px;height:1px;background:#A8844A;margin:36px auto;"></div>
+    <p style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#C4C0B8;letter-spacing:.04em;">José Oliveira Films</p>
+  </div>
+</div>
+
+
+<script>
+
+  
+  
+  function validateStep(stepNum) {
+    let isValid = true;
+    const stepEl = document.getElementById('step' + stepNum);
+    const fields = stepEl.querySelectorAll('.field');
+
+    fields.forEach(field => {
+      const label = field.querySelector('label');
+      if (label && label.innerText.includes('*')) {
+        const input = field.querySelector('input:not([type=hidden]), select, textarea');
+        if (input) {
+          const isValueEmpty = !input.value || input.value.trim() === "" || (input.tagName === 'SELECT' && input.value === "");
+          const isHiddenEmpty = input.type === 'hidden' && !input.value;
+
+          // Ensure error-msg span exists
+          let errMsg = field.querySelector('.error-msg');
+          if (!errMsg) {
+            errMsg = document.createElement('span');
+            errMsg.className = 'error-msg';
+            errMsg.innerText = 'This field is required.';
+            field.appendChild(errMsg);
+          }
+
+          if (isValueEmpty || isHiddenEmpty) {
+            field.classList.add('error');
+            isValid = false;
+          } else {
+            field.classList.remove('error');
+          }
+        }
+      }
+    });
+    return isValid;
+  }
+
+  function goToStep(step) {
+    // Se estiver tentando avançar, valida o passo atual primeiro
+    const currentStep = document.querySelector('.form-step.active');
+    const currentStepNum = parseInt(currentStep.id.replace('step', ''));
+
+    if (step > currentStepNum) {
+      if (!validateStep(currentStepNum)) {
+        // Scroll para o primeiro erro
+        const firstError = currentStep.querySelector('.field.error');
+        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
+
+    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step' + step).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function handleSubmit() {
+    // Valida o último passo antes de enviar
+    if (!validateStep(3)) return;
+
+    // Mostra o "Thank You" imediatamente para UX de luxo
+    document.getElementById('thankyou').style.display = 'flex';
+
+    // Coleta de dados aprimorada
+    var data = {};
+
+    // Dados básicos
+    data['first_name'] = document.querySelector('input[placeholder="José"]').value;
+    data['last_name'] = document.querySelector('input[placeholder="Oliveira"]').value;
+    data['email'] = document.querySelector('input[placeholder="jose@yourbrand.com"]').value;
+    data['instagram'] = document.querySelector('input[placeholder="@yourbrand"]').value;
+    data['website'] = document.querySelector('input[placeholder="www.yourbrand.com"]').value;
+
+    var country = document.getElementById('phone-country');
+    var phone = document.getElementById('phone');
+    if (country && phone) data['phone'] = country.value + ' ' + phone.value;
+
+    // Textareas
+    var tas = document.querySelectorAll('textarea');
+    data['ideal_client'] = tas[0].value;
+    data['vision'] = tas[1].value;
+    data['additional_context'] = tas[2].value;
+
+    // Selects e Dropdowns Customizados
+    data['cinematic_direction'] = document.querySelector('#step2 select').value;
+    data['primary_goal'] = document.querySelectorAll('#step2 select')[1].value;
+    data['intended_investment'] = document.querySelector('#step3 select').value;
+    data['marketing_investment'] = document.querySelectorAll('#step3 select')[1].value;
+    data['how_found_us'] = document.querySelectorAll('select')[document.querySelectorAll('select').length - 1].value;
+
+    // Checkboxes (Resultados, Uso, Decisores)
+    data['results_matter'] = Array.from(document.querySelectorAll('#results-select input:checked')).map(i => i.parentElement.innerText).join(', ');
+    data['usage_platforms'] = Array.from(document.querySelectorAll('#usage-select input:checked')).map(i => i.parentElement.innerText).join(', ');
+    data['decision_makers'] = Array.from(document.querySelectorAll('#decision-select input:checked')).map(i => i.parentElement.innerText).join(', ');
+
+    // Timeline (Radio/Hidden)
+    data['timeline'] = document.getElementById('timeline-input').value;
+
+    console.log('Enviando dados:', data);
+
+    try {
+      // SUBSTITUA PELA SUA URL DO RAILWAY
+      const RAILWAY_URL = 'ghl-backend-production-a810.up.railway.app'; 
+      
+      const response = await fetch(RAILWAY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) throw new Error('Erro no envio');
+      console.log('Sucesso!');
+    } catch (err) {
+      console.error('Erro ao enviar para o Railway:', err);
+      // Opcional: Mostrar erro se falhar, mas no luxo geralmente mantemos o "Thank You" para não frustrar
+    }
+  }
+;
+  var inputs = document.querySelectorAll('input[type=text], input[type=email], input[type=url]');
+  inputs.forEach(function(el) {
+    if (el.placeholder === 'José') data['first_name'] = el.value;
+    else if (el.placeholder === 'Oliveira') data['last_name'] = el.value;
+    else if (el.placeholder === 'jose@yourbrand.com') data['email'] = el.value;
+    else if (el.placeholder === 'www.yourbrand.com') data['website'] = el.value;
+    else if (el.placeholder === '@yourbrand') data['instagram'] = el.value;
+  });
+
+  var country = document.getElementById('phone-country');
+  var phone = document.getElementById('phone');
+  if (country && phone) data['phone'] = country.value + ' ' + phone.value;
+
+  var tas = document.querySelectorAll('textarea');
+  if (tas[0]) data['ideal_client'] = tas[0].value;
+  if (tas[1]) data['vision'] = tas[1].value;
+  if (tas[2]) data['additional'] = tas[2].value;
+
+  var sels = document.querySelectorAll('select');
+  sels.forEach(function(sel) {
+    if (sel.id === 'phone-country') return;
+    var label = sel.previousElementSibling;
+    if (label) data[label.textContent.replace('*','').trim().toLowerCase().replace(/ /g,'_')] = sel.value;
+  });
+
+  
+  var timelineVal = document.getElementById('timeline-input') ? document.getElementById('timeline-input').value : '';
+  if (timelineVal) data['timeline'] = timelineVal;
+
+  data['results_matter'] = Array.from(document.querySelectorAll('#results-select input:checked')).map(i => i.parentElement.innerText).join(', ');
+  data['usage'] = Array.from(document.querySelectorAll('#usage-select input:checked')).map(i => i.parentElement.innerText).join(', ');
+  data['decision_makers'] = Array.from(document.querySelectorAll('#decision-select input:checked')).map(i => i.parentElement.innerText).join(', ');
+
+  // Send via XMLHttpRequest
+
+  // Send via XMLHttpRequest with no-cors equivalent
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'https://services.leadconnectorhq.com/hooks/miVDl3ZCyFKR8jskk3jV/webhook-trigger/f602cc7f-baf7-40d9-957a-27273f3b563a', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(JSON.stringify(data));
+}
+</script>
