@@ -1,47 +1,60 @@
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+async function handleSubmit() {
+  if (!validateStep(3)) return;
 
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+  document.getElementById('thankyou').style.display = 'flex';
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+  let data = {};
 
-app.use(cors());
-app.use(express.json());
+  // Dados básicos
+  data.first_name = document.querySelector('input[placeholder="José"]').value;
+  data.last_name = document.querySelector('input[placeholder="Oliveira"]').value;
+  data.email = document.querySelector('input[placeholder="jose@yourbrand.com"]').value;
+  data.instagram = document.querySelector('input[placeholder="@yourbrand"]').value;
+  data.website = document.querySelector('input[placeholder="www.yourbrand.com"]').value;
 
-// ✅ servir arquivos da pasta public
-app.use(express.static(path.join(__dirname, 'public')));
+  const country = document.getElementById('phone-country');
+  const phone = document.getElementById('phone');
+  if (country && phone) data.phone = country.value + ' ' + phone.value;
 
-// ✅ abrir direto no domínio
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
-});
+  // Textareas
+  const tas = document.querySelectorAll('textarea');
+  data.ideal_client = tas[0]?.value || '';
+  data.vision = tas[1]?.value || '';
+  data.additional_context = tas[2]?.value || '';
 
-// ✅ receber leads e enviar pro Make
-app.post('/lead', async (req, res) => {
-  const leadData = req.body;
-  console.log('NOVO LEAD:', leadData);
+  // Selects
+  data.cinematic_direction = document.querySelector('#step2 select').value;
+  data.primary_goal = document.querySelectorAll('#step2 select')[1].value;
+  data.intended_investment = document.querySelector('#step3 select').value;
+  data.marketing_investment = document.querySelectorAll('#step3 select')[1].value;
+  data.how_found_us = document.querySelectorAll('select')[document.querySelectorAll('select').length - 1].value;
+
+  // Checkboxes
+  data.results_matter = Array.from(document.querySelectorAll('#results-select input:checked'))
+    .map(i => i.parentElement.innerText).join(', ');
+
+  data.usage_platforms = Array.from(document.querySelectorAll('#usage-select input:checked'))
+    .map(i => i.parentElement.innerText).join(', ');
+
+  data.decision_makers = Array.from(document.querySelectorAll('#decision-select input:checked'))
+    .map(i => i.parentElement.innerText).join(', ');
+
+  // Timeline
+  data.timeline = document.getElementById('timeline-input').value;
+
+  console.log('Enviando dados:', data);
 
   try {
-    await fetch('https://hook.us2.make.com/vviwoc9nobfi8lkyt1fl6odvr9x1404t', {
+    const response = await fetch('https://apply.joseoliveirafilms.com/lead', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(leadData)
+      body: JSON.stringify(data)
     });
 
-    res.json({ status: 'ok' });
-  } catch (e) {
-    console.error('Erro ao enviar:', e);
-    res.status(500).json({ error: 'erro ao enviar lead' });
+    if (!response.ok) throw new Error('Erro no envio');
+
+    console.log('✅ Lead enviado com sucesso!');
+  } catch (err) {
+    console.error('❌ Erro ao enviar:', err);
   }
-});
-
-// ✅ fallback (garante sempre abrir o form)
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5.html'));
-});
-
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+}
