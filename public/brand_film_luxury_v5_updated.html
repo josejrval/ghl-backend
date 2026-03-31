@@ -376,6 +376,10 @@
     border-color: var(--error) !important;
     box-shadow: 0 0 0 3px rgba(139, 58, 42, 0.1) !important;
   }
+  .field.error .select-trigger {
+    border-color: var(--error) !important;
+    box-shadow: 0 0 0 3px rgba(139, 58, 42, 0.1) !important;
+  }
   .error-msg {
     color: var(--error); font-size: 10px; margin-top: 4px; display: none;
     text-transform: uppercase; letter-spacing: 0.05em;
@@ -471,11 +475,11 @@
             </div>
           </div>
           <div class="field field-row">
-            <div>
+            <div class="field" style="margin-bottom:0;">
               <label>Website</label>
               <input type="url" id="website" placeholder="www.yourbrand.com">
             </div>
-            <div>
+            <div class="field" style="margin-bottom:0;">
               <label>Instagram *</label>
               <input type="text" id="instagram" placeholder="@yourbrand">
             </div>
@@ -614,22 +618,16 @@
             </div>
             <div class="anchor-text">
               Our projects are built for brands serious about standing out in the luxury market.
-              Engagements <strong>typically begin at $15,000</strong> and are scoped individually
-              based on your vision, location, and deliverables. If you're exploring options,
-              we respect that — please select the range that reflects your current thinking.
+              Engagements <strong>typically begin at $10,000</strong> and are scoped individually
+              based on your vision, location, and deliverables.
             </div>
           </div>
           <div class="field">
             <label>Intended investment for this production *</label>
-            <select id="intended_investment">
-              <option value="">Select...</option>
-              <option>$10,000 – $15,000</option>
-              <option>$15,000 – $25,000</option>
-              <option>$25,000 – $40,000</option>
-              <option>$40,000 – $60,000</option>
-              <option>$60,000+</option>
-              <option>Open to discussing based on scope</option>
-            </select>
+            <div style="position:relative;">
+              <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#6B6760;pointer-events:none;">$</span>
+              <input type="text" id="intended_investment" placeholder="e.g. 15,000" style="padding-left:26px;">
+            </div>
           </div>
           <div class="field">
             <label>Annual marketing investment *</label>
@@ -778,24 +776,45 @@ document.addEventListener('DOMContentLoaded', function() {
 function validateStep(stepNum) {
   let isValid = true;
   const stepEl = document.getElementById('step' + stepNum);
+
   stepEl.querySelectorAll('.field').forEach(field => {
     const label = field.querySelector('label');
-    if (label && label.innerText.includes('*')) {
-      const input = field.querySelector('input:not([type=hidden]), select, textarea');
-      if (input) {
-        const isEmpty = !input.value || input.value.trim() === '' || (input.tagName === 'SELECT' && input.value === '');
-        let errMsg = field.querySelector('.error-msg');
-        if (!errMsg) {
-          errMsg = document.createElement('span');
-          errMsg.className = 'error-msg';
-          errMsg.innerText = 'This field is required.';
-          field.appendChild(errMsg);
-        }
-        if (isEmpty) { field.classList.add('error'); isValid = false; }
-        else { field.classList.remove('error'); }
+    if (!label || !label.innerText.includes('*')) return;
+
+    let errMsg = field.querySelector('.error-msg');
+    if (!errMsg) {
+      errMsg = document.createElement('span');
+      errMsg.className = 'error-msg';
+      errMsg.innerText = 'This field is required.';
+      field.appendChild(errMsg);
+    }
+
+    // Custom select (checkbox multi or single radio)
+    const customSel = field.querySelector('.custom-select');
+    if (customSel) {
+      const hasChecked = customSel.querySelector('input[type=checkbox]:checked');
+      const hiddenVal = field.querySelector('input[type=hidden]');
+      const isEmpty = !hasChecked && (!hiddenVal || !hiddenVal.value);
+      if (isEmpty) {
+        field.classList.add('error');
+        customSel.querySelector('.select-trigger').style.borderColor = 'var(--error)';
+        isValid = false;
+      } else {
+        field.classList.remove('error');
+        customSel.querySelector('.select-trigger').style.borderColor = '';
       }
+      return;
+    }
+
+    // Regular input / select / textarea (including nested inside a div)
+    const input = field.querySelector('input:not([type=hidden]), select, textarea');
+    if (input) {
+      const isEmpty = !input.value || input.value.trim() === '' || (input.tagName === 'SELECT' && input.value === '');
+      if (isEmpty) { field.classList.add('error'); isValid = false; }
+      else { field.classList.remove('error'); }
     }
   });
+
   return isValid;
 }
 
