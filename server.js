@@ -24,7 +24,7 @@ app.post('/lead', async (req, res) => {
   try {
     const fetch = (await import('node-fetch')).default;
 
-    const response = await fetch('https://hook.us2.make.com/vviwoc9nobfi8lkyt1fl6odvr9x1404t', {
+    const response = await fetch('https://hook.us2.make.com/6n477rbaq6fqqw30myrbtw0w57v3ktxv', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(leadData)
