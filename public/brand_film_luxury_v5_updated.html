@@ -26,7 +26,7 @@
     --error: #8B3A2A;
   }
 
-   { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     background: var(--cream);
@@ -382,4 +382,502 @@
 
   .field.error input, .field.error select, .field.error textarea {
     border-color: var(--error) !important;
-    box-shadow:
+    box-shadow: 0 0 0 3px rgba(139, 58, 42, 0.1) !important;
+  }
+  .field.error .select-trigger {
+    border-color: var(--error) !important;
+    box-shadow: 0 0 0 3px rgba(139, 58, 42, 0.1) !important;
+  }
+  .error-msg {
+    color: var(--error); font-size: 10px; margin-top: 4px; display: none;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .field.error .error-msg { display: block; }
+
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">José Oliveira Films</div>
+      <div class="sidebar-eyebrow" style="margin-top:6px;margin-bottom:0;">Brand Film Application</div>
+    </div>
+    <div class="sidebar-main">
+      <h1 class="sidebar-title">We don't make videos.<br><em>We build desire.</em></h1>
+      <p class="sidebar-body">
+        We take on a limited number of projects each year — each one chosen with intention.
+        This application helps us understand whether we're the right creative fit for your brand,
+        and whether your brand is the right fit for us.
+      </p>
+    </div>
+    <div class="sidebar-footer">
+      All information is kept strictly confidential<br>and reviewed only by our internal team.
+    </div>
+  </aside>
+
+  <main class="form-panel">
+    <div class="form-header">
+      <div class="form-step-label">Application — 2026</div>
+      <h2>Tell us about your brand<br>and your vision.</h2>
+      <p>Take your time. The quality of your answers helps us understand how seriously you're approaching this investment — and gives us the foundation to build something remarkable together.</p>
+    </div>
+
+    <form id="application-form">
+      <!-- STEP 1 -->
+      <div class="form-step active" id="step1">
+        <div class="step-indicator">
+          <div class="step-dot active">01 Identity</div>
+          <div class="step-dot">02 Vision</div>
+          <div class="step-dot">03 Alignment</div>
+        </div>
+        <div class="section">
+          <div class="section-header">
+            <div class="section-num">1</div>
+            <div class="section-title">About you</div>
+            <div class="section-divider"></div>
+          </div>
+          <div class="field field-row">
+            <div>
+              <label>First name *</label>
+              <input type="text" id="first_name" placeholder="José">
+            </div>
+            <div>
+              <label>Last name *</label>
+              <input type="text" id="last_name" placeholder="Oliveira">
+            </div>
+          </div>
+          <div class="field field-row">
+            <div>
+              <label>Email *</label>
+              <input type="email" id="email" placeholder="jose@yourbrand.com">
+            </div>
+            <div>
+              <label>Phone *</label>
+              <div style="display:flex;gap:0;width:100%;">
+                <select id="phone-country" style="padding:11px 10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-right:none;border-radius:2px 0 0 2px;outline:none;cursor:pointer;min-width:110px;">
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+55">🇧🇷 +55</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+1-CA">🇨🇦 +1</option>
+                  <option value="+61">🇦🇺 +61</option>
+                  <option value="+33">🇫🇷 +33</option>
+                  <option value="+49">🇩🇪 +49</option>
+                  <option value="+34">🇪🇸 +34</option>
+                  <option value="+39">🇮🇹 +39</option>
+                  <option value="+351">🇵🇹 +351</option>
+                  <option value="+971">🇦🇪 +971</option>
+                  <option value="+52">🇲🇽 +52</option>
+                  <option value="+54">🇦🇷 +54</option>
+                  <option value="+57">🇨🇴 +57</option>
+                  <option value="+56">🇨🇱 +56</option>
+                  <option value="+81">🇯🇵 +81</option>
+                  <option value="+86">🇨🇳 +86</option>
+                  <option value="+91">🇮🇳 +91</option>
+                  <option value="+27">🇿🇦 +27</option>
+                </select>
+                <input type="tel" id="phone" placeholder="(000) 000-0000" style="width:100%;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-left:none;border-radius:0 2px 2px 0;outline:none;box-sizing:border-box;">
+              </div>
+            </div>
+          </div>
+          <div class="field field-row">
+            <div class="field" style="margin-bottom:0;">
+              <label>Website</label>
+              <input type="url" id="website" placeholder="www.yourbrand.com">
+            </div>
+            <div class="field" style="margin-bottom:0;">
+              <label>Instagram *</label>
+              <input type="text" id="instagram" placeholder="@yourbrand">
+            </div>
+          </div>
+        </div>
+        <div class="nav-buttons">
+          <button type="button" onclick="goToStep(2)" class="submit-btn">Continue to Vision</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="form-step" id="step2">
+        <div class="step-indicator">
+          <div class="step-dot" onclick="goToStep(1)">01 Identity</div>
+          <div class="step-dot active">02 Vision</div>
+          <div class="step-dot">03 Alignment</div>
+        </div>
+        <div class="section">
+          <div class="section-header">
+            <div class="section-num">2</div>
+            <div class="section-title">Your vision</div>
+            <div class="section-divider"></div>
+          </div>
+          <div class="field">
+            <label>Filming Location *</label>
+            <input type="text" id="project_location" placeholder="City, Country or Venue">
+          </div>
+          <div class="field">
+            <label>Cinematic Direction *</label>
+            <select id="cinematic_direction">
+              <option value="">Select...</option>
+              <option>Founder / Personal Brand Film</option>
+              <option>Cinematic Bio Film</option>
+              <option>Luxury Property Film</option>
+              <option>Developer / Project Presentation</option>
+              <option>Brand Documentary / Legacy Film</option>
+              <option>Campaign / Launch Film</option>
+              <option>Recruitment / Team Film</option>
+              <option>Event / Conference Film</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Describe the client you most want to attract *</label>
+            <span class="sublabel">Who are they, what do they value, and what needs to be true about your brand for them to choose you over anyone else?</span>
+            <textarea id="ideal_client" placeholder="My ideal client is someone who..."></textarea>
+          </div>
+          <div class="field">
+            <label>Describe your concept and vision for the film *</label>
+            <span class="sublabel">Don't worry about production details. Focus on the feeling, the story, and what you want people to experience when they watch it.</span>
+            <textarea id="vision" placeholder="I want this film to feel like..."></textarea>
+          </div>
+          <div class="field">
+            <label>Primary goal of this film *</label>
+            <select id="primary_goal">
+              <option value="">Select...</option>
+              <option>Establish Brand Authority</option>
+              <option>Position Myself Within The Luxury Market</option>
+              <option>Build Emotional Connection With My Audience</option>
+              <option>Humanize My Brand Through Storytelling</option>
+              <option>Attract High-Level Clients &amp; Opportunities</option>
+              <option>Elevate Brand Perception</option>
+              <option>Support Brand Expansion &amp; Growth</option>
+              <option>Launch / Reintroduce My Brand</option>
+              <option>Create A Long-Term Brand Asset</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>What results matter most? *</label>
+            <span class="sublabel">Select all that apply.</span>
+            <div class="custom-select" id="results-select">
+              <div class="select-trigger">Select options...</div>
+              <div class="options-menu">
+                <div class="option-row"><input type="checkbox" value="Attract HNW Clients"><span>Attract High-Net-Worth Clients</span></div>
+                <div class="option-row"><input type="checkbox" value="Build Trust"><span>Build Trust Before First Contact</span></div>
+                <div class="option-row"><input type="checkbox" value="Market Leader"><span>Position Myself As A Market Leader</span></div>
+                <div class="option-row"><input type="checkbox" value="Differentiate"><span>Differentiate From Competitors</span></div>
+                <div class="option-row"><input type="checkbox" value="Elevate Perception"><span>Elevate Brand Perception</span></div>
+                <div class="option-row"><input type="checkbox" value="Luxury Authority"><span>Establish Luxury Market Authority</span></div>
+                <div class="option-row"><input type="checkbox" value="Emotional Connection"><span>Strengthen Emotional Connection</span></div>
+                <div class="option-row"><input type="checkbox" value="Long-Term Asset"><span>Create A Long-Term Brand Asset</span></div>
+                <div class="option-row"><input type="checkbox" value="Brand Expansion"><span>Support Brand Expansion</span></div>
+                <div class="option-row"><input type="checkbox" value="Higher-Level Opps"><span>Open Higher-Level Opportunities</span></div>
+                <div class="option-row"><input type="checkbox" value="Media Exposure"><span>Gain Media / Press Exposure</span></div>
+                <div class="option-row"><input type="checkbox" value="Legacy Piece"><span>Leave A Cinematic Legacy Piece</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Where will this film be used? *</label>
+            <span class="sublabel">Select all that apply.</span>
+            <div class="custom-select" id="usage-select">
+              <div class="select-trigger">Select platforms...</div>
+              <div class="options-menu">
+                <div class="option-row"><input type="checkbox" value="Website"><span>Website / Homepage</span></div>
+                <div class="option-row"><input type="checkbox" value="Instagram"><span>Instagram</span></div>
+                <div class="option-row"><input type="checkbox" value="YouTube"><span>YouTube</span></div>
+                <div class="option-row"><input type="checkbox" value="LinkedIn"><span>LinkedIn</span></div>
+                <div class="option-row"><input type="checkbox" value="Paid Ads"><span>Paid Advertising</span></div>
+                <div class="option-row"><input type="checkbox" value="Listing Presentations"><span>Listing Presentations</span></div>
+                <div class="option-row"><input type="checkbox" value="Investor Decks"><span>Investor / Developer Decks</span></div>
+                <div class="option-row"><input type="checkbox" value="Brand Launch"><span>Brand Launch / Campaign</span></div>
+                <div class="option-row"><input type="checkbox" value="Recruitment"><span>Recruitment / Team Growth</span></div>
+                <div class="option-row"><input type="checkbox" value="Multi-Platform"><span>Multi-Platform Campaign</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="nav-buttons">
+          <button type="button" onclick="goToStep(1)" class="btn-outline">Back</button>
+          <button type="button" onclick="goToStep(3)" class="submit-btn">Continue to Alignment</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="form-step" id="step3">
+        <div class="step-indicator">
+          <div class="step-dot" onclick="goToStep(1)">01 Identity</div>
+          <div class="step-dot" onclick="goToStep(2)">02 Vision</div>
+          <div class="step-dot active">03 Alignment</div>
+        </div>
+        <div class="section">
+          <div class="section-header">
+            <div class="section-num">3</div>
+            <div class="section-title">Investment</div>
+            <div class="section-divider"></div>
+          </div>
+          <div class="anchor-box">
+            <div class="anchor-icon">
+              <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7" cy="7" r="6" stroke="#A8844A" stroke-width="1"/>
+                <path d="M7 4v3.5l2 2" stroke="#A8844A" stroke-width="1" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="anchor-text">
+              Our projects are built for brands serious about standing out in the luxury market.
+              Engagements <strong>typically begin at $10,000</strong> and are scoped individually
+              based on your vision, location, and deliverables.
+            </div>
+          </div>
+          <div class="field">
+            <label>Intended investment for this production *</label>
+            <div style="position:relative;">
+              <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#6B6760;pointer-events:none;">$</span>
+              <input type="text" id="intended_investment" placeholder="e.g. 15,000" style="padding-left:26px;">
+            </div>
+          </div>
+          <div class="field">
+            <label>Annual marketing investment *</label>
+            <select id="marketing_investment">
+              <option value="">Select...</option>
+              <option>Under $5,000</option>
+              <option>$5,000 – $15,000</option>
+              <option>$15,000 – $30,000</option>
+              <option>$30,000 – $60,000</option>
+              <option>$60,000 – $100,000</option>
+              <option>$100,000+</option>
+            </select>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-header">
+            <div class="section-num">4</div>
+            <div class="section-title">Decision &amp; timeline</div>
+            <div class="section-divider"></div>
+          </div>
+          <div class="field">
+            <label>Who is involved in this decision? *</label>
+            <span class="sublabel">Select all that apply.</span>
+            <div class="custom-select" id="decision-select">
+              <div class="select-trigger">Select all that apply...</div>
+              <div class="options-menu">
+                <div class="option-row"><input type="checkbox" value="Myself"><span>Myself — Sole Decision-Maker</span></div>
+                <div class="option-row"><input type="checkbox" value="Partner"><span>Business Partner</span></div>
+                <div class="option-row"><input type="checkbox" value="Spouse"><span>Spouse / Family Member</span></div>
+                <div class="option-row"><input type="checkbox" value="Board"><span>Board / Executive Team</span></div>
+                <div class="option-row"><input type="checkbox" value="Marketing"><span>Marketing Director / Team</span></div>
+                <div class="option-row"><input type="checkbox" value="Brokerage"><span>Brokerage Leadership</span></div>
+                <div class="option-row"><input type="checkbox" value="Developer"><span>Developer / Investor Group</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label>If we're aligned, when are you ready to move forward? *</label>
+            <div class="custom-select" id="timeline-select">
+              <div class="select-trigger">Select timeline...</div>
+              <div class="options-menu">
+                <div class="option-row" data-val="Now"><span>Yes — Ready To Move Forward Now</span></div>
+                <div class="option-row" data-val="30 Days"><span>Within 30 Days</span></div>
+                <div class="option-row" data-val="60 Days"><span>30 – 60 Days</span></div>
+                <div class="option-row" data-val="Exploring"><span>Not At This Time — Still Exploring</span></div>
+              </div>
+            </div>
+            <input type="hidden" name="timeline" id="timeline-input">
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-header">
+            <div class="section-num">5</div>
+            <div class="section-title">Final details</div>
+            <div class="section-divider"></div>
+          </div>
+          <div class="field">
+            <label>Anything else we should know?</label>
+            <span class="sublabel">Additional context, preferences, special considerations, or anything that would help us understand your brand and vision.</span>
+            <textarea id="additional_context" placeholder="Feel free to share anything relevant..."></textarea>
+          </div>
+          <div class="field">
+            <label>How did you find us?</label>
+            <select id="how_found_us">
+              <option value="">Select...</option>
+              <option>Instagram</option>
+              <option>YouTube</option>
+              <option>Referral</option>
+              <option>Google Search</option>
+              <option>Event / Conference</option>
+              <option>Past Client</option>
+              <option>Brokerage / Team</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="submit-section">
+          <div class="nav-buttons">
+            <button type="button" onclick="goToStep(2)" class="btn-outline">Back</button>
+            <button type="button" id="submit-btn" onclick="handleSubmit()" class="submit-btn">
+              Request Private Consultation
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;opacity:.6;">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <p class="consent-text">
+            By submitting, you consent to receive SMS messages from José Oliveira Films regarding project updates and scheduling.
+            Message and data rates may apply. Reply STOP to unsubscribe.
+          </p>
+        </div>
+      </div>
+    </form>
+  </main>
+</div>
+
+<!-- THANK YOU -->
+<div id="thankyou" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#F7F4EF;z-index:9999;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;">
+  <div style="max-width:480px;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#A8844A;margin-bottom:24px;">Application Received</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:#1A1814;line-height:1.2;margin-bottom:28px;">Thank you.</h2>
+    <p style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#6B6760;line-height:1.85;">We take on a limited number of projects each year, and every application is reviewed personally. If we believe we can build something remarkable together, we'll be in touch.</p>
+    <div style="width:40px;height:1px;background:#A8844A;margin:36px auto;"></div>
+    <p style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#C4C0B8;letter-spacing:.04em;">José Oliveira Films</p>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  document.querySelectorAll('.custom-select').forEach(function(sel) {
+    sel.querySelector('.select-trigger').addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.querySelectorAll('.custom-select').forEach(s => s !== sel && s.classList.remove('active'));
+      sel.classList.toggle('active');
+    });
+  });
+
+  document.querySelectorAll('#results-select .option-row, #usage-select .option-row, #decision-select .option-row').forEach(function(row) {
+    row.addEventListener('click', function() {
+      const cb = row.querySelector('input[type=checkbox]');
+      cb.checked = !cb.checked;
+      row.classList.toggle('selected', cb.checked);
+      const sel = row.closest('.custom-select');
+      const checked = Array.from(sel.querySelectorAll('input:checked')).map(i => i.value);
+      sel.querySelector('.select-trigger').textContent = checked.length ? checked.join(', ') : 'Select...';
+    });
+  });
+
+  document.querySelectorAll('#timeline-select .option-row').forEach(function(row) {
+    row.addEventListener('click', function() {
+      document.querySelectorAll('#timeline-select .option-row').forEach(r => r.classList.remove('selected'));
+      row.classList.add('selected');
+      document.getElementById('timeline-input').value = row.dataset.val;
+      document.getElementById('timeline-select').querySelector('.select-trigger').textContent = row.querySelector('span').textContent;
+      document.getElementById('timeline-select').classList.remove('active');
+    });
+  });
+
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('active'));
+  });
+
+});
+
+function validateStep(stepNum) {
+  let isValid = true;
+  const stepEl = document.getElementById('step' + stepNum);
+
+  stepEl.querySelectorAll('.field').forEach(field => {
+    const label = field.querySelector('label');
+    if (!label || !label.innerText.includes('*')) return;
+
+    const customSel = field.querySelector('.custom-select');
+    if (customSel) {
+      const hasChecked = customSel.querySelector('input[type=checkbox]:checked');
+      const hiddenVal = field.querySelector('input[type=hidden]');
+      const isEmpty = !hasChecked && (!hiddenVal || !hiddenVal.value);
+      if (isEmpty) { field.classList.add('error'); isValid = false; } 
+      else { field.classList.remove('error'); }
+      return;
+    }
+
+    const input = field.querySelector('input:not([type=hidden]), select, textarea');
+    if (input) {
+      const isEmpty = !input.value || input.value.trim() === '' || (input.tagName === 'SELECT' && input.value === '');
+      if (isEmpty) { field.classList.add('error'); isValid = false; }
+      else { field.classList.remove('error'); }
+    }
+  });
+
+  return isValid;
+}
+
+function goToStep(step) {
+  const currentStep = document.querySelector('.form-step.active');
+  const currentStepNum = parseInt(currentStep.id.replace('step', ''));
+  if (step > currentStepNum && !validateStep(currentStepNum)) {
+    const firstError = currentStep.querySelector('.field.error');
+    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + step).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function handleSubmit() {
+  if (!validateStep(3)) return;
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  const data = {
+    first_name: document.getElementById('first_name').value,
+    last_name: document.getElementById('last_name').value,
+    email: document.getElementById('email').value,
+    instagram: document.getElementById('instagram').value,
+    website: document.getElementById('website').value,
+    phone: document.getElementById('phone-country').value + ' ' + document.getElementById('phone').value,
+    filming_location: document.getElementById('project_location').value,
+    cinematic_direction: document.getElementById('cinematic_direction').value,
+    ideal_client: document.getElementById('ideal_client').value,
+    vision: document.getElementById('vision').value,
+    primary_goal: document.getElementById('primary_goal').value,
+    intended_investment: document.getElementById('intended_investment').value,
+    marketing_investment: document.getElementById('marketing_investment').value,
+    how_found_us: document.getElementById('how_found_us').value,
+    additional_context: document.getElementById('additional_context').value,
+    timeline: document.getElementById('timeline-input').value,
+    results_matter: Array.from(document.querySelectorAll('#results-select input:checked')).map(i => i.value).join(', '),
+    usage_platforms: Array.from(document.querySelectorAll('#usage-select input:checked')).map(i => i.value).join(', '),
+    decision_makers: Array.from(document.querySelectorAll('#decision-select input:checked')).map(i => i.value).join(', ')
+  };
+
+  console.log('Enviando dados:', data);
+
+  try {
+    // 1. ENVIO PARA O EMAIL (EmailJS)
+    await emailjs.send("service_sw9hclg", "template_dmdn9s4", data);
+    console.log('✅ Email enviado!');
+
+    // 2. ENVIO PARA O MAKE (Google Sheets/Telegram)
+    // Usamos o Railway como ponte para evitar erros de CORS
+    await fetch('https://apply.joseoliveirafilms.com/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    console.log('✅ Make/Railway processado!');
+
+    // SUCESSO FINAL
+    document.getElementById('thankyou').style.display = 'flex';
+
+  } catch (err) {
+    console.error('Erro:', err);
+    btn.disabled = false;
+    btn.innerHTML = 'Request Private Consultation <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;opacity:.6;"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    alert('Erro ao enviar. Verifique sua conexão e tente novamente.');
+  }
+}
+</script>
+
+</body>
+</html>
