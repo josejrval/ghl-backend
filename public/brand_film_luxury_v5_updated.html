@@ -454,7 +454,7 @@
               <label>Email *</label>
               <input type="email" id="email" placeholder="jose@yourbrand.com">
             </div>
-            <div>
+            <div class="field" style="margin-bottom:0;" id="phone-field">
               <label>Phone *</label>
               <div style="display:flex;gap:0;width:100%;">
                 <select id="phone-country" style="padding:11px 10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-right:none;border-radius:2px 0 0 2px;outline:none;cursor:pointer;min-width:110px;">
@@ -784,7 +784,26 @@ function validateStep(stepNum) {
   let isValid = true;
   const stepEl = document.getElementById('step' + stepNum);
 
+  // Validação especial do telefone (step 1)
+  if (stepNum === 1) {
+    const phoneField = document.getElementById('phone-field');
+    const phoneInput = document.getElementById('phone');
+    if (phoneField && phoneInput) {
+      if (!phoneInput.value || phoneInput.value.trim() === '') {
+        phoneField.classList.add('error');
+        phoneInput.style.borderColor = 'var(--error)';
+        phoneInput.style.boxShadow = '0 0 0 3px rgba(139,58,42,0.1)';
+        isValid = false;
+      } else {
+        phoneField.classList.remove('error');
+        phoneInput.style.borderColor = '';
+        phoneInput.style.boxShadow = '';
+      }
+    }
+  }
+
   stepEl.querySelectorAll('.field').forEach(field => {
+    if (field.id === 'phone-field') return; // já validado acima
     const label = field.querySelector('label');
     if (!label || !label.innerText.includes('*')) return;
 
