@@ -793,7 +793,7 @@ function validateStep(stepNum) {
       const hasChecked = customSel.querySelector('input[type=checkbox]:checked');
       const hiddenVal = field.querySelector('input[type=hidden]');
       const isEmpty = !hasChecked && (!hiddenVal || !hiddenVal.value);
-      if (isEmpty) { field.classList.add('error'); isValid = false; } 
+      if (isEmpty) { field.classList.add('error'); isValid = false; }
       else { field.classList.remove('error'); }
       return;
     }
@@ -857,15 +857,6 @@ async function handleSubmit() {
     // 1. ENVIO PARA O EMAIL (EmailJS)
     await emailjs.send("service_sw9hclg", "template_dmdn9s4", data);
     console.log('✅ Email enviado!');
-
-    // 2. ENVIO PARA O MAKE (Google Sheets/Telegram)
-    // Usamos o Railway como ponte para evitar erros de CORS
-    await fetch('https://apply.joseoliveirafilms.com/lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    console.log('✅ Make/Railway processado!');
 
     // SUCESSO FINAL
     document.getElementById('thankyou').style.display = 'flex';
