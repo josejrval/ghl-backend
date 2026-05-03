@@ -1,9 +1,14 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// necessário em ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(cors());
 app.use(express.json());
@@ -15,31 +20,38 @@ app.get('/', (req, res) => {
 
 app.post('/lead', async (req, res) => {
   const leadData = req.body;
+
   console.log('NOVO LEAD:', JSON.stringify(leadData, null, 2));
 
-  // Responde ao frontend IMEDIATAMENTE (evita timeout/erro no form)
   res.json({ status: 'ok' });
 
-  // Envia pro Make em background (sem bloquear a resposta)
   try {
     const fetch = (await import('node-fetch')).default;
 
-    const response = await fetch('https://hook.us2.make.com/6n477rbaq6fqqw30myrbtw0w57v3ktxv', {
+    await fetch('https://hook.us2.make.com/6n477rbaq6fqqw30myrbtw0w57v3ktxv', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(leadData)
     });
 
-    console.log('✅ Make respondeu:', response.status);
-
-  } catch (error) {
-    console.error('❌ Erro ao enviar pro Make:', error.message);
-    // Não afeta o usuário — já recebeu "ok"
+  } catch (err) {
+    console.log('Erro Make:', err.message);
   }
-});
 
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5_updated.html'));
+  try {
+    const { Resend } = await import('resend');
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    await resend.emails.send({
+      from: 'Leads <onboarding@resend.dev>',
+      to: 'teuemail@gmail.com',
+      subject: '🔥 Novo lead',
+      html: `<pre>${JSON.stringify(leadData, null, 2)}</pre>`
+    });
+
+  } catch (err) {
+    console.log('Erro Resend:', err.message);
+  }
 });
 
 app.listen(PORT, () => {
