@@ -37,18 +37,32 @@
   .page { background: var(--cream); width: 100%; min-height: 100vh; }
   .form-panel { min-height: 100vh; padding: 48px 40px 80px; max-width: 720px; margin: 0 auto; }
 
-  .form-header { margin-bottom: 48px; padding-bottom: 36px; border-bottom: 1px solid var(--border); }
+  /* Hero (dark cinematic header band) */
+  .hero { position: relative; width: 100%; background: linear-gradient(158deg, #1A1814 0%, #241F1B 100%); }
+  .hero::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: .55; }
+  .hero-inner { max-width: 720px; margin: 0 auto; padding: 66px 40px 54px; }
+  .form-header { margin-bottom: 0; }
   .form-step-label {
     font-size: 10px; font-weight: 500; letter-spacing: var(--ls-wide);
     text-transform: uppercase; color: var(--gold); margin-bottom: 22px; display: block;
   }
   .form-header h2 {
-    font-family: 'Cormorant Garamond', serif; font-size: 46px; font-weight: 300;
-    color: var(--ink); line-height: 1.08; margin-bottom: 22px; letter-spacing: -.01em; max-width: 9ch;
+    font-family: 'Cormorant Garamond', serif; font-size: 54px; font-weight: 300;
+    color: #F4EFE6; line-height: 1.04; margin-bottom: 22px; letter-spacing: -.015em; max-width: 11ch;
   }
-  .form-header h2 em { font-style: italic; color: var(--gold); }
-  .form-header p { font-size: 15px; color: var(--ink-light); line-height: 1.65; font-weight: 400; max-width: 500px; }
-  .form-header-confidential { font-size: 11px; color: var(--ink-soft); margin-top: 18px; display: block; line-height: 1.6; }
+  .form-header h2 em { font-style: italic; color: var(--gold-light); display: block; margin-top: 2px; }
+  .form-header p { font-size: 15px; color: rgba(255,255,255,0.72); line-height: 1.65; font-weight: 400; max-width: 500px; }
+  .form-header-confidential { font-size: 11px; color: rgba(255,255,255,0.42); margin-top: 18px; display: block; line-height: 1.6; }
+
+  /* Scroll cue (mobile) */
+  .scroll-cue {
+    display: none; margin: 38px auto 0; width: 46px; height: 46px; border-radius: 50%;
+    border: 1px solid rgba(168,132,74,0.55); background: transparent; cursor: pointer;
+    align-items: center; justify-content: center; color: var(--gold-light);
+    animation: cueBounce 1.8s ease-in-out infinite;
+  }
+  .scroll-cue svg { width: 18px; height: 18px; }
+  @keyframes cueBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(7px); } }
 
   .section { margin-bottom: 46px; }
   .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
@@ -201,7 +215,9 @@
     .form-panel { padding: 40px 24px 60px; }
     .field-row { grid-template-columns: 1fr; gap: 0; }
     .field-row .field { margin-bottom: 22px; }
-    .form-header h2 { font-size: 38px; max-width: none; }
+    .form-header h2 { font-size: 40px; max-width: none; }
+    .hero-inner { min-height: 88vh; display: flex; flex-direction: column; justify-content: center; padding: 40px 24px 28px; }
+    .scroll-cue { display: flex; margin-top: auto; }
   }
   @media (max-width: 600px) {
     .nav-buttons { flex-direction: column-reverse; }
@@ -214,14 +230,19 @@
 </head>
 <body>
 <div class="page">
-  <main class="form-panel">
-    <div class="form-header">
+  <header class="hero">
+    <div class="form-header hero-inner">
       <span class="form-step-label">José Oliveira Films &nbsp;·&nbsp; 2026</span>
-      <h2>Tell us what you want to make, and <em>who it's for.</em></h2>
+      <h2>Tell us what you want to make, and<em>who it's for.</em></h2>
       <p>We read every word of these. The more specific you can be — the place, the person, the moment that matters — the better we understand whether this is a film we're the right ones to make.</p>
       <span class="form-header-confidential">What you write here stays between you and us.</span>
+      <button type="button" class="scroll-cue" onclick="scrollToForm()" aria-label="Start the application">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </button>
     </div>
+  </header>
 
+  <main class="form-panel">
     <form id="application-form" autocomplete="on">
       <!-- STEP 1 -->
       <div class="form-step active" id="step1" tabindex="-1">
@@ -626,12 +647,16 @@ function validateStep(stepNum) {
 }
 
 /* ---------- Step navigation ---------- */
+function scrollToForm() {
+  const panel = document.querySelector('.form-panel');
+  if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 function showStep(step, forward) {
   document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active', 'slide-back'));
   const ns = document.getElementById('step' + step);
   ns.classList.add('active');
   if (!forward) ns.classList.add('slide-back');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  scrollToForm();
   setTimeout(() => { try { ns.focus({ preventScroll: true }); } catch (e) {} }, 60);
 }
 function goToStep(step) {
