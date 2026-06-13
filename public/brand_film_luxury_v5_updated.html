@@ -1,12 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0036)https://apply.joseoliveirafilms.com/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Brand Film Application — José Oliveira Films</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="./Brand Film Application — José Oliveira Films_files/css2" rel="stylesheet">
 <!-- Script do EmailJS -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript" src="./Brand Film Application — José Oliveira Films_files/email.min.js">
+function handleMobileBack() {
+  const currentStep = document.querySelector('.form-step.active');
+  const currentStepNum = parseInt(currentStep.id.replace('step', ''));
+  if (currentStepNum > 1) {
+    goToStep(currentStepNum - 1);
+  } else {
+    // Go back to sidebar / top of page
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelector('.sidebar').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+// Show/hide mobile back based on scroll
+window.addEventListener('scroll', function() {
+  const back = document.getElementById('mobile-back');
+  if (!back) return;
+  if (window.scrollY > 100) {
+    back.style.opacity = '1';
+  } else {
+    back.style.opacity = '0';
+  }
+});
+
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script type="text/javascript">
    (function(){
       emailjs.init("IGIG4HP_JYvbo8rKr");
@@ -315,7 +342,7 @@
   @media (max-width: 900px) {
     .page { grid-template-columns: 1fr; }
     .sidebar { position: relative; height: auto; padding: 48px 32px; }
-    .form-panel { padding: 40px 32px 60px; }
+    .form-panel { padding: 40px 24px 60px; }
     .field-row { grid-template-columns: 1fr; }
   }
 
@@ -351,24 +378,46 @@
   .option-row span { font-size: 12px; color: var(--ink-light); font-weight: 300; }
   .option-row.selected { background: var(--gold-faint); }
 
-  .form-step { display: none; animation: fadeIn 0.6s ease-out forwards; }
-  .form-step.active { display: block; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  .form-step { display: none; }
+  .form-step.active {
+    display: block;
+    animation: slideIn 0.45s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  .form-step.slide-back {
+    display: block;
+    animation: slideBack 0.45s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(24px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideBack {
+    from { opacity: 0; transform: translateX(-24px); }
+    to { opacity: 1; transform: translateX(0); }
   }
 
   .step-indicator {
-    display: flex; gap: 40px; margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+  .step-labels {
+    display: flex; justify-content: space-between; margin-bottom: 12px;
   }
   .step-dot {
-    font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--ink-faint); position: relative; cursor: pointer; transition: color .3s;
+    font-size: 10px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint); cursor: pointer; transition: color .3s;
   }
   .step-dot.active { color: var(--gold); }
-  .step-dot.active::after {
-    content: ''; position: absolute; bottom: -21px; left: 0; width: 100%; height: 2px; background: var(--gold);
+  .step-dot.done { color: var(--ink-light); }
+  .progress-bar-track {
+    width: 100%; height: 2px; background: var(--border); border-radius: 2px; position: relative;
+  }
+  .progress-bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 2px; transition: width .5s cubic-bezier(.4,0,.2,1);
+    width: 33%;
+  }
+  .step-time {
+    font-size: 10px; color: var(--ink-faint); letter-spacing: .06em; margin-top: 8px; text-align: right;
   }
 
   .nav-buttons { display: flex; gap: 16px; margin-top: 40px; width: 100%; }
@@ -395,10 +444,153 @@
   .field.error .error-msg { display: block; }
 
   .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .story-field-wrapper {
+    background: linear-gradient(135deg, #1A1814 0%, #2A2420 100%);
+    border-radius: 4px;
+    padding: 28px 28px 24px;
+    margin-bottom: 22px;
+  }
+  .story-field-wrapper label {
+    color: var(--gold-light) !important;
+    font-size: 12px !important;
+    letter-spacing: .14em !important;
+  }
+  .story-field-wrapper .sublabel {
+    color: rgba(255,255,255,0.45) !important;
+    margin-bottom: 14px !important;
+  }
+  .story-field-wrapper textarea {
+    background: rgba(255,255,255,0.06) !important;
+    border-color: rgba(168,132,74,0.3) !important;
+    color: rgba(255,255,255,0.9) !important;
+    min-height: 150px !important;
+  }
+  .story-field-wrapper textarea:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 3px rgba(168,132,74,0.12) !important;
+  }
+  .story-field-wrapper textarea::placeholder { color: rgba(255,255,255,0.2) !important; }
+  .story-field-wrapper textarea:focus::placeholder { color: rgba(255,255,255,0.3) !important; }
+
+  .scroll-arrow {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: 32px;
+    cursor: pointer;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  .scroll-arrow span {
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+  .scroll-arrow svg {
+    width: 20px; height: 20px;
+    opacity: 0.7;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  @media (max-width: 900px) {
+    .scroll-arrow { display: flex; }
+  }
+
+  .mobile-back {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 500;
+    width: 36px; height: 36px;
+    background: var(--ink);
+    border: 1px solid rgba(168,132,74,0.3);
+    border-radius: 50%;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .mobile-back:hover { background: #2A2520; }
+  .mobile-back svg { width: 16px; height: 16px; }
+  @media (max-width: 900px) {
+    .mobile-back { display: flex; }
+  }
+
+  /* Smooth transitions on all interactive elements */
+  .field input, .field select, .field textarea {
+    transition: border-color .2s, box-shadow .2s, background .2s;
+  }
+
+  /* Better focus ring */
+  .field input:focus, .field select:focus, .field textarea:focus {
+    background: #FDFCF9;
+  }
+
+  /* Label animation on focus */
+  .field:focus-within label {
+    color: var(--gold);
+    transition: color .2s;
+  }
+
+  /* Nav buttons better spacing on mobile */
+  @media (max-width: 600px) {
+    .nav-buttons { flex-direction: column-reverse; }
+    .submit-btn { flex: none; width: 100%; }
+    .btn-outline { flex: none; width: 100%; }
+    .form-panel { padding: 32px 20px 80px; }
+    .step-labels { gap: 8px; }
+    .step-dot { font-size: 9px; }
+  }
+
+  /* Film type card hover effect */
+
+  /* Better error states */
+  .field.error label { color: var(--error); }
+  .field.error .sublabel { color: rgba(139,58,42,0.7); }
+
+  /* Anchor box subtle hover */
+  .anchor-box {
+    transition: opacity .2s;
+  }
+
+  /* Submit button pulse on hover */
+  .submit-btn:not(:disabled):hover::after {
+    animation: shimmer 1.5s infinite;
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* Story field transition */
+  #sidebar-text {
+    transition: opacity .4s ease;
+    display: block;
+  }
+
+  /* Progress fill glow */
+  .progress-bar-fill {
+    box-shadow: 0 0 8px rgba(168,132,74,0.3);
+  }
+
+  /* Step dot done state */
+  .step-dot.done::after {
+    content: ' ✓';
+    opacity: 0.5;
+  }
 </style>
 </head>
 <body>
 
+<div class="mobile-back" id="mobile-back" style="opacity:0;" onclick="handleMobileBack()" title="Back">
+  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 4L6 8l4 4" stroke="#A8844A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</div>
 <div class="page">
   <aside class="sidebar">
     <div>
@@ -408,13 +600,17 @@
     <div class="sidebar-main">
       <h1 class="sidebar-title">We don't make videos.<br><em>We build desire.</em></h1>
       <p class="sidebar-body">
-        We take on a limited number of projects each year — each one chosen with intention.
-        This application helps us understand whether we're the right creative fit for your brand,
-        and whether your brand is the right fit for us.
+        <span id="sidebar-text">We take on a limited number of projects each year — each one chosen with intention. This application helps us understand whether we're the right creative fit for your brand, and whether your brand is the right fit for us.</span>
       </p>
     </div>
     <div class="sidebar-footer">
       All information is kept strictly confidential<br>and reviewed only by our internal team.
+    </div>
+    <div class="scroll-arrow" onclick="document.querySelector('.form-panel').scrollIntoView({behavior:'smooth'})">
+      <span>Begin</span>
+      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 4v12M4 10l6 6 6-6" stroke="#A8844A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
   </aside>
 
@@ -429,9 +625,13 @@
       <!-- STEP 1 -->
       <div class="form-step active" id="step1">
         <div class="step-indicator">
-          <div class="step-dot active">01 Identity</div>
-          <div class="step-dot">02 Vision</div>
-          <div class="step-dot">03 Alignment</div>
+          <div class="step-labels">
+            <div class="step-dot active">01 Identity</div>
+            <div class="step-dot" onclick="goToStep(2)">02 Your Film</div>
+            <div class="step-dot" onclick="goToStep(3)">03 Alignment</div>
+          </div>
+          <div class="progress-bar-track"><div class="progress-bar-fill" style="width:33%"></div></div>
+          <div class="step-time">About 4 minutes remaining</div>
         </div>
         <div class="section">
           <div class="section-header">
@@ -457,7 +657,7 @@
             <div class="field" style="margin-bottom:0;" id="phone-field">
               <label>Phone *</label>
               <div style="display:flex;gap:0;width:100%;">
-                <select id="phone-country" style="padding:11px 10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-right:none;border-radius:2px 0 0 2px;outline:none;cursor:pointer;min-width:110px;">
+                <select id="phone-country" style="padding:11px 10px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-right:none;border-radius:2px 0 0 2px;outline:none;cursor:pointer;min-width:110px;">
                   <option value="+1">🇺🇸 +1</option>
                   <option value="+55">🇧🇷 +55</option>
                   <option value="+44">🇬🇧 +44</option>
@@ -478,19 +678,13 @@
                   <option value="+91">🇮🇳 +91</option>
                   <option value="+27">🇿🇦 +27</option>
                 </select>
-                <input type="tel" id="phone" placeholder="(000) 000-0000" style="width:100%;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#1A1814;background:#FFFF;border:1px solid #E2DDD4;border-left:none;border-radius:0 2px 2px 0;outline:none;box-sizing:border-box;">
+                <input type="tel" id="phone" placeholder="(000) 000-0000" style="width: 100%; padding: 11px 14px; font-family: &quot;DM Sans&quot;, sans-serif; font-size: 13px; font-weight: 300; color: rgb(26, 24, 20); background: rgb(255, 255, 255); border-width: 1px 1px 1px medium; border-style: solid solid solid none; border-image: initial; border-radius: 0px 2px 2px 0px; outline: none; box-sizing: border-box;">
               </div>
             </div>
           </div>
-          <div class="field field-row">
-            <div class="field" style="margin-bottom:0;">
-              <label>Website</label>
-              <input type="url" id="website" placeholder="www.yourbrand.com">
-            </div>
-            <div class="field" style="margin-bottom:0;">
-              <label>Instagram *</label>
-              <input type="text" id="instagram" placeholder="@yourbrand">
-            </div>
+          <div class="field">
+            <label>Instagram or Website *</label>
+            <input type="text" id="instagram_or_website" placeholder="@handle or yoursite.com">
           </div>
         </div>
         <div class="nav-buttons">
@@ -501,9 +695,13 @@
       <!-- STEP 2 -->
       <div class="form-step" id="step2">
         <div class="step-indicator">
-          <div class="step-dot" onclick="goToStep(1)">01 Identity</div>
-          <div class="step-dot active">02 Vision</div>
-          <div class="step-dot">03 Alignment</div>
+          <div class="step-labels">
+            <div class="step-dot done" onclick="goToStep(1)">01 Identity</div>
+            <div class="step-dot active">02 Your Film</div>
+            <div class="step-dot">03 Alignment</div>
+          </div>
+          <div class="progress-bar-track"><div class="progress-bar-fill" style="width:66%"></div></div>
+          <div class="step-time">About 2 minutes remaining</div>
         </div>
         <div class="section">
           <div class="section-header">
@@ -516,51 +714,61 @@
             <input type="text" id="project_location" placeholder="City, Country or Venue">
           </div>
           <div class="field">
-            <label>Cinematic Direction *</label>
-            <select id="cinematic_direction">
-              <option value="">Select...</option>
-              <option>Founder / Personal Brand Film</option>
-              <option>Cinematic Bio Film</option>
-              <option>Luxury Property Film</option>
-              <option>Developer / Project Presentation</option>
-              <option>Brand Documentary / Legacy Film</option>
-              <option>Campaign / Launch Film</option>
-              <option>Recruitment / Team Film</option>
-              <option>Event / Conference Film</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Describe the client you most want to attract *</label>
-            <span class="sublabel">Who are they, what do they value, and what needs to be true about your brand for them to choose you over anyone else?</span>
-            <textarea id="ideal_client" placeholder="My ideal client is someone who..."></textarea>
-          </div>
-          <div class="field">
-            <label>Describe your concept and vision for the film *</label>
-            <span class="sublabel">Don't worry about production details. Focus on the feeling, the story, and what you want people to experience when they watch it.</span>
-            <textarea id="vision" placeholder="I want this film to feel like..."></textarea>
-          </div>
-          <div class="field">
-            <label>Primary goal of this film *</label>
-            <select id="primary_goal">
-              <option value="">Select...</option>
-              <option>Establish Brand Authority</option>
-              <option>Position Myself Within The Luxury Market</option>
-              <option>Build Emotional Connection With My Audience</option>
-              <option>Humanize My Brand Through Storytelling</option>
-              <option>Attract High-Level Clients &amp; Opportunities</option>
-              <option>Elevate Brand Perception</option>
-              <option>Support Brand Expansion &amp; Growth</option>
-              <option>Launch / Reintroduce My Brand</option>
-              <option>Create A Long-Term Brand Asset</option>
-              <option>Other</option>
-            </select>
+            <label>Type of Film *</label>
+            <div class="custom-select" id="film-type-group">
+              <input type="hidden" id="film_type" value="">
+              <div class="select-trigger" id="film-type-trigger">Select type of film...</div>
+              <div class="options-menu" id="film-type-menu">
+                <div class="option-row film-type-option" data-value="The Real Estate Listing Film">
+                  <div style="display:flex;flex-direction:column;gap:2px;padding:4px 0;">
+                    <span style="font-size:13px;font-weight:400;color:var(--ink);">The Real Estate Listing Film</span>
+                    <span style="font-size:11px;font-weight:300;color:var(--ink-light);line-height:1.5;">For a single luxury property that deserves more than a listing. A cinematic presentation that makes buyers feel the life before they step inside.</span>
+                  </div>
+                </div>
+                <div class="option-row film-type-option" data-value="The Realtor Story">
+                  <div style="display:flex;flex-direction:column;gap:2px;padding:4px 0;">
+                    <span style="font-size:13px;font-weight:400;color:var(--ink);">The Realtor Story</span>
+                    <span style="font-size:11px;font-weight:300;color:var(--ink-light);line-height:1.5;">For the realtor building a personal brand that earns trust before the first conversation. The film that makes clients choose you before they meet you.</span>
+                  </div>
+                </div>
+                <div class="option-row film-type-option" data-value="The Founder Documentary-Style Film">
+                  <div style="display:flex;flex-direction:column;gap:2px;padding:4px 0;">
+                    <span style="font-size:13px;font-weight:400;color:var(--ink);">The Founder Documentary-Style Film</span>
+                    <span style="font-size:11px;font-weight:300;color:var(--ink-light);line-height:1.5;">For the founder whose story is the brand. A long-form cinematic portrait that builds the credibility no pitch deck can.</span>
+                  </div>
+                </div>
+                <div class="option-row film-type-option" data-value="The Builder Film">
+                  <div style="display:flex;flex-direction:column;gap:2px;padding:4px 0;">
+                    <span style="font-size:13px;font-weight:400;color:var(--ink);">The Builder Film</span>
+                    <span style="font-size:11px;font-weight:300;color:var(--ink-light);line-height:1.5;">For the developer documenting what they create from the ground up. The film that turns a project into a legacy.</span>
+                  </div>
+                </div>
+                <div class="option-row film-type-option" data-value="The Brand Cinematic Documentary">
+                  <div style="display:flex;flex-direction:column;gap:2px;padding:4px 0;">
+                    <span style="font-size:13px;font-weight:400;color:var(--ink);">The Brand Cinematic Documentary</span>
+                    <span style="font-size:11px;font-weight:300;color:var(--ink-light);line-height:1.5;">For the brand with a story bigger than its product. A feature-length documentary that positions your company as a cultural force.</span>
+                  </div>
+                </div>
+                <div class="option-row film-type-option" data-value="Something Else">
+                  <div style="display:flex;flex-direction:column;gap:2px;padding:4px 0;">
+                    <span style="font-size:13px;font-weight:400;color:var(--ink);">Something Else</span>
+                    <span style="font-size:11px;font-weight:300;color:var(--ink-light);line-height:1.5;">For a vision that doesn't fit a category yet. If you know your story deserves to be told cinematically, we want to hear it.</span>
+                  </div>
+                </div>
+              </div>
+            </div></div>
+          <div class="story-field-wrapper">
+            <div class="field" style="margin-bottom:0;">
+              <label>What is the single story or moment you most want this film to capture? *</label>
+              <span class="sublabel">Don't worry about production. Tell us the one story, turning point, or feeling that should live at the heart of this film.</span>
+              <textarea id="your_story" placeholder="The story I want this film to tell is..."></textarea>
+            </div>
           </div>
           <div class="field">
             <label>What results matter most? *</label>
             <span class="sublabel">Select all that apply.</span>
             <div class="custom-select" id="results-select">
-              <div class="select-trigger">Select options...</div>
+              <div class="select-trigger">Long-Term Asset</div>
               <div class="options-menu">
                 <div class="option-row"><input type="checkbox" value="Attract HNW Clients"><span>Attract High-Net-Worth Clients</span></div>
                 <div class="option-row"><input type="checkbox" value="Build Trust"><span>Build Trust Before First Contact</span></div>
@@ -569,30 +777,11 @@
                 <div class="option-row"><input type="checkbox" value="Elevate Perception"><span>Elevate Brand Perception</span></div>
                 <div class="option-row"><input type="checkbox" value="Luxury Authority"><span>Establish Luxury Market Authority</span></div>
                 <div class="option-row"><input type="checkbox" value="Emotional Connection"><span>Strengthen Emotional Connection</span></div>
-                <div class="option-row"><input type="checkbox" value="Long-Term Asset"><span>Create A Long-Term Brand Asset</span></div>
+                <div class="option-row selected"><input type="checkbox" value="Long-Term Asset"><span>Create A Long-Term Brand Asset</span></div>
                 <div class="option-row"><input type="checkbox" value="Brand Expansion"><span>Support Brand Expansion</span></div>
                 <div class="option-row"><input type="checkbox" value="Higher-Level Opps"><span>Open Higher-Level Opportunities</span></div>
                 <div class="option-row"><input type="checkbox" value="Media Exposure"><span>Gain Media / Press Exposure</span></div>
                 <div class="option-row"><input type="checkbox" value="Legacy Piece"><span>Leave A Cinematic Legacy Piece</span></div>
-              </div>
-            </div>
-          </div>
-          <div class="field">
-            <label>Where will this film be used? *</label>
-            <span class="sublabel">Select all that apply.</span>
-            <div class="custom-select" id="usage-select">
-              <div class="select-trigger">Select platforms...</div>
-              <div class="options-menu">
-                <div class="option-row"><input type="checkbox" value="Website"><span>Website / Homepage</span></div>
-                <div class="option-row"><input type="checkbox" value="Instagram"><span>Instagram</span></div>
-                <div class="option-row"><input type="checkbox" value="YouTube"><span>YouTube</span></div>
-                <div class="option-row"><input type="checkbox" value="LinkedIn"><span>LinkedIn</span></div>
-                <div class="option-row"><input type="checkbox" value="Paid Ads"><span>Paid Advertising</span></div>
-                <div class="option-row"><input type="checkbox" value="Listing Presentations"><span>Listing Presentations</span></div>
-                <div class="option-row"><input type="checkbox" value="Investor Decks"><span>Investor / Developer Decks</span></div>
-                <div class="option-row"><input type="checkbox" value="Brand Launch"><span>Brand Launch / Campaign</span></div>
-                <div class="option-row"><input type="checkbox" value="Recruitment"><span>Recruitment / Team Growth</span></div>
-                <div class="option-row"><input type="checkbox" value="Multi-Platform"><span>Multi-Platform Campaign</span></div>
               </div>
             </div>
           </div>
@@ -606,9 +795,13 @@
       <!-- STEP 3 -->
       <div class="form-step" id="step3">
         <div class="step-indicator">
-          <div class="step-dot" onclick="goToStep(1)">01 Identity</div>
-          <div class="step-dot" onclick="goToStep(2)">02 Vision</div>
-          <div class="step-dot active">03 Alignment</div>
+          <div class="step-labels">
+            <div class="step-dot done" onclick="goToStep(1)">01 Identity</div>
+            <div class="step-dot done" onclick="goToStep(2)">02 Your Film</div>
+            <div class="step-dot active">03 Alignment</div>
+          </div>
+          <div class="progress-bar-track"><div class="progress-bar-fill" style="width:100%"></div></div>
+          <div class="step-time">Almost done</div>
         </div>
         <div class="section">
           <div class="section-header">
@@ -619,20 +812,20 @@
           <div class="anchor-box">
             <div class="anchor-icon">
               <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="7" cy="7" r="6" stroke="#A8844A" stroke-width="1"/>
-                <path d="M7 4v3.5l2 2" stroke="#A8844A" stroke-width="1" stroke-linecap="round"/>
+                <circle cx="7" cy="7" r="6" stroke="#A8844A" stroke-width="1"></circle>
+                <path d="M7 4v3.5l2 2" stroke="#A8844A" stroke-width="1" stroke-linecap="round"></path>
               </svg>
             </div>
             <div class="anchor-text">
               Our projects are built for brands serious about standing out in the luxury market.
               Engagements <strong>typically begin at $10,000</strong> and are scoped individually
-              based on your vision, location, and deliverables.
+              based on your vision, location, and deliverables. There's no wrong answer here — this helps us scope the right approach for your project.
             </div>
           </div>
           <div class="field">
             <label>Intended investment for this production *</label>
             <div style="position:relative;">
-              <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;color:#6B6760;pointer-events:none;">$</span>
+              <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:&#39;DM Sans&#39;,sans-serif;font-size:13px;font-weight:300;color:#6B6760;pointer-events:none;">$</span>
               <input type="text" id="intended_investment" placeholder="e.g. 15,000" style="padding-left:26px;">
             </div>
           </div>
@@ -656,7 +849,7 @@
             <div class="section-divider"></div>
           </div>
           <div class="field">
-            <label>Who is involved in this decision? *</label>
+            <label>Who is involved in this decision?</label>
             <span class="sublabel">Select all that apply.</span>
             <div class="custom-select" id="decision-select">
               <div class="select-trigger">Select all that apply...</div>
@@ -671,20 +864,7 @@
               </div>
             </div>
           </div>
-          <div class="field">
-            <label>If we're aligned, when are you ready to move forward? *</label>
-            <div class="custom-select" id="timeline-select">
-              <div class="select-trigger">Select timeline...</div>
-              <div class="options-menu">
-                <div class="option-row" data-val="Now"><span>Yes — Ready To Move Forward Now</span></div>
-                <div class="option-row" data-val="30 Days"><span>Within 30 Days</span></div>
-                <div class="option-row" data-val="60 Days"><span>30 – 60 Days</span></div>
-                <div class="option-row" data-val="Exploring"><span>Not At This Time — Still Exploring</span></div>
-              </div>
-            </div>
-            <input type="hidden" name="timeline" id="timeline-input">
-          </div>
-        </div>
+          
         <div class="section">
           <div class="section-header">
             <div class="section-num">5</div>
@@ -696,28 +876,18 @@
             <span class="sublabel">Additional context, preferences, special considerations, or anything that would help us understand your brand and vision.</span>
             <textarea id="additional_context" placeholder="Feel free to share anything relevant..."></textarea>
           </div>
-          <div class="field">
-            <label>How did you find us?</label>
-            <select id="how_found_us">
-              <option value="">Select...</option>
-              <option>Instagram</option>
-              <option>YouTube</option>
-              <option>Referral</option>
-              <option>Google Search</option>
-              <option>Event / Conference</option>
-              <option>Past Client</option>
-              <option>Brokerage / Team</option>
-              <option>Other</option>
-            </select>
-          </div>
+
         </div>
         <div class="submit-section">
+          <div style="background:var(--gold-faint);border-left:2px solid var(--gold);border-radius:0 2px 2px 0;padding:14px 18px;margin-bottom:24px;">
+            <p style="font-size:12px;font-weight:300;color:var(--ink-light);line-height:1.7;">Once submitted, our team reviews your application personally. If we're aligned, you will hear from us within one business day.</p>
+          </div>
           <div class="nav-buttons">
             <button type="button" onclick="goToStep(2)" class="btn-outline">Back</button>
             <button type="button" id="submit-btn" onclick="handleSubmit()" class="submit-btn">
               Request Private Consultation
               <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;opacity:.6;">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
             </button>
           </div>
@@ -727,6 +897,7 @@
           </p>
         </div>
       </div>
+          </div>
     </form>
   </main>
 </div>
@@ -734,11 +905,11 @@
 <!-- THANK YOU -->
 <div id="thankyou" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#F7F4EF;z-index:9999;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;">
   <div style="max-width:480px;">
-    <div style="font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#A8844A;margin-bottom:24px;">Application Received</div>
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:#1A1814;line-height:1.2;margin-bottom:28px;">Thank you.</h2>
-    <p style="font-family:'DM Sans',sans-serif;font-size:14px;font-weight:300;color:#6B6760;line-height:1.85;">We take on a limited number of projects each year, and every application is reviewed personally. If we believe we can build something remarkable together, we'll be in touch.</p>
+    <div style="font-family:&#39;Cormorant Garamond&#39;,serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#A8844A;margin-bottom:24px;">Application Received</div>
+    <h2 style="font-family:&#39;Cormorant Garamond&#39;,serif;font-size:38px;font-weight:300;color:#1A1814;line-height:1.2;margin-bottom:28px;">Thank you.</h2>
+    <p style="font-family:&#39;DM Sans&#39;,sans-serif;font-size:14px;font-weight:300;color:#6B6760;line-height:1.85;">Yours is now with us, and we review each application personally. You will hear from us within one business day.</p>
     <div style="width:40px;height:1px;background:#A8844A;margin:36px auto;"></div>
-    <p style="font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300;color:#C4C0B8;letter-spacing:.04em;">José Oliveira Films</p>
+    <p style="font-family:&#39;DM Sans&#39;,sans-serif;font-size:12px;font-weight:300;color:#C4C0B8;letter-spacing:.04em;">José Oliveira Films</p>
   </div>
 </div>
 
@@ -778,13 +949,50 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('active'));
   });
 
+  // Film type dropdown (same style as custom-select)
+  document.querySelectorAll('.film-type-option').forEach(function(row) {
+    row.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const value = row.dataset.value;
+      const title = row.querySelector('span:first-child').textContent;
+      document.getElementById('film_type').value = value;
+      document.getElementById('film-type-trigger').textContent = title;
+      document.getElementById('film-type-group').classList.remove('active');
+      // Clear error
+      const field = row.closest('.field');
+      if (field) field.classList.remove('error');
+      // Mark selected
+      document.querySelectorAll('.film-type-option').forEach(r => r.classList.remove('selected'));
+      row.classList.add('selected');
+    });
+  });
+
+
+
 });
+
+function validateFilmType() {
+  const filmType = document.getElementById('film_type');
+  const filmGroup = document.getElementById('film-type-group');
+  if (filmType && filmGroup) {
+    const field = filmGroup.closest('.field');
+    if (!filmType.value) {
+      if (field) field.classList.add('error');
+      return false;
+    } else {
+      if (field) field.classList.remove('error');
+      return true;
+    }
+  }
+  return true;
+}
+
 
 function validateStep(stepNum) {
   let isValid = true;
   const stepEl = document.getElementById('step' + stepNum);
 
-  // Validação especial do telefone (step 1)
+  // Phone validation (step 1)
   if (stepNum === 1) {
     const phoneField = document.getElementById('phone-field');
     const phoneInput = document.getElementById('phone');
@@ -802,13 +1010,14 @@ function validateStep(stepNum) {
     }
   }
 
-  stepEl.querySelectorAll('.field').forEach(field => {
-    if (field.id === 'phone-field') return; // já validado acima
+  stepEl.querySelectorAll('.field').forEach(function(field) {
+    if (field.id === 'phone-field') return;
     const label = field.querySelector('label');
     if (!label || !label.innerText.includes('*')) return;
 
     const customSel = field.querySelector('.custom-select');
     if (customSel) {
+      if (customSel.id === 'film-type-group') return;
       const hasChecked = customSel.querySelector('input[type=checkbox]:checked');
       const hiddenVal = field.querySelector('input[type=hidden]');
       const isEmpty = !hasChecked && (!hiddenVal || !hiddenVal.value);
@@ -825,8 +1034,16 @@ function validateStep(stepNum) {
     }
   });
 
+  if (stepNum === 2 && !validateFilmType()) isValid = false;
+
   return isValid;
 }
+
+const sidebarTexts = {
+  1: "We take on a limited number of projects each year — each one chosen with intention. This application helps us understand whether we're the right creative fit for your brand, and whether your brand is the right fit for us.",
+  2: "The type of film you choose shapes everything — the story we tell, the locations we scout, the moments we capture. Take your time with this one.",
+  3: "Transparency here helps us build the right approach for your project. Every number you share stays between us."
+};
 
 function goToStep(step) {
   const currentStep = document.querySelector('.form-step.active');
@@ -836,8 +1053,27 @@ function goToStep(step) {
     if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
-  document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
-  document.getElementById('step' + step).classList.add('active');
+  const goingForward = step > currentStepNum;
+  document.querySelectorAll('.form-step').forEach(s => {
+    s.classList.remove('active');
+    s.classList.remove('slide-back');
+  });
+  const nextStep = document.getElementById('step' + step);
+  if (goingForward) {
+    nextStep.classList.add('active');
+  } else {
+    nextStep.classList.add('slide-back');
+    nextStep.classList.add('active');
+  }
+  const sidebarEl = document.getElementById('sidebar-text');
+  if (sidebarEl && sidebarTexts[step]) {
+    sidebarEl.style.opacity = '0';
+    setTimeout(() => {
+      sidebarEl.textContent = sidebarTexts[step];
+      sidebarEl.style.transition = 'opacity .4s';
+      sidebarEl.style.opacity = '1';
+    }, 200);
+  }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -852,21 +1088,15 @@ async function handleSubmit() {
     first_name: document.getElementById('first_name').value,
     last_name: document.getElementById('last_name').value,
     email: document.getElementById('email').value,
-    instagram: document.getElementById('instagram').value,
-    website: document.getElementById('website').value,
+    instagram_or_website: document.getElementById('instagram_or_website').value,
     phone: document.getElementById('phone-country').value + ' ' + document.getElementById('phone').value,
     filming_location: document.getElementById('project_location').value,
-    cinematic_direction: document.getElementById('cinematic_direction').value,
-    ideal_client: document.getElementById('ideal_client').value,
-    vision: document.getElementById('vision').value,
-    primary_goal: document.getElementById('primary_goal').value,
+    film_type: document.getElementById('film_type').value,
+    your_story: document.getElementById('your_story').value,
     intended_investment: document.getElementById('intended_investment').value,
     marketing_investment: document.getElementById('marketing_investment').value,
-    how_found_us: document.getElementById('how_found_us').value,
     additional_context: document.getElementById('additional_context').value,
-    timeline: document.getElementById('timeline-input').value,
     results_matter: Array.from(document.querySelectorAll('#results-select input:checked')).map(i => i.value).join(', '),
-    usage_platforms: Array.from(document.querySelectorAll('#usage-select input:checked')).map(i => i.value).join(', '),
     decision_makers: Array.from(document.querySelectorAll('#decision-select input:checked')).map(i => i.value).join(', ')
   };
 
@@ -889,5 +1119,6 @@ async function handleSubmit() {
 }
 </script>
 
-</body>
-</html>
+
+
+</body></html>
