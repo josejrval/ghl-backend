@@ -16,7 +16,7 @@
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{background:var(--canvas);color:var(--ink);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5}
-  .wrap{max-width:560px;margin:0 auto;padding:32px 20px 56px}
+  .wrap{max-width:620px;margin:0 auto;padding:32px 20px 56px}
   .brand{text-align:center;margin-bottom:26px}
   .brand .name{font-family:'DM Serif Display',serif;font-size:20px;letter-spacing:.5px;color:var(--ink)}
   .brand .tag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--inklt);margin-top:2px}
@@ -73,20 +73,20 @@
   #submit-error{display:none;background:#F6EAE4;color:var(--err);border-radius:10px;padding:12px 14px;font-size:14px;margin-top:14px;line-height:1.45}
 
   #thankyou{display:none;text-align:center;padding:8px 4px}
-  #thankyou .seal{width:54px;height:54px;border-radius:50%;background:var(--soft);border:1px solid var(--copper);display:flex;align-items:center;justify-content:center;margin:6px auto 20px;font-size:24px;color:var(--copper-dk)}
+  #thankyou .seal{width:54px;height:54px;border-radius:50%;background:var(--soft);border:1px solid var(--copper);display:flex;align-items:center;justify-content:center;margin:6px auto 18px;font-size:24px;color:var(--copper-dk)}
   #thankyou h2{font-family:'DM Serif Display',serif;font-weight:400;font-size:27px;line-height:1.2;color:var(--ink);margin:0 0 10px}
-  #thankyou .lead{font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.5;color:var(--inklt);margin:0 0 24px}
-  .nextsteps{text-align:left;border-top:1px solid var(--stone);max-width:400px;margin:0 auto}
+  #thankyou .lead{font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.5;color:var(--inklt);margin:0 0 6px}
+
+  .tz{display:inline-flex;align-items:center;gap:7px;background:var(--soft);border:1px solid var(--stone);border-radius:22px;padding:8px 15px;font-size:13px;color:var(--copper-dk);margin:16px 0 4px}
+  #cal-inline{min-height:520px;margin:12px auto 0;max-width:100%}
+  .held{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;color:var(--inklt);margin-top:16px}
+
+  .nextsteps{text-align:left;border-top:1px solid var(--stone);max-width:400px;margin:18px auto 0}
   .nextsteps .s{display:flex;gap:13px;padding:15px 2px;border-bottom:1px solid var(--stone)}
   .nextsteps .s:last-child{border-bottom:none}
   .nextsteps .n{font-family:'DM Serif Display',serif;color:var(--copper);font-size:18px;min-width:16px}
   .nextsteps .t{font-size:15px;font-weight:500;color:var(--ink)}
   .nextsteps .d{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--inklt)}
-  #schedule-block{max-width:420px;margin:0 auto}
-  #schedule-block .headline{font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.5;color:var(--ink);margin-bottom:18px}
-  #schedule-block .book{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--copper);color:#fff;text-decoration:none;font-weight:500;font-size:16px;border-radius:11px;min-height:52px}
-  #schedule-block .book:hover{background:var(--copper-dk)}
-  #schedule-block .fine{font-size:12px;color:var(--inklt);margin-top:12px}
 </style>
 </head>
 <body>
@@ -98,9 +98,9 @@
 
   <div id="form-shell">
     <div class="progress" id="progress">
-      <div class="seg on"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div>
+      <div class="seg on"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div>
     </div>
-    <div class="stepmeta" id="stepmeta">Step 1 of 5 · You</div>
+    <div class="stepmeta" id="stepmeta">Step 1 of 4 · You</div>
 
     <form id="application-form" onsubmit="return false;">
 
@@ -190,14 +190,8 @@
             <option>Just exploring for now</option>
           </select>
         </div>
-        <div class="nav"><button type="button" class="btn ghost" onclick="back(4)">Back</button><button type="button" class="btn primary" onclick="next(4)">Continue <span class="arrow">&rarr;</span></button></div>
-      </div>
-
-      <div class="step" id="step5">
-        <div class="eyebrow">The final word</div>
-        <h2 class="q">Anything you would like us to know?</h2>
-        <div class="field"><label>Additional context</label><textarea id="additional_context" placeholder="Feel free to share anything relevant…"></textarea></div>
-        <div class="nav"><button type="button" class="btn ghost" onclick="back(5)">Back</button><button type="button" class="btn primary" id="submit-btn" onclick="submitForm()">Send your application <span class="arrow">&rarr;</span></button></div>
+        <div class="field"><label>Anything you would like us to know?</label><textarea id="additional_context" placeholder="Feel free to share anything relevant…"></textarea></div>
+        <div class="nav"><button type="button" class="btn ghost" onclick="back(4)">Back</button><button type="button" class="btn primary" id="submit-btn" onclick="submitForm()">Send your application <span class="arrow">&rarr;</span></button></div>
         <div id="submit-error"></div>
         <div class="assurance">Private, and reviewed personally.</div>
       </div>
@@ -211,9 +205,10 @@
     <p class="lead">Thank you. Here is exactly what happens next.</p>
 
     <div id="schedule-block" style="display:none">
-      <p class="headline">Your work qualifies for a direct conversation with Jose. Choose a time below.</p>
-      <a class="book" href="https://cal.com/jose-oliveira-ehscu6/discovery-call-with-jose-oliveira" target="_blank" rel="noopener">Book your call with Jose &rarr;</a>
-      <p class="fine">Your time is held privately until Jose confirms it.</p>
+      <p class="lead" style="margin-bottom:0">Your work qualifies for a conversation with Jose. Choose a time.</p>
+      <div class="tz">&#127760;&nbsp; Times are shown in your local time</div>
+      <div id="cal-inline"></div>
+      <div class="held">&#128274;&nbsp; Your time is held privately until Jose confirms it.</div>
     </div>
 
     <div id="nextsteps-block" style="display:none">
@@ -227,12 +222,29 @@
 </div>
 
 <script>
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; typeof namespace === "string" ? (cal.ns[namespace] = api) && p(api, ar) : p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+  Cal("init", { origin: "https://cal.com" });
+
+  var calStarted = false;
+  function startCal(){
+    if(calStarted) return;
+    calStarted = true;
+    Cal("inline", {
+      elementOrSelector: "#cal-inline",
+      calLink: "jose-oliveira-ehscu6/discovery-call-with-jose-oliveira",
+      config: { layout: "month_view" }
+    });
+    Cal("ui", { cssVarsPerTheme: { light: { "cal-brand": "#A0703F" } }, hideEventTypeDetails: false, layout: "month_view" });
+  }
+</script>
+
+<script>
   var DRAFT_KEY = 'jof_application_draft';
   var current = 1;
-  var TOTAL = 5;
+  var TOTAL = 4;
 
   var SIMPLE = ['first_name','last_name','email','phone','instagram_or_website','estimated_property_value','years_experience','film_type','project_location','your_story','intended_investment','timeline','additional_context'];
-  var STEP_META = ['You','Your work','The film','Investment & timing','Anything else'];
+  var STEP_META = ['You','Your work','The film','Investment & timing'];
 
   document.querySelectorAll('#results-chips .chip').forEach(function(c){
     c.addEventListener('click', function(){ c.classList.toggle('sel'); saveDraft(); });
@@ -290,7 +302,7 @@
   updateProgress();
 
   function submitForm(){
-    if(!validateStep(5)) return;
+    if(!validateStep(4)) return;
     var errBox = document.getElementById('submit-error');
     errBox.style.display='none';
     var btn = document.getElementById('submit-btn');
@@ -323,7 +335,12 @@
     }).then(function(){
       try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
       document.getElementById('form-shell').style.display='none';
-      document.getElementById(qualified ? 'schedule-block' : 'nextsteps-block').style.display='block';
+      if(qualified){
+        document.getElementById('schedule-block').style.display='block';
+        if(typeof startCal==='function') startCal();
+      } else {
+        document.getElementById('nextsteps-block').style.display='block';
+      }
       document.getElementById('thankyou').style.display='block';
       window.scrollTo({top:0,behavior:'smooth'});
     }).catch(function(err){
