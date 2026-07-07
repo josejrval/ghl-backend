@@ -50,15 +50,16 @@ function parseInvestment(raw) {
 }
 
 // decide a faixa de temperatura pelo investimento
+// decide a faixa de temperatura pela opção escolhida no form
 function tier(investment) {
-  const n = parseInvestment(investment);
-  if (n >= 10000) {
-    return { name: 'Hot lead', note: 'Priority · calendar shown', bg: '#EAF3DE', fg: '#3B6D11' };
+  const s = String(investment || '');
+  if (s.indexOf('$') === 0) {
+    return { name: '🔥 Hot lead', note: 'Priority · calendar shown', bg: '#EAF3DE', fg: '#3B6D11' };
   }
-  if (n >= 5000) {
-    return { name: 'Warm lead', note: 'For follow-up', bg: '#FAEEDA', fg: '#854F0B' };
+  if (/exploring/i.test(s)) {
+    return { name: '☀️ Warm lead', note: 'For follow-up', bg: '#FAEEDA', fg: '#854F0B' };
   }
-  return { name: 'Cool lead', note: 'Nurture', bg: '#F1EFE8', fg: '#5F5E5A' };
+  return { name: '❄️ Cool lead', note: 'Nurture', bg: '#F1EFE8', fg: '#5F5E5A' };
 }
 
 function row(label, value) {
@@ -107,8 +108,26 @@ function newLeadEmail(d) {
        <div style="background:#F9F8F4;border-radius:10px;padding:13px 15px;font-family:Georgia,serif;font-size:16px;color:#2B2622;line-height:1.5;font-style:italic;">${esc(d.your_story)}</div>`
     : '';
 
+  const isFounder = (d.lead_type || '').toLowerCase().indexOf('founder') !== -1;
+
+  const typePill = `<div style="display:inline-block;background:#F1ECE2;color:#7C5730;font-size:11px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin:0 0 12px;font-family:Arial,sans-serif;">${isFounder ? 'Founder / brand' : 'Real estate agent'}</div>`;
+
+  const middleSection = isFounder
+    ? `${sectionLabel('Their company')}
+       <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+         ${row('Industry', d.industry)}
+         ${row('Company revenue', d.company_revenue)}
+         ${row('Role', d.role)}
+       </table>`
+    : `${sectionLabel('Their market')}
+       <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+         ${row('Property calibre', d.estimated_property_value)}
+         ${row('Years in market', d.years_experience)}
+       </table>`;
+
   const inner = `
     <div style="font-family:Georgia,'Times New Roman',serif;font-size:24px;color:#2B2622;margin:0 0 6px;">${fullName}</div>
+    ${typePill}<br>
     ${badge}
     ${sectionLabel('Contact')}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
@@ -116,15 +135,10 @@ function newLeadEmail(d) {
       ${row('Phone', d.phone)}
       ${row('Instagram or site', d.instagram_or_website)}
     </table>
-    ${sectionLabel('Their market')}
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-      ${row('Property calibre', d.estimated_property_value)}
-      ${row('Years in market', d.years_experience)}
-    </table>
+    ${middleSection}
     ${sectionLabel('The project')}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-      ${row('Film type', d.film_type)}
-      ${row('Location', d.project_location)}
+      ${row('Film chosen', d.film_type)}
       ${row('Investment', d.intended_investment)}
       ${row('Timeline', d.timeline)}
       ${row('Results wanted', d.results_matter)}
@@ -160,9 +174,11 @@ function bookedEmail(d) {
     </table>
     ${sectionLabel('Context for the call')}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-      ${row('Property calibre', d.estimated_property_value)}
+      ${(d.lead_type || '').toLowerCase().indexOf('founder') !== -1
+        ? `${row('Industry', d.industry)}${row('Company revenue', d.company_revenue)}${row('Role', d.role)}`
+        : `${row('Property calibre', d.estimated_property_value)}`}
       ${row('Investment', d.intended_investment)}
-      ${row('Film type', d.film_type)}
+      ${row('Film chosen', d.film_type)}
     </table>`;
 
   return emailShell('Discovery call booked', inner);
@@ -216,7 +232,9 @@ app.post('/lead', async (req, res) => {
   }
 
   const t = tier(leadData.intended_investment);
-  await sendEmail(`${t.name} — ${leadData.first_name || 'novo lead'} (${leadData.intended_investment || '—'})`, newLeadEmail(leadData));
+  const typeEmoji = (leadData.lead_type || '').toLowerCase().indexOf('founder') !== -1 ? '🎬' : '🏠';
+  const typeWord = (leadData.lead_type || '').toLowerCase().indexOf('founder') !== -1 ? 'Founder' : 'Agent';
+  await sendEmail(`${t.name} ${typeEmoji} ${typeWord} — ${leadData.first_name || 'novo lead'} (${leadData.intended_investment || '—'})`, newLeadEmail(leadData));
 });
 
 // Email 2: reunião agendada (o front envia aqui quando o Cal.com confirma o booking)
@@ -225,7 +243,7 @@ app.post('/booked', async (req, res) => {
   console.log('📅 REUNIÃO AGENDADA:', JSON.stringify(d, null, 2));
   res.json({ status: 'ok' });
 
-  await sendEmail(`Call marcada — ${d.first_name || 'lead'} (${d.booking_date || ''})`, bookedEmail(d));
+  await sendEmail(`📅 Reunião marcada — ${d.first_name || 'lead'} (${d.booking_date || ''})`, bookedEmail(d));
 });
 
 app.use((req, res) => {
