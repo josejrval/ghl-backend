@@ -269,16 +269,14 @@
 
     <div id="schedule-block" style="display:none">
 
-      <div id="value-gate">
-        <div class="eyebrow">Before you choose a time</div>
-        <h3>What we create</h3>
-        <p class="vbody">We tell your story through cinematic film, shaped around your brand and the value you want the world to see. Each one is crafted to elevate how you are perceived, and to build the equity a name like yours deserves. We take on only a few each year, so each film receives everything it deserves.<br><br>Work of this calibre begins at <b>$15,000</b>, up to $40,000, from concept to final delivery. We share it now so our conversation is about the vision, not the budget.</p>
-        <button type="button" class="apply-btn" onclick="acceptValueGate()">Yes, let's find a time &rarr;</button>
-        <div><button type="button" class="not-ready" onclick="declineValueGate()">I'm not ready yet</button></div>
+      <div id="value-intro" style="max-width:440px;margin:8px auto 22px;text-align:center">
+        <div class="eyebrow" style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--copper-dk);margin-bottom:14px">What we create</div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.55;color:var(--inklt);margin:0">We tell your story through cinematic film, shaped around your brand and the value you want the world to see, crafted to elevate how you are perceived and build the equity a name like yours deserves. Work of this calibre begins at <b style="color:var(--ink);font-weight:600">$15,000</b>, up to $40,000, from concept to final delivery.</p>
       </div>
 
-      <div id="cal-reveal" style="display:none">
-        <p class="lead" style="margin-bottom:0">Your work qualifies for a conversation with Jose. Choose a time.</p>
+      <div id="cal-reveal">
+        <h3 style="font-family:'DM Serif Display',serif;font-weight:400;font-size:24px;color:var(--ink);text-align:center;margin:0 0 6px">Choose your time</h3>
+        <p class="lead" style="margin:0 0 4px;text-align:center">One last step. Your application is complete once you pick a time below.</p>
         <div class="tz">&#127760;&nbsp; Times are shown in your local time</div>
         <div id="cal-inline"></div>
         <div class="held">&#128274;&nbsp; Your time is held privately until Jose confirms it.</div>
@@ -334,17 +332,7 @@
   }
 
   function acceptValueGate(){
-    document.getElementById('value-gate').style.display='none';
-    document.getElementById('cal-reveal').style.display='block';
     if(typeof startCal==='function') startCal();
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-
-  function declineValueGate(){
-    document.getElementById('schedule-block').innerHTML =
-      '<p class="lead" style="margin-bottom:0">When the moment is right, we will be here.</p>' +
-      '<p style="font-family:\'Cormorant Garamond\',serif;font-size:18px;line-height:1.55;color:var(--inklt);max-width:400px;margin:14px auto 0">Your application is already with us. If anything changes, or you would like to talk it through, Chloe is a note away at chloe@joseoliveirafilms.com.</p>';
-    window.scrollTo({top:0,behavior:'smooth'});
   }
 </script>
 
@@ -406,6 +394,16 @@
     document.getElementById('who-err').style.display='none';
     who = sel;
     saveDraft();
+
+    var invSel = document.getElementById('intended_investment');
+    var exploringOpt = null;
+    for(var k=0;k<invSel.options.length;k++){ if(/exploring/i.test(invSel.options[k].text)){ exploringOpt = invSel.options[k]; break; } }
+    if(who === 'Founder or brand'){
+      if(exploringOpt) exploringOpt.style.display='none';
+    } else {
+      if(exploringOpt) exploringOpt.style.display='';
+    }
+
     var s = seq();
     var i = s.indexOf('2');
     showStepId(s[i+1]);
@@ -502,6 +500,7 @@
       document.getElementById('form-shell').style.display='none';
       if(qualified){
         document.getElementById('schedule-block').style.display='block';
+        if(typeof startCal==='function') startCal();
       } else {
         document.getElementById('nextsteps-block').style.display='block';
       }
