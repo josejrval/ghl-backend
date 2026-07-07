@@ -235,6 +235,31 @@
       config: { layout: "month_view" }
     });
     Cal("ui", { cssVarsPerTheme: { light: { "cal-brand": "#A0703F" } }, hideEventTypeDetails: false, layout: "month_view" });
+
+    Cal("on", {
+      action: "bookingSuccessful",
+      callback: function (e) {
+        try {
+          var detail = (e && e.detail && e.detail.data) ? e.detail.data : {};
+          var booking = detail.booking || detail || {};
+          var start = booking.startTime || booking.start || (booking.attendees && booking.attendees[0] && booking.attendees[0].timeZone) || '';
+          var when = start ? new Date(start) : null;
+          var dateStr = when ? when.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' }) : '';
+          var timeStr = when ? when.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', timeZoneName:'short' }) : '';
+
+          var payload = Object.assign({}, window.__leadData || {}, {
+            booking_date: dateStr,
+            booking_time: timeStr
+          });
+
+          fetch('/booked', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } catch (err) {}
+      }
+    });
   }
 </script>
 
@@ -327,6 +352,8 @@
 
     var budget = Number(String(data.intended_investment).replace(/[^0-9]/g,'')) || 0;
     var qualified = budget >= 10000;
+
+    window.__leadData = data;
 
     fetch('/lead', {
       method:'POST',
