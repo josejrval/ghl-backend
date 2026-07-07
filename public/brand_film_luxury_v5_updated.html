@@ -176,10 +176,16 @@
       <div class="step" id="step4">
         <div class="eyebrow">Shaping it to your budget</div>
         <h2 class="q">A few practical notes.</h2>
-        <div class="assist">Most films begin around $10,000, and each is scoped on its own. We ask only so we can shape something honest, rather than guess at it.</div>
+        <div class="assist">Each film is scoped on its own. We ask only so we can shape something honest, rather than guess at it.</div>
         <div class="field" data-required><label>Intended investment for this production <span class="req">*</span></label>
-          <div class="money"><span class="pfx">$</span><input id="intended_investment" type="text" inputmode="numeric" placeholder="15,000"></div>
-          <div class="errmsg">A rough number is perfectly fine.</div>
+          <select id="intended_investment">
+            <option value="">Select…</option>
+            <option>$15,000 – $25,000</option>
+            <option>$25,000 – $40,000</option>
+            <option>$40,000+</option>
+            <option>I'm exploring options</option>
+          </select>
+          <div class="errmsg">Please choose the range that fits best.</div>
         </div>
         <div class="field"><label>When would you like to begin?</label>
           <select id="timeline">
@@ -350,8 +356,8 @@
       additional_context: val('additional_context')
     };
 
-    var budget = Number(String(data.intended_investment).replace(/[^0-9]/g,'')) || 0;
-    var qualified = budget >= 10000;
+    var inv = String(data.intended_investment || '');
+    var qualified = inv.indexOf('$') === 0;
 
     window.__leadData = data;
 
