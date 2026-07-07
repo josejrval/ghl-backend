@@ -59,6 +59,13 @@
   .chip{cursor:pointer;user-select:none;font-size:14px;color:var(--inklt);background:var(--panel);border:1px solid var(--stone);border-radius:22px;padding:9px 14px;transition:all .15s}
   .chip.sel{background:var(--soft);border-color:var(--copper);color:var(--copper-dk)}
 
+  .prodcards{display:flex;flex-direction:column;gap:10px}
+  .prodcard{cursor:pointer;user-select:none;border:1px solid var(--stone);border-radius:12px;padding:14px 16px;transition:border .15s,background .15s;background:var(--panel)}
+  .prodcard:hover{border-color:var(--copper)}
+  .prodcard.sel{border:2px solid var(--copper);padding:13px 15px;background:var(--soft)}
+  .prodcard .pn{font-size:15px;font-weight:500;color:var(--ink)}
+  .prodcard .pd{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--inklt);margin-top:3px;line-height:1.35}
+
   .nav{display:flex;gap:10px;align-items:center;margin-top:26px}
   .btn{cursor:pointer;font-family:'DM Sans';font-size:16px;font-weight:500;border-radius:11px;min-height:50px;padding:0 22px;transition:all .15s;border:1px solid var(--stone);background:var(--panel);color:var(--ink)}
   .btn:active{transform:scale(.985)}
@@ -81,6 +88,17 @@
   #cal-inline{min-height:520px;margin:12px auto 0;max-width:100%}
   .held{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;color:var(--inklt);margin-top:16px}
 
+  #value-gate{max-width:420px;margin:8px auto 0;text-align:center}
+  #value-gate .eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--copper-dk);margin-bottom:14px}
+  #value-gate h3{font-family:'DM Serif Display',serif;font-weight:400;font-size:24px;line-height:1.25;color:var(--ink);margin:0 0 14px}
+  #value-gate .vbody{font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.55;color:var(--inklt);margin:0 0 26px}
+  #value-gate .vbody b{color:var(--ink);font-weight:600}
+  #value-gate .apply-btn{display:block;width:100%;background:var(--copper);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:17px;font-weight:500;letter-spacing:.3px;padding:20px;border-radius:12px;cursor:pointer;transition:background .18s,transform .1s,box-shadow .18s;box-shadow:0 6px 20px rgba(160,112,63,.38)}
+  #value-gate .apply-btn:hover{background:var(--copper-dk);box-shadow:0 8px 26px rgba(160,112,63,.48)}
+  #value-gate .apply-btn:active{transform:scale(.99)}
+  #value-gate .not-ready{display:inline-block;margin-top:16px;font-size:13px;color:var(--inklt);cursor:pointer;text-decoration:underline;text-underline-offset:3px;background:none;border:none;font-family:'DM Sans',sans-serif}
+  #value-gate .not-ready:hover{color:var(--copper-dk)}
+
   .nextsteps{text-align:left;border-top:1px solid var(--stone);max-width:400px;margin:18px auto 0}
   .nextsteps .s{display:flex;gap:13px;padding:15px 2px;border-bottom:1px solid var(--stone)}
   .nextsteps .s:last-child{border-bottom:none}
@@ -98,9 +116,9 @@
 
   <div id="form-shell">
     <div class="progress" id="progress">
-      <div class="seg on"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div>
+      <div class="seg on"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div>
     </div>
-    <div class="stepmeta" id="stepmeta">Step 1 of 4 · You</div>
+    <div class="stepmeta" id="stepmeta">Step 1 · You</div>
 
     <form id="application-form" onsubmit="return false;">
 
@@ -118,6 +136,17 @@
       </div>
 
       <div class="step" id="step2">
+        <div class="eyebrow">To begin</div>
+        <h2 class="q">Which best describes you?</h2>
+        <div class="prodcards" id="who-cards">
+          <div class="prodcard" data-v="Real estate agent"><div class="pn">A real estate agent</div><div class="pd">You list and sell property, and want your marketing to match its calibre.</div></div>
+          <div class="prodcard" data-v="Founder or brand"><div class="pn">A founder or brand</div><div class="pd">You have built something, and want its story told with permanence.</div></div>
+        </div>
+        <div class="errmsg" id="who-err" style="margin-top:4px">Please choose one to continue.</div>
+        <div class="nav"><button type="button" class="btn ghost" onclick="back(2)">Back</button><button type="button" class="btn primary" onclick="chooseWho()">Continue <span class="arrow">&rarr;</span></button></div>
+      </div>
+
+      <div class="step" id="step3agent">
         <div class="eyebrow">The homes you represent</div>
         <h2 class="q">Tell us about your market.</h2>
         <div class="field" data-required><label>Instagram or website <span class="req">*</span></label><input id="instagram_or_website" type="text" placeholder="@handle or yoursite.com"><div class="errmsg">Please share where we can see your work.</div></div>
@@ -125,9 +154,9 @@
           <select id="estimated_property_value">
             <option value="">Select a range…</option>
             <option>Under $1M</option>
-            <option>$1M – $2M</option>
-            <option>$2M – $5M</option>
-            <option>$5M – $10M</option>
+            <option>$1M &ndash; $2M</option>
+            <option>$2M &ndash; $5M</option>
+            <option>$5M &ndash; $10M</option>
             <option>$10M+</option>
           </select>
           <div class="errmsg">Please choose a range.</div>
@@ -136,52 +165,80 @@
           <select id="years_experience">
             <option value="">Select…</option>
             <option>Less than 2 years</option>
-            <option>2 – 5 years</option>
-            <option>5 – 10 years</option>
+            <option>2 &ndash; 5 years</option>
+            <option>5 &ndash; 10 years</option>
             <option>10+ years</option>
           </select>
         </div>
         <div class="assist">A range is all we need. It helps us shape something honest to the market you work in, rather than guess at it.</div>
-        <div class="nav"><button type="button" class="btn ghost" onclick="back(2)">Back</button><button type="button" class="btn primary" onclick="next(2)">Continue <span class="arrow">&rarr;</span></button></div>
+        <div class="nav"><button type="button" class="btn ghost" onclick="back('3agent')">Back</button><button type="button" class="btn primary" onclick="next('3agent')">Continue <span class="arrow">&rarr;</span></button></div>
       </div>
 
-      <div class="step" id="step3">
-        <div class="eyebrow">What we would create</div>
-        <h2 class="q">Tell us about the film.</h2>
-        <div class="field"><label>Type of film</label>
-          <select id="film_type">
+      <div class="step" id="step3founder">
+        <div class="eyebrow">The company you have built</div>
+        <h2 class="q">Tell us about your brand.</h2>
+        <div class="field" data-required><label>Instagram or website <span class="req">*</span></label><input id="instagram_or_website_f" type="text" placeholder="@handle or yoursite.com"><div class="errmsg">Please share where we can see your work.</div></div>
+        <div class="field" data-required><label>Your industry <span class="req">*</span></label><input id="industry" type="text" placeholder="e.g. real estate development, hospitality, technology"><div class="errmsg">Please tell us your industry.</div></div>
+        <div class="field"><label>Annual company revenue</label>
+          <select id="company_revenue">
             <option value="">Select…</option>
-            <option>Signature brand film</option>
-            <option>Bio film</option>
-            <option>Listing film</option>
-            <option>Founder documentary series</option>
-            <option>Not sure yet</option>
+            <option>Under $1M</option>
+            <option>$1M &ndash; $5M</option>
+            <option>$5M &ndash; $20M</option>
+            <option>$20M &ndash; $50M</option>
+            <option>$50M+</option>
           </select>
         </div>
-        <div class="field"><label>Project location</label><input id="project_location" type="text" placeholder="City, country or venue"></div>
-        <div class="field" data-required><label>Your story <span class="req">*</span></label><textarea id="your_story" placeholder="The story I want this film to tell is…"></textarea><div class="errmsg">A few words are perfect.</div></div>
-        <div class="field"><label>What results matter most</label>
-          <div class="chips" id="results-chips">
-            <span class="chip" data-v="Attract high-net-worth clients">Attract high-net-worth clients</span>
-            <span class="chip" data-v="Build trust before the first conversation">Build trust before the first conversation</span>
-            <span class="chip" data-v="Become the clear choice in my market">Become the clear choice in my market</span>
-            <span class="chip" data-v="Elevate how the brand is perceived">Elevate how the brand is perceived</span>
-            <span class="chip" data-v="Create a lasting brand asset">Create a lasting brand asset</span>
-            <span class="chip" data-v="Open doors to bigger opportunities">Open doors to bigger opportunities</span>
-          </div>
+        <div class="field"><label>Your role</label>
+          <select id="role">
+            <option value="">Select…</option>
+            <option>Founder or partner</option>
+            <option>CEO or C-level</option>
+            <option>Director</option>
+            <option>Other</option>
+          </select>
         </div>
-        <div class="nav"><button type="button" class="btn ghost" onclick="back(3)">Back</button><button type="button" class="btn primary" onclick="next(3)">Continue <span class="arrow">&rarr;</span></button></div>
+        <div class="assist">A range is all we need. It helps us shape something honest, rather than guess at it.</div>
+        <div class="nav"><button type="button" class="btn ghost" onclick="back('3founder')">Back</button><button type="button" class="btn primary" onclick="next('3founder')">Continue <span class="arrow">&rarr;</span></button></div>
       </div>
 
-      <div class="step" id="step4">
-        <div class="eyebrow">Shaping it to your budget</div>
+      <div class="step" id="step4agent">
+        <div class="eyebrow">What we would create</div>
+        <h2 class="q">What do you have in mind?</h2>
+        <div class="field"><div class="prodcards" id="prod-cards-agent">
+          <div class="prodcard" data-v="The Listing Film"><div class="pn">The Listing Film</div><div class="pd">A single property, shown as an experience.</div></div>
+          <div class="prodcard" data-v="The Bio Video"><div class="pn">The Bio Video</div><div class="pd">Your moving business card, sixty seconds that build trust.</div></div>
+          <div class="prodcard" data-v="The Case Study Film"><div class="pn">The Case Study Film</div><div class="pd">A result told as a story, with your client as the hero.</div></div>
+          <div class="prodcard" data-v="The Listing Coverage Program"><div class="pn">The Listing Coverage Program</div><div class="pd">Across listings, all year.</div></div>
+          <div class="prodcard" data-v="Not sure yet"><div class="pn">Not sure yet</div><div class="pd">Help me find the right one.</div></div>
+        </div></div>
+        <div class="field" data-required><label>Your story <span class="req">*</span></label><textarea id="your_story" placeholder="The story I want this film to tell is…"></textarea><div class="errmsg">A few words are perfect.</div></div>
+        <div class="nav"><button type="button" class="btn ghost" onclick="back('4agent')">Back</button><button type="button" class="btn primary" onclick="next('4agent')">Continue <span class="arrow">&rarr;</span></button></div>
+      </div>
+
+      <div class="step" id="step4founder">
+        <div class="eyebrow">What we would create</div>
+        <h2 class="q">What do you have in mind?</h2>
+        <div class="field"><div class="prodcards" id="prod-cards-founder">
+          <div class="prodcard" data-v="Brand Video Production"><div class="pn">Brand Video Production</div><div class="pd">Your company and the standard behind it.</div></div>
+          <div class="prodcard" data-v="The One Episode Documentary"><div class="pn">The One Episode Documentary</div><div class="pd">Your story: founder, brand, or client journey.</div></div>
+          <div class="prodcard" data-v="The Property Development Documentary"><div class="pn">The Property Development Documentary</div><div class="pd">A development, followed as it comes to life.</div></div>
+          <div class="prodcard" data-v="The Signature Documentary Series"><div class="pn">The Signature Documentary Series</div><div class="pd">The flagship, three connected films.</div></div>
+          <div class="prodcard" data-v="Not sure yet"><div class="pn">Not sure yet</div><div class="pd">Help me find the right one.</div></div>
+        </div></div>
+        <div class="field" data-required><label>Your story <span class="req">*</span></label><textarea id="your_story_f" placeholder="The story I want this film to tell is…"></textarea><div class="errmsg">A few words are perfect.</div></div>
+        <div class="nav"><button type="button" class="btn ghost" onclick="back('4founder')">Back</button><button type="button" class="btn primary" onclick="next('4founder')">Continue <span class="arrow">&rarr;</span></button></div>
+      </div>
+
+      <div class="step" id="step5">
+        <div class="eyebrow">Shaping it to your vision</div>
         <h2 class="q">A few practical notes.</h2>
         <div class="assist">Each film is scoped on its own. We ask only so we can shape something honest, rather than guess at it.</div>
         <div class="field" data-required><label>Intended investment for this production <span class="req">*</span></label>
           <select id="intended_investment">
             <option value="">Select…</option>
-            <option>$15,000 – $25,000</option>
-            <option>$25,000 – $40,000</option>
+            <option>$15,000 &ndash; $25,000</option>
+            <option>$25,000 &ndash; $40,000</option>
             <option>$40,000+</option>
             <option>I'm exploring options</option>
           </select>
@@ -197,7 +254,7 @@
           </select>
         </div>
         <div class="field"><label>Anything you would like us to know?</label><textarea id="additional_context" placeholder="Feel free to share anything relevant…"></textarea></div>
-        <div class="nav"><button type="button" class="btn ghost" onclick="back(4)">Back</button><button type="button" class="btn primary" id="submit-btn" onclick="submitForm()">Send your application <span class="arrow">&rarr;</span></button></div>
+        <div class="nav"><button type="button" class="btn ghost" onclick="back(5)">Back</button><button type="button" class="btn primary" id="submit-btn" onclick="submitForm()">Send your application <span class="arrow">&rarr;</span></button></div>
         <div id="submit-error"></div>
         <div class="assurance">Private, and reviewed personally.</div>
       </div>
@@ -211,18 +268,26 @@
     <p class="lead">Thank you. Here is exactly what happens next.</p>
 
     <div id="schedule-block" style="display:none">
-      <p class="lead" style="margin-bottom:0">Your work qualifies for a conversation with Jose. Choose a time.</p>
-      <div class="tz">&#127760;&nbsp; Times are shown in your local time</div>
-      <div id="cal-inline"></div>
-      <div class="held">&#128274;&nbsp; Your time is held privately until Jose confirms it.</div>
+
+      <div id="value-gate">
+        <div class="eyebrow">Before you choose a time</div>
+        <h3>What we create</h3>
+        <p class="vbody">We tell your story through cinematic film, shaped around your brand and the value you want the world to see. Each one is crafted to elevate how you are perceived, and to build the equity a name like yours deserves. We take on only a few each year, so each film receives everything it deserves.<br><br>Work of this calibre begins at <b>$15,000</b>, up to $40,000, from concept to final delivery. We share it now so our conversation is about the vision, not the budget.</p>
+        <button type="button" class="apply-btn" onclick="acceptValueGate()">Yes, let's find a time &rarr;</button>
+        <div><button type="button" class="not-ready" onclick="declineValueGate()">I'm not ready yet</button></div>
+      </div>
+
+      <div id="cal-reveal" style="display:none">
+        <p class="lead" style="margin-bottom:0">Your work qualifies for a conversation with Jose. Choose a time.</p>
+        <div class="tz">&#127760;&nbsp; Times are shown in your local time</div>
+        <div id="cal-inline"></div>
+        <div class="held">&#128274;&nbsp; Your time is held privately until Jose confirms it.</div>
+      </div>
+
     </div>
 
     <div id="nextsteps-block" style="display:none">
-      <div class="nextsteps">
-        <div class="s"><span class="n">1</span><div><div class="t">We review your work</div><div class="d">Within one business day.</div></div></div>
-        <div class="s"><span class="n">2</span><div><div class="t">You hear from us personally</div><div class="d">A note from Chloe, not an autoresponder.</div></div></div>
-        <div class="s"><span class="n">3</span><div><div class="t">We find a time to talk</div><div class="d">A quiet conversation about your film.</div></div></div>
-      </div>
+      <p class="lead" style="max-width:420px;margin:18px auto 0;font-size:19px;line-height:1.55">Your application is with us. We will read it with the care it deserves, and reach out by email if there is a fit.</p>
     </div>
   </div>
 </div>
@@ -267,40 +332,101 @@
       }
     });
   }
+
+  function acceptValueGate(){
+    document.getElementById('value-gate').style.display='none';
+    document.getElementById('cal-reveal').style.display='block';
+    if(typeof startCal==='function') startCal();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function declineValueGate(){
+    document.getElementById('schedule-block').innerHTML =
+      '<p class="lead" style="margin-bottom:0">When the moment is right, we will be here.</p>' +
+      '<p style="font-family:\'Cormorant Garamond\',serif;font-size:18px;line-height:1.55;color:var(--inklt);max-width:400px;margin:14px auto 0">Your application is already with us. If anything changes, or you would like to talk it through, Chloe is a note away at chloe@joseoliveirafilms.com.</p>';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
 </script>
 
 <script>
-  var DRAFT_KEY = 'jof_application_draft';
-  var current = 1;
-  var TOTAL = 4;
+  var DRAFT_KEY = 'jof_application_draft_v2';
+  var who = '';
+  var SEQ_AGENT = ['1','2','3agent','4agent','5'];
+  var SEQ_FOUNDER = ['1','2','3founder','4founder','5'];
+  function seq(){ return who === 'Founder or brand' ? SEQ_FOUNDER : SEQ_AGENT; }
 
-  var SIMPLE = ['first_name','last_name','email','phone','instagram_or_website','estimated_property_value','years_experience','film_type','project_location','your_story','intended_investment','timeline','additional_context'];
-  var STEP_META = ['You','Your work','The film','Investment & timing'];
+  var SIMPLE = ['first_name','last_name','email','phone','instagram_or_website','estimated_property_value','years_experience','instagram_or_website_f','industry','company_revenue','role','your_story','your_story_f','intended_investment','timeline','additional_context'];
 
   document.querySelectorAll('#results-chips .chip').forEach(function(c){
     c.addEventListener('click', function(){ c.classList.toggle('sel'); saveDraft(); });
   });
+
+  function wireCards(containerId){
+    document.querySelectorAll('#'+containerId+' .prodcard').forEach(function(card){
+      card.addEventListener('click', function(){
+        document.querySelectorAll('#'+containerId+' .prodcard').forEach(function(x){ x.classList.remove('sel'); });
+        card.classList.add('sel');
+        saveDraft();
+      });
+    });
+  }
+  wireCards('who-cards');
+  wireCards('prod-cards-agent');
+  wireCards('prod-cards-founder');
+
+  function getSel(containerId){ var s=document.querySelector('#'+containerId+' .prodcard.sel'); return s?s.getAttribute('data-v'):''; }
+  function getFilmType(){ return who === 'Founder or brand' ? getSel('prod-cards-founder') : getSel('prod-cards-agent'); }
+
   document.getElementById('application-form').addEventListener('input', saveDraft);
   document.getElementById('application-form').addEventListener('change', saveDraft);
 
   function getResults(){ return Array.prototype.slice.call(document.querySelectorAll('#results-chips .chip.sel')).map(function(c){return c.getAttribute('data-v');}); }
 
   function updateProgress(){
+    var s = seq();
+    var idx = s.indexOf(String(currentId));
+    var total = s.length;
     var segs = document.querySelectorAll('#progress .seg');
-    segs.forEach(function(s,i){ s.classList.toggle('on', i < current); });
-    document.getElementById('stepmeta').textContent = 'Step ' + current + ' of ' + TOTAL + ' · ' + STEP_META[current-1];
+    segs.forEach(function(seg,i){ seg.classList.toggle('on', i <= idx); });
+    var metaMap = {'1':'You','2':'About you','3agent':'Your market','3founder':'Your brand','4agent':'The film','4founder':'The film','5':'Investment'};
+    document.getElementById('stepmeta').textContent = 'Step ' + (idx+1) + ' of ' + total + ' \u00b7 ' + (metaMap[currentId]||'');
   }
 
-  function showStep(n){
+  var currentId = '1';
+  function showStepId(id){
     document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
-    document.getElementById('step'+n).classList.add('active');
-    current = n; updateProgress();
+    document.getElementById('step'+id).classList.add('active');
+    currentId = id; updateProgress();
     window.scrollTo({top:0,behavior:'smooth'});
   }
 
-  function validateStep(n){
+  function chooseWho(){
+    var sel = getSel('who-cards');
+    if(!sel){ document.getElementById('who-err').style.display='block'; return; }
+    document.getElementById('who-err').style.display='none';
+    who = sel;
+    saveDraft();
+    var s = seq();
+    var i = s.indexOf('2');
+    showStepId(s[i+1]);
+  }
+
+  function next(id){
+    if(!validateStep(id)) return;
+    var s = seq();
+    var i = s.indexOf(String(id));
+    if(i>=0 && i < s.length-1){ showStepId(s[i+1]); }
+  }
+  function back(id){
+    var s = seq();
+    var i = s.indexOf(String(id));
+    if(i>0){ showStepId(s[i-1]); }
+  }
+
+  function validateStep(id){
     var ok = true;
-    var stepEl = document.getElementById('step'+n);
+    var stepEl = document.getElementById('step'+id);
+    if(!stepEl) return true;
     stepEl.querySelectorAll('.field[data-required]').forEach(function(f){
       var inp = f.querySelector('input,select,textarea');
       var empty = !inp || !inp.value || inp.value.trim()==='';
@@ -311,45 +437,51 @@
     return ok;
   }
 
-  function next(n){ if(!validateStep(n)) return; showStep(n+1); }
-  function back(n){ showStep(n-1); }
-
   function saveDraft(){
     try{
-      var d = {};
+      var d = { who: who };
       SIMPLE.forEach(function(id){ var e=document.getElementById(id); if(e) d[id]=e.value; });
       d.results = getResults();
+      d.film_agent = getSel('prod-cards-agent');
+      d.film_founder = getSel('prod-cards-founder');
       localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
     }catch(e){}
   }
   function restoreDraft(){
     try{
       var d = JSON.parse(localStorage.getItem(DRAFT_KEY)); if(!d) return;
+      if(d.who){ who = d.who; document.querySelectorAll('#who-cards .prodcard').forEach(function(c){ if(c.getAttribute('data-v')===d.who) c.classList.add('sel'); }); }
       SIMPLE.forEach(function(id){ var e=document.getElementById(id); if(e && d[id]!=null) e.value=d[id]; });
       if(d.results){ document.querySelectorAll('#results-chips .chip').forEach(function(c){ if(d.results.indexOf(c.getAttribute('data-v'))!==-1) c.classList.add('sel'); }); }
+      if(d.film_agent){ document.querySelectorAll('#prod-cards-agent .prodcard').forEach(function(c){ if(c.getAttribute('data-v')===d.film_agent) c.classList.add('sel'); }); }
+      if(d.film_founder){ document.querySelectorAll('#prod-cards-founder .prodcard').forEach(function(c){ if(c.getAttribute('data-v')===d.film_founder) c.classList.add('sel'); }); }
     }catch(e){}
   }
   restoreDraft();
   updateProgress();
 
   function submitForm(){
-    if(!validateStep(4)) return;
+    if(!validateStep('5')) return;
     var errBox = document.getElementById('submit-error');
     errBox.style.display='none';
     var btn = document.getElementById('submit-btn');
-    btn.disabled = true; btn.textContent = 'Sending…';
+    btn.disabled = true; btn.textContent = 'Sending\u2026';
 
+    var isFounder = who === 'Founder or brand';
     var data = {
+      lead_type: who,
       first_name: val('first_name'),
       last_name: val('last_name'),
       email: val('email'),
       phone: val('phone'),
-      instagram_or_website: val('instagram_or_website'),
+      instagram_or_website: isFounder ? val('instagram_or_website_f') : val('instagram_or_website'),
       estimated_property_value: val('estimated_property_value'),
       years_experience: val('years_experience'),
-      film_type: val('film_type'),
-      project_location: val('project_location'),
-      your_story: val('your_story'),
+      industry: val('industry'),
+      company_revenue: val('company_revenue'),
+      role: val('role'),
+      film_type: getFilmType(),
+      your_story: isFounder ? val('your_story_f') : val('your_story'),
       results_matter: getResults().join(', '),
       intended_investment: val('intended_investment'),
       timeline: val('timeline'),
@@ -370,7 +502,6 @@
       document.getElementById('form-shell').style.display='none';
       if(qualified){
         document.getElementById('schedule-block').style.display='block';
-        if(typeof startCal==='function') startCal();
       } else {
         document.getElementById('nextsteps-block').style.display='block';
       }
@@ -378,7 +509,7 @@
       window.scrollTo({top:0,behavior:'smooth'});
     }).catch(function(err){
       btn.disabled=false; btn.innerHTML='Send your application <span class="arrow">&rarr;</span>';
-      errBox.textContent="Something interrupted the send — your answers are still here. Please check your connection and try again. If it keeps happening, email us at chloe@joseoliveirafilms.com.";
+      errBox.textContent="Something interrupted the send \u2014 your answers are still here. Please check your connection and try again. If it keeps happening, email us at chloe@joseoliveirafilms.com.";
       errBox.style.display='block';
     });
   }
