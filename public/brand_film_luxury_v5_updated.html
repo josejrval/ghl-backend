@@ -627,7 +627,7 @@ const CAL_LINK = "jose-oliveira-ehscu6/discovery-call-with-jose-oliveira";
    ============================================================ */
 const state = {
   lead_type: null,
-  first_name: "", last_name: "", email: "", phone: "", instagram: "",
+  first_name: "", last_name: "", email: "", phone: "", instagram: "", location: "",
   calibre: null, years: null,
   industry: "", revenue: null, role: null,
   selections: [],            // [{objective, name}] - multi-select
@@ -765,6 +765,10 @@ function buildAbout() {
         <label>Instagram or website</label>
         <input type="text" id="instagram" placeholder="@handle or website" maxlength="200">
       </div>
+      <div class="field">
+        <label>Location</label>
+        <input type="text" id="location" placeholder="City, state" maxlength="120">
+      </div>
       <div class="group-label">Calibre of properties you list</div>
       <div class="opts compact">${optRows('calibre', ['Under $1M','$1M to $2M','$2M to $5M','$5M to $10M','$10M+'])}</div>
       <div class="group-label">Years in the market</div>
@@ -777,6 +781,10 @@ function buildAbout() {
       <div class="field">
         <label>Instagram or website</label>
         <input type="text" id="instagram" placeholder="@handle or website" maxlength="200">
+      </div>
+      <div class="field">
+        <label>Location</label>
+        <input type="text" id="location" placeholder="City, state" maxlength="120">
       </div>
       <div class="field">
         <label>Your industry</label>
@@ -810,6 +818,12 @@ function fromAbout() {
   if (!ig) { igEl.classList.add('error'); setErr('err-about','Please share your Instagram or website.'); return; }
   igEl.classList.remove('error');
   state.instagram = ig;
+
+  const locEl = document.getElementById('location');
+  const loc = locEl ? locEl.value.trim() : '';
+  if (!loc) { locEl.classList.add('error'); setErr('err-about','Please share where you are based.'); return; }
+  locEl.classList.remove('error');
+  state.location = loc;
 
   if (path === 'agent') {
     if (!state.calibre) { setErr('err-about','Please select the calibre of properties you list.'); return; }
@@ -1011,6 +1025,7 @@ async function submitForm() {
     email: clamp(state.email, 254),
     phone: clamp(state.phone, 40),
     instagram: clamp(state.instagram, 200),
+    location: clamp(state.location, 120),
     calibre: state.calibre,
     years: state.years,
     industry: clamp(state.industry, 200),
