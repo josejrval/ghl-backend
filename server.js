@@ -11,6 +11,8 @@ const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const FORM_FILE = 'brand_film_luxury_v5_updated.html';
+
 let pool = null;
 if (process.env.DATABASE_URL) {
   pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
@@ -27,39 +29,69 @@ if (process.env.DATABASE_URL) {
 }
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '64kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// ============================================================
+// GATE — recalculado no servidor (nunca confiar no navegador)
+// Mesma lógica robusta do form: trata "10k", "10,000", "10.000", "$10k".
+// ============================================================
+const GATE_THRESHOLD = 10000;
+
+function extractBudget(raw) {
+  if (raw == null) return null;
+  const s = String(raw).toLowerCase().trim();
+  if (!s) return null;
+  const mult = /([\d][\d.,\s]*?)\s*(k|mil)\b/.exec(s);
+  if (mult) {
+    const base = cleanNumber(mult[1]);
+    if (base === null) return null;
+    return Math.round(base * 1000);
+  }
+  return cleanNumber(s);
+}
+
+function cleanNumber(s) {
+  const m = /(\d[\d.,]*)/.exec(String(s));
+  if (!m) return null;
+  let t = m[1].replace(/[.,]+$/, '');
+  const hasComma = t.includes(',');
+  const hasDot = t.includes('.');
+  if (hasComma && hasDot) return safeFloat(t.replace(/,/g, ''));
+  if (hasComma && !hasDot) {
+    const parts = t.split(',');
+    if (parts.length === 2 && parts[1].length === 2) return safeFloat(parts[0] + '.' + parts[1]);
+    return safeFloat(t.replace(/,/g, ''));
+  }
+  if (hasDot && !hasComma) {
+    const parts = t.split('.');
+    const last = parts[parts.length - 1];
+    if (last.length === 3) return safeFloat(parts.join(''));
+    if (parts.length > 2) { const dec = parts.pop(); return safeFloat(parts.join('') + '.' + dec); }
+    return safeFloat(t);
+  }
+  return safeFloat(t);
+}
+function safeFloat(t) { const n = parseFloat(t); return isNaN(n) ? null : n; }
 
 // ---------- helpers de email (Old Money, compatível com Gmail/Outlook) ----------
 
 function esc(v) {
   if (v === undefined || v === null || v === '') return '—';
-  return String(v)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-// extrai o número do investimento declarado (aceita "$5,000", "5000", "$10k", etc.)
-function parseInvestment(raw) {
-  if (!raw) return 0;
-  let s = String(raw).toLowerCase().replace(/[, $]/g, '');
-  const hasK = s.includes('k');
-  s = s.replace(/[^0-9.]/g, '');
-  let n = parseFloat(s) || 0;
-  if (hasK && n < 1000) n = n * 1000;
-  return n;
-}
-
-// decide a faixa de temperatura pelo investimento
-// decide a faixa de temperatura pela opção escolhida no form
-function tier(investment) {
-  const s = String(investment || '');
-  if (s.indexOf('$') === 0) {
+// temperatura: 🔥 se qualifica (>= $10k), senão frio. Sem número → frio.
+function tier(budgetNum) {
+  if (budgetNum !== null && budgetNum >= GATE_THRESHOLD) {
     return { name: '🔥 Hot lead', note: 'Priority · calendar shown', bg: '#EAF3DE', fg: '#3B6D11' };
   }
-  if (/exploring/i.test(s)) {
-    return { name: '☀️ Warm lead', note: 'For follow-up', bg: '#FAEEDA', fg: '#854F0B' };
-  }
-  return { name: '❄️ Cool lead', note: 'Nurture', bg: '#F1EFE8', fg: '#5F5E5A' };
+  return { name: '❄️ Cool lead', note: 'For Chloe · follow-up', bg: '#F1EFE8', fg: '#5F5E5A' };
+}
+
+function money(budgetNum, raw) {
+  if (budgetNum === null) return esc(raw);
+  return '$' + budgetNum.toLocaleString('en-US');
 }
 
 function row(label, value) {
@@ -95,20 +127,15 @@ function emailShell(subtitle, innerHtml) {
 }
 
 // Email 1 — Novo lead
-function newLeadEmail(d) {
-  const t = tier(d.intended_investment);
+function newLeadEmail(d, budgetNum) {
+  const t = tier(budgetNum);
   const fullName = `${esc(d.first_name)} ${esc(d.last_name)}`.trim();
+  const isFounder = (d.lead_type || '').toLowerCase().indexOf('founder') !== -1;
+
   const badge = `
     <div style="display:inline-block;background:${t.bg};color:${t.fg};font-size:12px;font-weight:bold;padding:6px 14px;border-radius:20px;margin-bottom:18px;font-family:Arial,sans-serif;">
-      ${esc(t.name)} · ${esc(d.intended_investment)} · ${esc(t.note)}
+      ${esc(t.name)} · ${money(budgetNum, d.budget)} · ${esc(t.note)}
     </div>`;
-
-  const story = d.your_story
-    ? `${sectionLabel('Their story')}
-       <div style="background:#F9F8F4;border-radius:10px;padding:13px 15px;font-family:Georgia,serif;font-size:16px;color:#2B2622;line-height:1.5;font-style:italic;">${esc(d.your_story)}</div>`
-    : '';
-
-  const isFounder = (d.lead_type || '').toLowerCase().indexOf('founder') !== -1;
 
   const typePill = `<div style="display:inline-block;background:#F1ECE2;color:#7C5730;font-size:11px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin:0 0 12px;font-family:Arial,sans-serif;">${isFounder ? 'Founder / brand' : 'Real estate agent'}</div>`;
 
@@ -116,14 +143,24 @@ function newLeadEmail(d) {
     ? `${sectionLabel('Their company')}
        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
          ${row('Industry', d.industry)}
-         ${row('Company revenue', d.company_revenue)}
+         ${row('Company revenue', d.revenue)}
          ${row('Role', d.role)}
        </table>`
     : `${sectionLabel('Their market')}
        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-         ${row('Property calibre', d.estimated_property_value)}
-         ${row('Years in market', d.years_experience)}
+         ${row('Property calibre', d.calibre)}
+         ${row('Years in market', d.years)}
        </table>`;
+
+  const elseBlock = d.something_else_text
+    ? `${sectionLabel('In their words')}
+       <div style="background:#F9F8F4;border-radius:10px;padding:13px 15px;font-family:Georgia,serif;font-size:16px;color:#2B2622;line-height:1.5;font-style:italic;">${esc(d.something_else_text)}</div>`
+    : '';
+
+  const context = d.additional_context
+    ? `${sectionLabel('Anything else')}
+       <div style="background:#F9F8F4;border-radius:10px;padding:13px 15px;font-family:Georgia,serif;font-size:16px;color:#2B2622;line-height:1.5;font-style:italic;">${esc(d.additional_context)}</div>`
+    : '';
 
   const inner = `
     <div style="font-family:Georgia,'Times New Roman',serif;font-size:24px;color:#2B2622;margin:0 0 6px;">${fullName}</div>
@@ -133,18 +170,19 @@ function newLeadEmail(d) {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       ${row('Email', d.email)}
       ${row('Phone', d.phone)}
-      ${row('Instagram or site', d.instagram_or_website)}
+      ${row('Location', d.location)}
+      ${row('Instagram or site', d.instagram)}
     </table>
     ${middleSection}
-    ${sectionLabel('The project')}
+    ${sectionLabel('What they want')}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      ${row('Objective', d.objective)}
       ${row('Film chosen', d.film_type)}
-      ${row('Investment', d.intended_investment)}
+      ${row('Budget', money(budgetNum, d.budget))}
       ${row('Timeline', d.timeline)}
-      ${row('Results wanted', d.results_matter)}
-      ${row('Extra context', d.additional_context)}
     </table>
-    ${story}`;
+    ${elseBlock}
+    ${context}`;
 
   return emailShell('New application received', inner);
 }
@@ -152,6 +190,7 @@ function newLeadEmail(d) {
 // Email 2 — Reunião agendada
 function bookedEmail(d) {
   const fullName = `${esc(d.first_name)} ${esc(d.last_name)}`.trim();
+  const isFounder = (d.lead_type || '').toLowerCase().indexOf('founder') !== -1;
   const when = `
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F9F8F4;border:1px solid #A0703F;border-radius:12px;margin-bottom:22px;">
       <tr><td style="padding:18px 20px;">
@@ -170,15 +209,17 @@ function bookedEmail(d) {
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       ${row('Email', d.email)}
       ${row('Phone', d.phone)}
-      ${row('Instagram or site', d.instagram_or_website)}
+      ${row('Location', d.location)}
+      ${row('Instagram or site', d.instagram)}
     </table>
     ${sectionLabel('Context for the call')}
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-      ${(d.lead_type || '').toLowerCase().indexOf('founder') !== -1
-        ? `${row('Industry', d.industry)}${row('Company revenue', d.company_revenue)}${row('Role', d.role)}`
-        : `${row('Property calibre', d.estimated_property_value)}`}
-      ${row('Investment', d.intended_investment)}
+      ${isFounder
+        ? `${row('Industry', d.industry)}${row('Company revenue', d.revenue)}${row('Role', d.role)}`
+        : `${row('Property calibre', d.calibre)}${row('Years in market', d.years)}`}
+      ${row('Objective', d.objective)}
       ${row('Film chosen', d.film_type)}
+      ${row('Budget', d.budget)}
     </table>`;
 
   return emailShell('Discovery call booked', inner);
@@ -199,21 +240,42 @@ async function sendEmail(subject, html) {
   }
 }
 
+// monta o assunto: "Marcus, Miami — 🔥 Hot lead ($10,000) - 🏠 Agent"
+function buildSubject(d, budgetNum) {
+  const t = tier(budgetNum);
+  const isFounder = (d.lead_type || '').toLowerCase().indexOf('founder') !== -1;
+  const typeEmoji = isFounder ? '🎬' : '🏠';
+  const typeWord = isFounder ? 'Founder' : 'Agent';
+  const name = d.first_name || 'novo lead';
+  const city = d.location ? `, ${d.location}` : '';
+  return `${name}${city} — ${t.name} (${money(budgetNum, d.budget)}) - ${typeEmoji} ${typeWord}`;
+}
+
 // ---------- rotas ----------
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5_updated.html'));
+  res.sendFile(path.join(__dirname, 'public', FORM_FILE));
 });
 
 // Email 1: novo lead
 app.post('/lead', async (req, res) => {
-  const leadData = req.body;
-  console.log('🔥 NOVO LEAD:', JSON.stringify(leadData, null, 2));
+  const d = req.body || {};
   res.json({ status: 'ok' });
+
+  // Proteções contra bot: honeypot preenchido ou envio rápido demais.
+  const elapsed = Number(d.elapsed_ms) || 0;
+  if (d.company_website) { console.log('🕳️ Honeypot preenchido — lead ignorado'); return; }
+  if (elapsed > 0 && elapsed < 3000) { console.log('⏱️ Envio rápido demais (' + elapsed + 'ms) — lead ignorado'); return; }
+
+  // Gate recalculado no servidor (não confia no que veio do navegador).
+  const budgetNum = extractBudget(d.budget);
+  const qualifies = budgetNum !== null && budgetNum >= GATE_THRESHOLD;
+
+  console.log('🔥 NOVO LEAD:', d.first_name, d.last_name, '·', d.location || '—', '·', d.budget || '—', '→', qualifies ? 'HOT (calendário)' : 'para Chloe');
 
   if (pool) {
     try {
-      await pool.query('insert into leads (data) values ($1)', [leadData]);
+      await pool.query("insert into leads (data, status) values (\$1, \$2)", [d, qualifies ? 'qualified' : 'nurture']);
       console.log('💾 Lead salvo no banco');
     } catch (err) {
       console.log('❌ Erro banco:', err.message);
@@ -224,30 +286,28 @@ app.post('/lead', async (req, res) => {
     await fetch('https://hook.us2.make.com/6n477rbaq6fqqw30myrbtw0w57v3ktxv', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(leadData)
+      body: JSON.stringify({ ...d, budget_value_server: budgetNum, qualifies_server: qualifies })
     });
     console.log('✅ Enviado para Make');
   } catch (err) {
     console.log('❌ Erro Make:', err.message);
   }
 
-  const t = tier(leadData.intended_investment);
-  const typeEmoji = (leadData.lead_type || '').toLowerCase().indexOf('founder') !== -1 ? '🎬' : '🏠';
-  const typeWord = (leadData.lead_type || '').toLowerCase().indexOf('founder') !== -1 ? 'Founder' : 'Agent';
-  await sendEmail(`${t.name} ${typeEmoji} ${typeWord} — ${leadData.first_name || 'novo lead'} (${leadData.intended_investment || '—'})`, newLeadEmail(leadData));
+  await sendEmail(buildSubject(d, budgetNum), newLeadEmail(d, budgetNum));
 });
 
-// Email 2: reunião agendada (o front envia aqui quando o Cal.com confirma o booking)
+// Email 2: reunião agendada
 app.post('/booked', async (req, res) => {
-  const d = req.body;
-  console.log('📅 REUNIÃO AGENDADA:', JSON.stringify(d, null, 2));
+  const d = req.body || {};
+  console.log('📅 REUNIÃO AGENDADA:', d.first_name, d.last_name, '·', d.booking_date || '');
   res.json({ status: 'ok' });
 
-  await sendEmail(`📅 Reunião marcada — ${d.first_name || 'lead'} (${d.booking_date || ''})`, bookedEmail(d));
+  const city = d.location ? `, ${d.location}` : '';
+  await sendEmail(`📅 Reunião marcada — ${d.first_name || 'lead'}${city} (${d.booking_date || ''})`, bookedEmail(d));
 });
 
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'brand_film_luxury_v5_updated.html'));
+  res.sendFile(path.join(__dirname, 'public', FORM_FILE));
 });
 
 app.listen(PORT, '0.0.0.0', () => {
