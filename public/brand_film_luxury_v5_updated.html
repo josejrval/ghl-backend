@@ -6,15 +6,21 @@
 <title>Jose Oliveira Films</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --canvas: #F9F8F4;
-    --field: #FDFBF8;
-    --copper: #A0703F;
-    --copper-dk: #7C5730;
-    --ink: #2B2622;
-    --stone: #E0D9CC;
+    --page: #F7F4EE;
+    --card: #FFFFFF;
+    --tint: #F0E7DA;
+    --tint-hover: #F6F0E6;
+    --copper: #9A6B4E;
+    --copper-dk: #7A5238;
+    --ink: #2D2926;
+    --umber: #8C7A6B;
+    --whisper: #A6988B;
+    --line: #E7E0D4;
+    --line-soft: #EFEAE0;
+    --error: #8B4049;
     --serif: 'DM Serif Display', Georgia, serif;
     --garamond: 'Cormorant Garamond', Georgia, serif;
     --sans: 'DM Sans', -apple-system, sans-serif;
@@ -23,472 +29,574 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
-    background: var(--canvas);
+    background: var(--page);
     color: var(--ink);
     font-family: var(--sans);
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: rgba(154,107,78,0.2); }
+
+  .wrap {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 0 20px 100px;
   }
 
-  body {
-    min-height: 100vh;
+  /* ------------------------------------------------------------
+     Top bar: wordmark + honest progress
+  ------------------------------------------------------------ */
+  .topbar { padding: 34px 6px 26px; }
+  .tb-row {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
   }
-
-  .shell {
-    width: 100%;
-    max-width: 620px;
-    padding: 0 28px 80px;
+  .tb-mark {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    color: var(--ink);
   }
-
-  /* Progress */
-  .progress-wrap {
-    position: sticky;
-    top: 0;
-    background: var(--canvas);
-    padding: 32px 0 20px;
-    z-index: 20;
+  .tb-step {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--umber);
+    transition: opacity 0.3s;
   }
-  .progress-bar {
-    height: 3px;
-    width: 100%;
-    background: var(--stone);
-    border-radius: 3px;
+  .tb-bar {
+    height: 2px;
+    border-radius: 2px;
+    background: var(--line-soft);
+    position: relative;
     overflow: hidden;
+    transition: opacity 0.3s;
   }
-  .progress-fill {
+  .tb-fill {
+    position: absolute;
+    left: 0; top: 0;
     height: 100%;
     width: 20%;
+    border-radius: 2px;
     background: var(--copper);
-    border-radius: 3px;
-    transition: width 0.5s cubic-bezier(.2,.7,.2,1);
+    transition: width 0.7s cubic-bezier(.25,.8,.25,1);
   }
-  .progress-label {
-    margin-top: 10px;
-    font-size: 12px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--copper-dk);
-    font-weight: 500;
-  }
-  .progress-wrap.hidden { display: none; }
+  .topbar.done .tb-step, .topbar.done .tb-bar { opacity: 0; }
 
-  /* Screens */
-  .screen { display: none; animation: rise 0.5s cubic-bezier(.2,.7,.2,1); }
+  /* ------------------------------------------------------------
+     The card: one floating white card per screen
+  ------------------------------------------------------------ */
+  .screen {
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--line-soft);
+    border-radius: 22px;
+    box-shadow: 0 20px 55px rgba(45,41,38,0.07);
+    padding: 50px 52px 46px;
+  }
   .screen.active { display: block; }
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: translateY(0); }
+  .screen.active > * {
+    animation: settle 0.5s cubic-bezier(.25,.8,.25,1) both;
+  }
+  .screen.active > *:nth-child(1) { animation-delay: 0.02s; }
+  .screen.active > *:nth-child(2) { animation-delay: 0.07s; }
+  .screen.active > *:nth-child(3) { animation-delay: 0.12s; }
+  .screen.active > *:nth-child(4) { animation-delay: 0.17s; }
+  .screen.active > *:nth-child(5) { animation-delay: 0.22s; }
+  .screen.active > *:nth-child(6) { animation-delay: 0.27s; }
+  .screen.active > *:nth-child(7) { animation-delay: 0.32s; }
+  .screen.active > *:nth-child(n+8) { animation-delay: 0.37s; }
+  @keyframes settle {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  .eyebrow {
-    font-family: var(--sans);
-    font-size: 12px;
-    letter-spacing: 0.18em;
+  .kicker {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.26em;
     text-transform: uppercase;
     color: var(--copper);
-    font-weight: 500;
     margin-bottom: 14px;
   }
   h1.title {
     font-family: var(--serif);
     font-weight: 400;
-    font-size: 34px;
+    font-size: 33px;
     line-height: 1.12;
     letter-spacing: -0.01em;
     margin-bottom: 10px;
   }
   .lede {
     font-family: var(--garamond);
-    font-size: 21px;
-    line-height: 1.4;
-    color: #5A5149;
-    margin-bottom: 34px;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.42;
+    color: var(--umber);
+    margin-bottom: 36px;
   }
 
-  /* Fields */
-  .field { margin-bottom: 20px; }
+  /* ------------------------------------------------------------
+     Fields: white boxes, soft borders
+  ------------------------------------------------------------ */
+  .field { margin-bottom: 22px; }
   .field label {
     display: block;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
-    letter-spacing: 0.02em;
-    margin-bottom: 8px;
     color: var(--ink);
+    margin-bottom: 8px;
   }
-  .field .optional { color: #9A9188; font-weight: 400; }
+  .field .optional { color: var(--whisper); font-weight: 400; }
   input[type="text"],
   input[type="email"],
   input[type="tel"],
   textarea {
     width: 100%;
-    background: var(--field);
-    border: 1px solid var(--stone);
-    border-radius: 8px;
-    padding: 15px 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
     font-family: var(--sans);
     font-size: 16px;
     color: var(--ink);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.22s, box-shadow 0.22s, background 0.22s;
   }
-  textarea { resize: vertical; min-height: 96px; line-height: 1.5; }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+  input::placeholder, textarea::placeholder { color: var(--whisper); }
+  input:hover, textarea:hover { border-color: #D8CFBF; }
   input:focus, textarea:focus {
     outline: none;
     border-color: var(--copper);
-    box-shadow: 0 0 0 3px rgba(160,112,63,0.12);
+    box-shadow: 0 0 0 3px rgba(154,107,78,0.1);
   }
-  input.error, textarea.error { border-color: #B4552F; }
-  .row { display: flex; gap: 14px; }
+  input.error, textarea.error { border-color: var(--error); }
+  .row { display: flex; gap: 16px; }
   .row .field { flex: 1; }
 
-  /* Choice cards & option lists */
-  .choice {
-    background: var(--field);
-    border: 1px solid var(--stone);
-    border-radius: 10px;
-    padding: 20px 22px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    transition: border-color 0.2s, background 0.2s, transform 0.1s;
-  }
-  .choice:hover { border-color: #C9BEAD; }
-  .choice:active { transform: scale(0.996); }
-  .choice.selected {
-    border: 2px solid var(--copper);
-    background: #FBF6EF;
-    padding: 19px 21px;
-  }
-  .choice h3 {
-    font-family: var(--serif);
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 1.2;
-    margin-bottom: 4px;
-  }
-  .choice p {
-    font-family: var(--garamond);
-    font-size: 17px;
-    color: #6A6159;
-    line-height: 1.35;
-  }
-
-  /* Pill options (calibre, revenue, timeline etc.) */
-  .pills { display: flex; flex-wrap: wrap; gap: 10px; }
-  .pill {
-    background: var(--field);
-    border: 1px solid var(--stone);
-    border-radius: 999px;
-    padding: 11px 18px;
+  /* ------------------------------------------------------------
+     Choices: white rounded buttons; hover changes the background
+  ------------------------------------------------------------ */
+  .group-label {
     font-size: 14px;
     font-weight: 500;
     color: var(--ink);
-    cursor: pointer;
-    transition: all 0.18s;
-    user-select: none;
+    margin: 30px 0 10px;
   }
-  .pill:hover { border-color: #C9BEAD; }
-  .pill.selected {
-    border: 2px solid var(--copper);
-    background: #FBF6EF;
-    color: var(--copper-dk);
-    padding: 10px 17px;
-  }
-
-  /* Accordion (objectives) */
-  .accordion { margin-bottom: 4px; }
-  .panel {
-    border: 1px solid var(--stone);
-    border-radius: 10px;
-    margin-bottom: 12px;
-    overflow: hidden;
-    background: var(--field);
-    transition: border-color 0.2s;
-  }
-  .panel.open { border-color: var(--copper); }
-  .panel.has-selection { border: 2px solid var(--copper); }
-  .panel-head {
-    padding: 20px 22px;
-    cursor: pointer;
+  .opt {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: baseline;
     gap: 16px;
+    padding: 20px 22px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.12s;
   }
-  .panel-head .ptext h3 {
+  .opt:hover { background: var(--tint-hover); border-color: #D8CFBF; }
+  .opt:active { transform: scale(0.994); }
+  .opt.selected {
+    background: var(--tint);
+    border-color: var(--copper);
+    box-shadow: inset 0 0 0 1px var(--copper);
+  }
+  .opt .marker {
+    flex-shrink: 0;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    border: 1px solid #CFC6B6;
+    transition: all 0.22s;
+    transform: translateY(-1px);
+  }
+  .opt.selected .marker {
+    border-color: var(--copper);
+    background: var(--copper);
+    box-shadow: 0 0 0 3px rgba(154,107,78,0.18);
+  }
+  .opt .otext { flex: 1; }
+  .opt .oname {
     font-family: var(--serif);
     font-weight: 400;
-    font-size: 20px;
-    line-height: 1.2;
-    margin-bottom: 3px;
+    font-size: 19px;
+    line-height: 1.25;
+    color: var(--ink);
+    transition: color 0.2s;
   }
-  .panel-head .ptext p {
+  .opt .odesc {
     font-family: var(--garamond);
+    font-style: italic;
     font-size: 17px;
-    color: #6A6159;
-    line-height: 1.3;
+    line-height: 1.4;
+    color: var(--umber);
+    margin-top: 2px;
   }
-  .chev {
+  .opt.selected .oname { color: var(--copper-dk); }
+
+  .opts.compact .opt { padding: 15px 20px; margin-bottom: 10px; }
+  .opts.compact .oname {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 400;
+  }
+  .opts.compact .opt.selected .oname { color: var(--copper-dk); font-weight: 500; }
+
+  /* ------------------------------------------------------------
+     Accordion: multi-select, auto-collapse after each pick
+  ------------------------------------------------------------ */
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    margin-bottom: 12px;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .panel:hover { background: var(--tint-hover); border-color: #D8CFBF; }
+  .panel.open { border-color: var(--copper); background: var(--card); }
+  .panel.has-selection {
+    border-color: var(--copper);
+    box-shadow: inset 0 0 0 1px var(--copper);
+  }
+  .panel-head {
+    padding: 22px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+  }
+  .panel-head .ptext { flex: 1; }
+  .panel-head h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 1.2;
+    transition: color 0.2s;
+  }
+  .panel.open .panel-head h3 { color: var(--copper-dk); }
+  .panel-head .psub {
+    font-family: var(--garamond);
+    font-style: italic;
+    font-size: 17px;
+    color: var(--umber);
+    margin-top: 3px;
+  }
+  .panel-head .pchosen {
+    display: none;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--copper);
+    margin-top: 10px;
+    line-height: 1.7;
+  }
+  .panel.has-selection .panel-head .pchosen { display: block; }
+  .cross {
     flex-shrink: 0;
-    width: 12px; height: 12px;
-    border-right: 1.5px solid var(--copper);
-    border-bottom: 1.5px solid var(--copper);
-    transform: rotate(45deg);
-    transition: transform 0.3s;
-    margin-top: -4px;
+    position: relative;
+    width: 14px; height: 14px;
+    margin-top: 7px;
   }
-  .panel.open .chev { transform: rotate(-135deg); margin-top: 4px; }
+  .cross::before, .cross::after {
+    content: "";
+    position: absolute;
+    background: var(--copper);
+    transition: transform 0.32s cubic-bezier(.25,.8,.25,1), opacity 0.28s;
+  }
+  .cross::before { left: 0; top: 6.5px; width: 14px; height: 1px; }
+  .cross::after  { left: 6.5px; top: 0; width: 1px; height: 14px; }
+  .panel.open .cross::after { transform: rotate(90deg); opacity: 0; }
+
   .panel-body {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.35s cubic-bezier(.2,.7,.2,1);
+    transition: max-height 0.45s cubic-bezier(.25,.8,.25,1);
   }
-  .panel.open .panel-body { max-height: 900px; }
-  .panel-inner { padding: 0 22px 20px; }
-  .product {
-    border: 1px solid var(--stone);
-    border-radius: 8px;
-    padding: 15px 16px;
-    margin-top: 10px;
-    cursor: pointer;
-    background: var(--canvas);
-    transition: all 0.18s;
+  .panel.open .panel-body { max-height: 1000px; }
+  .panel-inner { padding: 0 24px 22px; }
+  .panel-inner .opt {
+    background: #FBF9F5;
+    padding: 15px 18px;
+    margin-bottom: 10px;
+    border-radius: 10px;
   }
-  .product:hover { border-color: #C9BEAD; }
-  .product.selected {
-    border: 2px solid var(--copper);
-    background: #FBF6EF;
-    padding: 14px 15px;
-  }
-  .product h4 {
-    font-family: var(--sans);
-    font-weight: 600;
-    font-size: 15px;
-    margin-bottom: 3px;
-  }
-  .product p {
+  .panel-inner .opt:hover { background: var(--tint-hover); }
+  .panel-inner .opt:last-child { margin-bottom: 0; }
+  .panel-inner .opt.selected { background: var(--tint); }
+  .panel-inner .opt .oname { font-size: 18px; }
+  .panel-inner .opt .odesc { font-size: 16px; }
+  .hint {
     font-family: var(--garamond);
+    font-style: italic;
     font-size: 16px;
-    color: #6A6159;
-    line-height: 1.35;
+    color: var(--whisper);
+    margin: -22px 0 26px;
   }
-  .else-field { margin-top: 12px; }
+  .else-field { padding-top: 4px; }
 
-  /* Buttons */
-  .actions {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    margin-top: 34px;
-  }
-  .btn {
+  /* ------------------------------------------------------------
+     Actions
+  ------------------------------------------------------------ */
+  .actions { margin-top: 36px; }
+  .btn-primary {
+    width: 100%;
     font-family: var(--sans);
     font-size: 15px;
     font-weight: 500;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.2s;
-    border: none;
-  }
-  .btn-primary {
+    letter-spacing: 0.04em;
+    color: #FFFFFF;
     background: var(--copper);
-    color: #FDFBF8;
-    padding: 15px 30px;
-    box-shadow: 0 6px 18px rgba(160,112,63,0.28);
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-  }
-  .btn-primary:hover { background: var(--copper-dk); box-shadow: 0 8px 22px rgba(160,112,63,0.34); }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
-  .btn-primary .arrow { transition: transform 0.2s; }
-  .btn-primary:hover:not(:disabled) .arrow { transform: translateX(3px); }
-  .btn-ghost {
-    background: transparent;
-    color: var(--ink);
-    border: 1px solid var(--stone);
-    padding: 14px 24px;
-  }
-  .btn-ghost:hover { border-color: var(--copper); color: var(--copper-dk); }
-
-  .err-msg {
-    color: #B4552F;
-    font-size: 13px;
-    font-family: var(--sans);
-    margin-top: 10px;
-    min-height: 18px;
-  }
-
-  /* Final screens */
-  .final { text-align: center; padding-top: 40px; }
-  .seal {
-    width: 64px; height: 64px;
-    border-radius: 50%;
-    border: 2px solid var(--copper);
+    border: none;
+    border-radius: 14px;
+    padding: 18px 28px;
+    cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 26px;
+    gap: 10px;
+    box-shadow: 0 12px 28px rgba(154,107,78,0.24);
+    transition: background 0.22s, box-shadow 0.22s, transform 0.14s;
   }
-  .seal svg { width: 28px; height: 28px; }
+  .btn-primary:hover { background: var(--copper-dk); box-shadow: 0 14px 32px rgba(122,82,56,0.3); }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+  .btn-primary .arrow { transition: transform 0.22s; }
+  .btn-primary:hover:not(:disabled) .arrow { transform: translateX(4px); }
+
+  .btn-back {
+    display: block;
+    margin: 16px auto 0;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--whisper);
+    background: none;
+    border: none;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: color 0.22s;
+  }
+  .btn-back:hover { color: var(--copper-dk); }
+
+  .err-msg {
+    color: var(--error);
+    font-family: var(--garamond);
+    font-style: italic;
+    font-size: 17px;
+    margin-top: 18px;
+    min-height: 22px;
+    text-align: center;
+  }
+
+  /* ------------------------------------------------------------
+     Final screens
+  ------------------------------------------------------------ */
+  .final { text-align: center; }
+  .seal {
+    width: 62px; height: 62px;
+    border-radius: 50%;
+    border: 1px solid var(--copper);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  .seal svg { width: 24px; height: 24px; }
   .final h1 {
     font-family: var(--serif);
     font-weight: 400;
-    font-size: 32px;
-    margin-bottom: 12px;
+    font-size: 34px;
+    line-height: 1.1;
+    margin-bottom: 14px;
   }
   .final .sub {
     font-family: var(--garamond);
-    font-size: 21px;
-    line-height: 1.45;
-    color: #5A5149;
-    max-width: 440px;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--umber);
+    max-width: 42ch;
     margin: 0 auto;
   }
   .divider {
-    width: 44px;
+    width: 26px;
     height: 1px;
-    background: var(--stone);
-    margin: 32px auto;
+    background: var(--copper);
+    margin: 36px auto;
   }
   .final h2 {
     font-family: var(--serif);
     font-weight: 400;
-    font-size: 24px;
+    font-size: 25px;
     margin-bottom: 8px;
   }
-  #cal-inline { width: 100%; min-height: 560px; margin-top: 8px; }
+  #cal-inline { width: 100%; min-height: 560px; margin-top: 26px; }
   .held-note {
     font-family: var(--garamond);
-    font-size: 16px;
     font-style: italic;
-    color: #8A8177;
-    margin-top: 18px;
+    font-size: 16px;
+    color: var(--whisper);
+    margin-top: 20px;
   }
 
-  @media (max-width: 480px) {
-    .shell { padding: 0 20px 60px; }
-    h1.title { font-size: 28px; }
-    .lede { font-size: 19px; }
+  /* ------------------------------------------------------------
+     Accessibility, reduced motion, mobile
+  ------------------------------------------------------------ */
+  .opt:focus-visible, .panel-head:focus-visible,
+  .btn-primary:focus-visible, .btn-back:focus-visible {
+    outline: 1.5px solid var(--copper);
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+  @media (max-width: 560px) {
+    .wrap { padding: 0 14px 70px; }
+    .screen { padding: 34px 24px 30px; border-radius: 18px; }
+    h1.title { font-size: 27px; }
+    .lede { font-size: 18px; margin-bottom: 30px; }
     .row { flex-direction: column; gap: 0; }
+    .panel-inner { padding: 0 18px 18px; }
   }
 </style>
 </head>
 <body>
-<div class="shell">
+<div class="wrap">
 
-  <!-- Progress -->
-  <div class="progress-wrap" id="progressWrap">
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="progress-label" id="progressLabel">1 of 5</div>
-  </div>
+  <!-- Top bar -->
+  <header class="topbar" id="topbar">
+    <div class="tb-row">
+      <div class="tb-mark">Jose&nbsp;Oliveira&nbsp;Films</div>
+      <div class="tb-step" id="progressLabel">1 of 5</div>
+    </div>
+    <div class="tb-bar"><div class="tb-fill" id="progressFill"></div></div>
+  </header>
 
   <!-- SCREEN 1: You -->
   <section class="screen active" id="s-you">
-    <div class="eyebrow">You</div>
-    <h1 class="title">Let us start with you.</h1>
-    <p class="lede">A few details so we know who we are speaking with.</p>
+    <div class="kicker">First, an introduction</div>
+    <h1 class="title">Who are we speaking with?</h1>
+    <p class="lede">A few details, so we know who we are speaking with.</p>
     <div class="row">
       <div class="field">
         <label>First name</label>
-        <input type="text" id="first_name" autocomplete="given-name">
+        <input type="text" id="first_name" autocomplete="given-name" maxlength="80">
       </div>
       <div class="field">
         <label>Last name</label>
-        <input type="text" id="last_name" autocomplete="family-name">
+        <input type="text" id="last_name" autocomplete="family-name" maxlength="80">
       </div>
     </div>
     <div class="field">
       <label>Email</label>
-      <input type="email" id="email" autocomplete="email">
+      <input type="email" id="email" autocomplete="email" maxlength="254">
     </div>
     <div class="field">
       <label>Phone</label>
-      <input type="tel" id="phone" autocomplete="tel">
+      <input type="tel" id="phone" autocomplete="tel" maxlength="40">
+    </div>
+    <div style="position:absolute;left:-9999px;top:-9999px;height:0;overflow:hidden;" aria-hidden="true">
+      <label for="company_website">Company website</label>
+      <input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off">
     </div>
     <div class="err-msg" id="err-you"></div>
     <div class="actions">
-      <button class="btn btn-primary" onclick="fromYou()">Continue <span class="arrow">&rarr;</span></button>
+      <button class="btn-primary" onclick="fromYou()">Continue <span class="arrow">&rarr;</span></button>
     </div>
   </section>
 
   <!-- SCREEN 2: Which best describes you? -->
   <section class="screen" id="s-describe">
-    <div class="eyebrow">The path</div>
+    <div class="kicker">To begin</div>
     <h1 class="title">Which best describes you?</h1>
-    <p class="lede">This shapes what we ask next.</p>
-    <div class="choice" id="card-agent" onclick="pickType('agent')">
-      <h3>A real estate agent</h3>
-      <p>You list and sell property.</p>
-    </div>
-    <div class="choice" id="card-founder" onclick="pickType('founder')">
-      <h3>A founder or brand</h3>
-      <p>You have built something.</p>
+    <p class="lede">This shapes everything we ask next.</p>
+    <div class="opts">
+      <div class="opt" id="card-agent" tabindex="0" onclick="pickType('agent')" onkeydown="if(event.key==='Enter')pickType('agent')">
+        <div class="marker"></div>
+        <div class="otext">
+          <div class="oname">A real estate agent</div>
+          <div class="odesc">You list and sell property.</div>
+        </div>
+      </div>
+      <div class="opt" id="card-founder" tabindex="0" onclick="pickType('founder')" onkeydown="if(event.key==='Enter')pickType('founder')">
+        <div class="marker"></div>
+        <div class="otext">
+          <div class="oname">A founder or brand</div>
+          <div class="odesc">You have built something.</div>
+        </div>
+      </div>
     </div>
     <div class="err-msg" id="err-describe"></div>
     <div class="actions">
-      <button class="btn btn-ghost" onclick="go('s-you')">Back</button>
-      <button class="btn btn-primary" id="btn-describe" onclick="fromDescribe()">Continue <span class="arrow">&rarr;</span></button>
+      <button class="btn-primary" id="btn-describe" onclick="fromDescribe()">Continue <span class="arrow">&rarr;</span></button>
+      <button class="btn-back" onclick="go('s-you')">&larr;&nbsp;&nbsp;Back</button>
     </div>
   </section>
 
   <!-- SCREEN 3: About you (branched) -->
   <section class="screen" id="s-about">
-    <div class="eyebrow" id="about-eyebrow">Your world</div>
+    <div class="kicker" id="about-kicker">About you</div>
     <h1 class="title" id="about-title"></h1>
+    <p class="lede" id="about-lede"></p>
     <div id="about-fields"></div>
     <div class="err-msg" id="err-about"></div>
     <div class="actions">
-      <button class="btn btn-ghost" onclick="go('s-describe')">Back</button>
-      <button class="btn btn-primary" onclick="fromAbout()">Continue <span class="arrow">&rarr;</span></button>
+      <button class="btn-primary" onclick="fromAbout()">Continue <span class="arrow">&rarr;</span></button>
+      <button class="btn-back" onclick="go('s-describe')">&larr;&nbsp;&nbsp;Back</button>
     </div>
   </section>
 
-  <!-- SCREEN 4: What are you looking to do? (accordion) -->
+  <!-- SCREEN 4: What are you looking to do? (multi-select accordion) -->
   <section class="screen" id="s-objectives">
-    <div class="eyebrow">Your intention</div>
+    <div class="kicker">Your intention</div>
     <h1 class="title">What are you looking to do?</h1>
-    <p class="lede">Choose the one that fits, then the film within it.</p>
+    <p class="lede">Open an intention, choose the film within it.</p>
+    <p class="hint">You may choose more than one.</p>
     <div class="accordion" id="accordion"></div>
     <div class="err-msg" id="err-objectives"></div>
     <div class="actions">
-      <button class="btn btn-ghost" onclick="go('s-about')">Back</button>
-      <button class="btn btn-primary" onclick="fromObjectives()">Continue <span class="arrow">&rarr;</span></button>
+      <button class="btn-primary" onclick="fromObjectives()">Continue <span class="arrow">&rarr;</span></button>
+      <button class="btn-back" onclick="go('s-about')">&larr;&nbsp;&nbsp;Back</button>
     </div>
   </section>
 
   <!-- SCREEN 5: A few last details -->
   <section class="screen" id="s-details">
-    <div class="eyebrow">Almost there</div>
+    <div class="kicker">Almost there</div>
     <h1 class="title">A few last details.</h1>
     <p class="lede">So we can prepare the right conversation.</p>
     <div class="field">
       <label>What is your budget?</label>
-      <input type="text" id="budget" inputmode="numeric" placeholder="10,000">
+      <input type="text" id="budget" inputmode="numeric" placeholder="10,000" maxlength="40">
     </div>
-    <div class="field">
-      <label>When are you hoping to film?</label>
-      <div class="pills" id="timeline-pills">
-        <div class="pill" onclick="pickPill(this,'timeline','Ready to start now')">Ready to start now</div>
-        <div class="pill" onclick="pickPill(this,'timeline','Within the next month')">Within the next month</div>
-        <div class="pill" onclick="pickPill(this,'timeline','One to three months out')">One to three months out</div>
-        <div class="pill" onclick="pickPill(this,'timeline','Just exploring for now')">Just exploring for now</div>
-      </div>
+    <div class="group-label">When are you hoping to film?</div>
+    <div class="opts compact" id="timeline-opts">
+      <div class="opt" tabindex="0" onclick="pickOpt(this,'timeline','Ready to start now')"><div class="marker"></div><div class="otext"><div class="oname">Ready to start now</div></div></div>
+      <div class="opt" tabindex="0" onclick="pickOpt(this,'timeline','Within the next month')"><div class="marker"></div><div class="otext"><div class="oname">Within the next month</div></div></div>
+      <div class="opt" tabindex="0" onclick="pickOpt(this,'timeline','One to three months out')"><div class="marker"></div><div class="otext"><div class="oname">One to three months out</div></div></div>
+      <div class="opt" tabindex="0" onclick="pickOpt(this,'timeline','Just exploring for now')"><div class="marker"></div><div class="otext"><div class="oname">Just exploring for now</div></div></div>
     </div>
-    <div class="field">
+    <div class="field" style="margin-top:30px;">
       <label>Anything you would like us to know? <span class="optional">(optional)</span></label>
-      <textarea id="additional_context"></textarea>
+      <textarea id="additional_context" maxlength="2000"></textarea>
     </div>
     <div class="err-msg" id="err-details"></div>
     <div class="actions">
-      <button class="btn btn-ghost" onclick="go('s-objectives')">Back</button>
-      <button class="btn btn-primary" id="btn-send" onclick="submitForm()">Send <span class="arrow">&rarr;</span></button>
+      <button class="btn-primary" id="btn-send" onclick="submitForm()">Send <span class="arrow">&rarr;</span></button>
+      <button class="btn-back" onclick="go('s-objectives')">&larr;&nbsp;&nbsp;Back</button>
     </div>
   </section>
 
   <!-- FINAL A: Scheduling (budget >= 10k) -->
   <section class="screen final" id="s-final-schedule">
-    <div class="seal"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="#A0703F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="seal"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="#9A6B4E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <h1>Your application is in.</h1>
     <p class="sub">Thank you. One last step.</p>
     <div class="divider"></div>
@@ -500,7 +608,7 @@
 
   <!-- FINAL B: Message to Chloe (budget < 10k) -->
   <section class="screen final" id="s-final-chloe">
-    <div class="seal"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="#A0703F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="seal"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="#9A6B4E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <h1>Your application is in.</h1>
     <p class="sub">Your application is with us. We will read it with the care it deserves, and reach out by email if there is a fit.</p>
   </section>
@@ -509,24 +617,20 @@
 
 <script>
 /* ============================================================
-   CONFIGURATION  (set these two before deploying)
+   CONFIGURATION  (set before deploying)
    ============================================================ */
-// Where the lead is saved and the email fired. Use the full Railway URL
-// if the form is served from a different origin than the backend.
-const LEAD_ENDPOINT = "/lead";
-// Jose's Cal.com link, e.g. "jose-oliveira-films/discovery"
-const CAL_LINK = "jose/discovery";
+const LEAD_ENDPOINT = "/lead";      // full Railway URL if cross-origin
+const CAL_LINK = "jose-oliveira-ehscu6/discovery-call-with-jose-oliveira";
 
 /* ============================================================
    STATE
    ============================================================ */
 const state = {
-  lead_type: null,        // "Real estate agent" | "Founder or brand"
+  lead_type: null,
   first_name: "", last_name: "", email: "", phone: "", instagram: "",
-  calibre: null, years: null,           // agent
-  industry: "", revenue: null, role: null,  // founder
-  objective: null,
-  film_type: null,
+  calibre: null, years: null,
+  industry: "", revenue: null, role: null,
+  selections: [],            // [{objective, name}] - multi-select
   something_else_text: "",
   budget: "",
   timeline: null,
@@ -534,44 +638,50 @@ const state = {
 };
 let path = null; // 'agent' | 'founder'
 
+/* Security: timing signal for bot detection (server rejects sub-3s fills)
+   and a hard cap on every string leaving the browser, so a tampered DOM
+   (maxlength removed via devtools) still cannot ship oversized payloads. */
+const FORM_LOADED_AT = Date.now();
+function clamp(v, max) { return String(v == null ? '' : v).trim().slice(0, max); }
+
 /* ============================================================
    OBJECTIVES + PRODUCTS
    ============================================================ */
 const OBJECTIVES = {
   agent: [
-    { key:'sell', title:'Sell a specific property', sub:'Make a listing impossible to ignore.', products:[
+    { title:'Sell a specific property', sub:'Make a listing impossible to ignore.', products:[
       {name:'The Listing Film', desc:'A single property, shown as an experience.'},
       {name:'The Just Sold Video', desc:'The story behind the sale.'},
       {name:'The Lifestyle Video', desc:'The city, the way you sell it.'}
     ]},
-    { key:'brand', title:'Build my personal brand', sub:'Become the name your market remembers.', products:[
+    { title:'Build my personal brand', sub:'Become the name your market remembers.', products:[
       {name:'Classic Bio Realtor Video', desc:'A short film your personal brand is built around. Who you are, what you stand for, and why a client trusts you before you ever meet.'},
       {name:'The Talking Head', desc:'You, speaking to your market directly.'},
       {name:'The Lifestyle Video', desc:'The city, the way you sell it.'}
     ]},
-    { key:'story', title:'Tell my story', sub:'Show the person behind the listings.', products:[
+    { title:'Tell my story', sub:'Show the person behind the listings.', products:[
       {name:'The Realtor Documentary', desc:"Your story, told with depth. The life behind the name, and a client's own words."},
       {name:'The Case Study Film', desc:'A result told as a story, with your client as the hero.'}
     ]},
-    { key:'allyear', title:'Show up all year', sub:'Cinematic presence, every listing.', products:[
+    { title:'Show up all year', sub:'Cinematic presence, every listing.', products:[
       {name:'The Listing Coverage Program', desc:'Across listings, all year.'}
     ]},
-    { key:'else', title:'Something else', sub:'Tell us what you have in mind.', products:[], isElse:true }
+    { title:'Something else', sub:'Tell us what you have in mind.', products:[], isElse:true }
   ],
   founder: [
-    { key:'show', title:'Show my company', sub:'Settle a first impression on its own.', products:[
+    { title:'Show my company', sub:'Settle a first impression on its own.', products:[
       {name:'Brand Video Production', desc:'Your company and the standard behind it.'}
     ]},
-    { key:'story', title:'Tell my story', sub:'The story that makes people believe.', products:[
+    { title:'Tell my story', sub:'The story that makes people believe.', products:[
       {name:'The One Episode Documentary', desc:'One episode: founder, brand, or client journey.'}
     ]},
-    { key:'develop', title:'Document a development', sub:'Vision, becoming real.', products:[
+    { title:'Document a development', sub:'Vision, becoming real.', products:[
       {name:'The Property Development Documentary', desc:'Your development, followed as it rises. Presence and permanence, before the doors open.'}
     ]},
-    { key:'complete', title:'The complete story', sub:'Trust, built across three chapters.', products:[
+    { title:'The complete story', sub:'Trust, built across three chapters.', products:[
       {name:'The Signature Documentary Series', desc:'Three connected chapters: founder, brand, client. The flagship.'}
     ]},
-    { key:'else', title:'Something else', sub:'Tell us what you have in mind.', products:[], isElse:true }
+    { title:'Something else', sub:'Tell us what you have in mind.', products:[], isElse:true }
   ]
 };
 
@@ -583,14 +693,14 @@ const STEP_OF = { 's-you':1, 's-describe':2, 's-about':3, 's-objectives':4, 's-d
 function go(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  const pw = document.getElementById('progressWrap');
+  const topbar = document.getElementById('topbar');
   if (STEP_OF[id]) {
-    pw.classList.remove('hidden');
+    topbar.classList.remove('done');
     const step = STEP_OF[id];
     document.getElementById('progressFill').style.width = (step / 5 * 100) + '%';
     document.getElementById('progressLabel').textContent = step + ' of 5';
   } else {
-    pw.classList.add('hidden');
+    topbar.classList.add('done');
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -631,8 +741,7 @@ function pickType(t) {
 function fromDescribe() {
   if (!path) { setErr('err-describe','Please choose one.'); return; }
   state.lead_type = path === 'agent' ? 'Real estate agent' : 'Founder or brand';
-  // reset downstream selections if the path changed
-  state.objective = null; state.film_type = null; state.something_else_text = '';
+  state.selections = []; state.something_else_text = '';
   buildAbout();
   buildAccordion();
   go('s-about');
@@ -642,64 +751,53 @@ function fromDescribe() {
    SCREEN 3: About you (branched)
    ============================================================ */
 function buildAbout() {
-  const eyebrow = document.getElementById('about-eyebrow');
+  const kicker = document.getElementById('about-kicker');
   const title = document.getElementById('about-title');
+  const lede = document.getElementById('about-lede');
   const wrap = document.getElementById('about-fields');
-  wrap.innerHTML = '';
 
   if (path === 'agent') {
-    eyebrow.textContent = 'Your market';
+    kicker.textContent = 'Your market';
     title.textContent = 'Tell us about your market.';
+    lede.textContent = 'The level you work at tells us how to speak with you.';
     wrap.innerHTML = `
       <div class="field">
         <label>Instagram or website</label>
-        <input type="text" id="instagram" placeholder="@handle or website">
+        <input type="text" id="instagram" placeholder="@handle or website" maxlength="200">
       </div>
-      <div class="field">
-        <label>Calibre of properties you list</label>
-        <div class="pills" id="calibre-pills">
-          ${pillsHtml('calibre', ['Under $1M','$1M to $2M','$2M to $5M','$5M to $10M','$10M+'])}
-        </div>
-      </div>
-      <div class="field">
-        <label>Years in the market</label>
-        <div class="pills" id="years-pills">
-          ${pillsHtml('years', ['Less than 2 years','2 to 5 years','5 to 10 years','10+ years'])}
-        </div>
-      </div>`;
+      <div class="group-label">Calibre of properties you list</div>
+      <div class="opts compact">${optRows('calibre', ['Under $1M','$1M to $2M','$2M to $5M','$5M to $10M','$10M+'])}</div>
+      <div class="group-label">Years in the market</div>
+      <div class="opts compact">${optRows('years', ['Less than 2 years','2 to 5 years','5 to 10 years','10+ years'])}</div>`;
   } else {
-    eyebrow.textContent = 'Your brand';
+    kicker.textContent = 'Your brand';
     title.textContent = 'Tell us about your brand.';
+    lede.textContent = 'What you have built, and where you stand in it.';
     wrap.innerHTML = `
       <div class="field">
         <label>Instagram or website</label>
-        <input type="text" id="instagram" placeholder="@handle or website">
+        <input type="text" id="instagram" placeholder="@handle or website" maxlength="200">
       </div>
       <div class="field">
         <label>Your industry</label>
-        <input type="text" id="industry" placeholder="What you do">
+        <input type="text" id="industry" placeholder="What you do" maxlength="200">
       </div>
-      <div class="field">
-        <label>Annual company revenue</label>
-        <div class="pills" id="revenue-pills">
-          ${pillsHtml('revenue', ['Under $1M','$1M to $5M','$5M to $20M','$20M to $50M','$50M+'])}
-        </div>
-      </div>
-      <div class="field">
-        <label>Your role</label>
-        <div class="pills" id="role-pills">
-          ${pillsHtml('role', ['Founder or partner','CEO or C-level','Director','Other'])}
-        </div>
-      </div>`;
+      <div class="group-label">Annual company revenue</div>
+      <div class="opts compact">${optRows('revenue', ['Under $1M','$1M to $5M','$5M to $20M','$20M to $50M','$50M+'])}</div>
+      <div class="group-label">Your role</div>
+      <div class="opts compact">${optRows('role', ['Founder or partner','CEO or C-level','Director','Other'])}</div>`;
   }
 }
-function pillsHtml(group, values) {
-  return values.map(v =>
-    `<div class="pill" onclick="pickPill(this,'${group}',${JSON.stringify(v).replace(/"/g,'&quot;')})">${v}</div>`
-  ).join('');
+function optRows(group, values) {
+  return values.map(v => {
+    const safe = v.replace(/'/g, "\\'");
+    return `<div class="opt" tabindex="0" onclick="pickOpt(this,'${group}','${safe}')" onkeydown="if(event.key==='Enter')pickOpt(this,'${group}','${safe}')">
+      <div class="marker"></div><div class="otext"><div class="oname">${v}</div></div>
+    </div>`;
+  }).join('');
 }
-function pickPill(el, group, value) {
-  el.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+function pickOpt(el, group, value) {
+  el.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   state[group] = value;
   if (group === 'timeline') setErr('err-details','');
@@ -707,25 +805,30 @@ function pickPill(el, group, value) {
 }
 
 function fromAbout() {
-  const ig = (document.getElementById('instagram')||{}).value?.trim() || '';
-  if (!ig) { setErr('err-about','Please share your Instagram or website.'); return; }
+  const igEl = document.getElementById('instagram');
+  const ig = igEl ? igEl.value.trim() : '';
+  if (!ig) { igEl.classList.add('error'); setErr('err-about','Please share your Instagram or website.'); return; }
+  igEl.classList.remove('error');
   state.instagram = ig;
 
   if (path === 'agent') {
     if (!state.calibre) { setErr('err-about','Please select the calibre of properties you list.'); return; }
-    // years is not marked required in the spec, but capture it if chosen
   } else {
-    const ind = document.getElementById('industry').value.trim();
-    if (!ind) { setErr('err-about','Please tell us your industry.'); return; }
+    const indEl = document.getElementById('industry');
+    const ind = indEl.value.trim();
+    if (!ind) { indEl.classList.add('error'); setErr('err-about','Please tell us your industry.'); return; }
+    indEl.classList.remove('error');
     state.industry = ind;
-    // revenue and role captured if chosen
   }
   setErr('err-about','');
   go('s-objectives');
 }
 
 /* ============================================================
-   SCREEN 4: Objectives accordion
+   SCREEN 4: Multi-select accordion
+   Selecting a film registers it, then the panel folds back up
+   so the person can open the next intention. Click again to
+   deselect. Selections stay visible on each closed panel.
    ============================================================ */
 function buildAccordion() {
   const acc = document.getElementById('accordion');
@@ -733,18 +836,24 @@ function buildAccordion() {
   acc.innerHTML = list.map((obj, i) => {
     const products = obj.isElse
       ? `<div class="else-field field">
-           <textarea id="else-text" placeholder="Tell us what you have in mind." oninput="onElseInput(${i})"></textarea>
+           <textarea id="else-text" placeholder="Tell us what you have in mind." maxlength="2000" oninput="onElseInput(${i})"></textarea>
          </div>`
-      : obj.products.map(p => `
-          <div class="product" onclick="pickProduct(${i}, this, ${JSON.stringify(p.name).replace(/"/g,'&quot;')})">
-            <h4>${p.name}</h4>
-            <p>${p.desc}</p>
-          </div>`).join('');
+      : obj.products.map(p => {
+          const safe = p.name.replace(/'/g, "\\'");
+          return `<div class="opt" tabindex="0" onclick="pickProduct(${i}, this, '${safe}')" onkeydown="if(event.key==='Enter')pickProduct(${i}, this, '${safe}')">
+            <div class="marker"></div>
+            <div class="otext"><div class="oname">${p.name}</div><div class="odesc">${p.desc}</div></div>
+          </div>`;
+        }).join('');
     return `
       <div class="panel" data-i="${i}">
-        <div class="panel-head" onclick="togglePanel(${i})">
-          <div class="ptext"><h3>${obj.title}</h3><p>${obj.sub}</p></div>
-          <div class="chev"></div>
+        <div class="panel-head" tabindex="0" onclick="togglePanel(${i})" onkeydown="if(event.key==='Enter')togglePanel(${i})">
+          <div class="ptext">
+            <h3>${obj.title}</h3>
+            <div class="psub">${obj.sub}</div>
+            <div class="pchosen" id="chosen-${i}"></div>
+          </div>
+          <div class="cross"></div>
         </div>
         <div class="panel-body"><div class="panel-inner">${products}</div></div>
       </div>`;
@@ -752,47 +861,64 @@ function buildAccordion() {
 }
 
 function togglePanel(i) {
-  const panels = document.querySelectorAll('#accordion .panel');
-  panels.forEach(p => {
+  document.querySelectorAll('#accordion .panel').forEach(p => {
     if (+p.dataset.i === i) p.classList.toggle('open');
     else p.classList.remove('open');
   });
 }
 
-function pickProduct(i, el, name) {
-  // clear all product selections everywhere
-  document.querySelectorAll('#accordion .product').forEach(p => p.classList.remove('selected'));
-  document.querySelectorAll('#accordion .panel').forEach(p => p.classList.remove('has-selection'));
-  el.classList.add('selected');
-  document.querySelector(`#accordion .panel[data-i="${i}"]`).classList.add('has-selection');
-  state.objective = OBJECTIVES[path][i].title;
-  state.film_type = name;
-  state.something_else_text = '';
-  setErr('err-objectives','');
+function isSelected(objective, name) {
+  return state.selections.some(s => s.objective === objective && s.name === name);
 }
 
-function onElseInput(i) {
-  document.querySelectorAll('#accordion .product').forEach(p => p.classList.remove('selected'));
-  document.querySelectorAll('#accordion .panel').forEach(p => p.classList.remove('has-selection'));
+function refreshPanelState(i) {
+  const objective = OBJECTIVES[path][i].title;
   const panel = document.querySelector(`#accordion .panel[data-i="${i}"]`);
-  const val = document.getElementById('else-text').value.trim();
-  if (val) {
+  const chosen = document.getElementById('chosen-' + i);
+  const names = state.selections.filter(s => s.objective === objective).map(s => s.name);
+  if (objective === 'Something else' && state.something_else_text) names.push('In your words');
+  if (names.length) {
     panel.classList.add('has-selection');
-    state.objective = OBJECTIVES[path][i].title; // "Something else"
-    state.film_type = 'Something else';
-    state.something_else_text = val;
+    chosen.textContent = names.join('  ·  ');
   } else {
     panel.classList.remove('has-selection');
-    if (state.film_type === 'Something else') { state.film_type = null; state.objective = null; }
-    state.something_else_text = '';
+    chosen.textContent = '';
+  }
+}
+
+function pickProduct(i, el, name) {
+  const objective = OBJECTIVES[path][i].title;
+  const already = isSelected(objective, name);
+
+  if (already) {
+    state.selections = state.selections.filter(s => !(s.objective === objective && s.name === name));
+    el.classList.remove('selected');
+    refreshPanelState(i);
+  } else {
+    state.selections.push({ objective: objective, name: name });
+    el.classList.add('selected');
+    refreshPanelState(i);
+    /* register the choice, then fold the panel back up so the
+       person can continue to the next intention */
+    setTimeout(() => {
+      document.querySelector(`#accordion .panel[data-i="${i}"]`).classList.remove('open');
+    }, 380);
   }
   setErr('err-objectives','');
 }
 
+function onElseInput(i) {
+  state.something_else_text = document.getElementById('else-text').value.trim();
+  refreshPanelState(i);
+  setErr('err-objectives','');
+}
+
 function fromObjectives() {
-  if (!state.film_type) { setErr('err-objectives','Please choose what you are looking to do.'); return; }
-  if (state.film_type === 'Something else' && !state.something_else_text) {
-    setErr('err-objectives','Please tell us what you have in mind.'); return;
+  const hasFilms = state.selections.length > 0;
+  const hasElse = state.something_else_text.length > 0;
+  if (!hasFilms && !hasElse) {
+    setErr('err-objectives','Please choose at least one film, or tell us what you have in mind.');
+    return;
   }
   setErr('err-objectives','');
   go('s-details');
@@ -805,8 +931,6 @@ function extractBudget(raw) {
   if (raw == null) return null;
   let s = String(raw).toLowerCase().trim();
   if (!s) return null;
-
-  // k / mil multiplier  (10k, 10 k, 10mil, 10 mil = 10000)
   const mult = /([\d][\d.,\s]*?)\s*(k|mil)\b/.exec(s);
   if (mult) {
     const base = cleanNumber(mult[1]);
@@ -819,27 +943,25 @@ function extractBudget(raw) {
 function cleanNumber(s) {
   const m = /(\d[\d.,]*)/.exec(String(s));
   if (!m) return null;
-  let t = m[1].replace(/[.,]+$/, ''); // trim trailing separators
+  let t = m[1].replace(/[.,]+$/, '');
   const hasComma = t.includes(',');
   const hasDot = t.includes('.');
 
   if (hasComma && hasDot) {
-    // US style: comma = thousands, dot = decimal
     t = t.replace(/,/g, '');
     return safeFloat(t);
   }
   if (hasComma && !hasDot) {
     const parts = t.split(',');
-    // comma + exactly 2 trailing digits reads as a decimal (pt style); otherwise thousands
     if (parts.length === 2 && parts[1].length === 2) return safeFloat(parts[0] + '.' + parts[1]);
     return safeFloat(t.replace(/,/g, ''));
   }
   if (hasDot && !hasComma) {
     const parts = t.split('.');
     const last = parts[parts.length - 1];
-    if (last.length === 3) return safeFloat(parts.join(''));       // 10.000 = thousands
+    if (last.length === 3) return safeFloat(parts.join(''));
     if (parts.length > 2) { const dec = parts.pop(); return safeFloat(parts.join('') + '.' + dec); }
-    return safeFloat(t);                                            // 10.50 = decimal
+    return safeFloat(t);
   }
   return safeFloat(t);
 }
@@ -862,33 +984,48 @@ async function submitForm() {
   btn.disabled = true;
   btn.innerHTML = 'Sending&hellip;';
 
-  const budgetNum = extractBudget(budgetRaw);           // null if unreadable
+  const budgetNum = extractBudget(budgetRaw);
   const qualifies = budgetNum !== null && budgetNum >= 10000;
 
+  /* Honeypot: humans never see this field. If it has a value, a bot
+     filled it. Show the quiet final screen and never touch the backend. */
+  const hpEl = document.getElementById('company_website');
+  if (hpEl && hpEl.value) { go('s-final-chloe'); return; }
+
+  /* Multi-select: film_type stays a string for backend compatibility
+     (names joined), film_types carries the array, objective carries the
+     distinct intentions. */
+  const filmNames = state.selections.map(s => s.name);
+  if (state.something_else_text) filmNames.push('Something else');
+  const objectives = [...new Set(state.selections.map(s => s.objective))];
+  if (state.something_else_text && !objectives.includes('Something else')) objectives.push('Something else');
+
+  /* NOTE: budget_value and qualifies are sent for convenience only.
+     The server MUST recompute the gate from the raw budget string and
+     re-validate every field. Anything arriving from a browser can be
+     forged; server.js is the single source of truth. */
   const payload = {
     lead_type: state.lead_type,
-    first_name: state.first_name,
-    last_name: state.last_name,
-    email: state.email,
-    phone: state.phone,
-    instagram: state.instagram,
-    // agent
+    first_name: clamp(state.first_name, 80),
+    last_name: clamp(state.last_name, 80),
+    email: clamp(state.email, 254),
+    phone: clamp(state.phone, 40),
+    instagram: clamp(state.instagram, 200),
     calibre: state.calibre,
     years: state.years,
-    // founder
-    industry: state.industry,
+    industry: clamp(state.industry, 200),
     revenue: state.revenue,
     role: state.role,
-    // intent
-    objective: state.objective,
-    film_type: state.film_type,
-    something_else_text: state.something_else_text,
-    // details
-    budget: state.budget,
+    objective: objectives.join(', '),
+    film_type: filmNames.join(', '),
+    film_types: filmNames,
+    something_else_text: clamp(state.something_else_text, 2000),
+    budget: clamp(state.budget, 40),
     budget_value: budgetNum,
     qualifies: qualifies,
     timeline: state.timeline,
-    additional_context: state.additional_context
+    additional_context: clamp(state.additional_context, 2000),
+    elapsed_ms: Date.now() - FORM_LOADED_AT
   };
 
   // Save the lead and fire the email BEFORE showing any final screen.
@@ -899,8 +1036,6 @@ async function submitForm() {
       body: JSON.stringify(payload)
     });
   } catch (e) {
-    // The lead should never be lost from the visitor's side; the backend is
-    // the source of truth. We proceed to the final screen regardless.
     console.error('Lead post failed:', e);
   }
 
@@ -948,7 +1083,7 @@ function initCalendar() {
     layout: "month_view"
   });
   Cal("ui", {
-    styles: { branding: { brandColor: "#A0703F" } },
+    styles: { branding: { brandColor: "#9A6B4E" } },
     hideEventTypeDetails: false
   });
 }
