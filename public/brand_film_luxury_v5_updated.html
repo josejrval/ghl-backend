@@ -585,11 +585,18 @@
     </div>
   </section>
 
-  <!-- FINAL: single confirmation for everyone -->
+  <!-- FINAL: stopped at the gate (below the floor) -->
+  <section class="screen final" id="s-final-low">
+    <div class="seal"><svg viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="#9A6B4E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+    <h1>Thank you for your honesty.</h1>
+    <p class="sub">We appreciate the time you took with this application. If your moment changes, or the right project comes along, write to us at <b style="color:var(--ink);font-weight:600;">chloe@joseoliveirafilms.com</b>. We would be glad to hear from you.</p>
+  </section>
+
+  <!-- FINAL: completed application (confirmed the investment) -->
   <section class="screen final" id="s-final-chloe">
     <div class="seal"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="#9A6B4E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <h1>Your application is in.</h1>
-    <p class="sub">Your application is with us. We will read it with the care it deserves, and reach out by email if there is a fit.</p>
+    <p class="sub">Thank you for your trust. Jose reviews every application personally, and his calendar holds only a few discovery calls each month. If there is a fit, you will hear from us by email shortly to set your time.</p>
   </section>
 
 </div>
@@ -728,6 +735,15 @@ function fromDescribe() {
 /* ============================================================
    SCREEN 3: About you (branched)
    ============================================================ */
+function wireMoney(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', function () {
+    const d = this.value.replace(/\D/g, '').slice(0, 12);
+    this.value = d ? Number(d).toLocaleString('en-US') : '';
+  });
+}
+
 function buildAbout() {
   const kicker = document.getElementById('about-kicker');
   const title = document.getElementById('about-title');
@@ -749,10 +765,13 @@ function buildAbout() {
       </div>
       <div class="group-label">Calibre of properties you list</div>
       <div class="opts compact">${optRows('calibre', ['Under $1M','$1M to $2M','$2M to $5M','$5M to $10M','$10M+'])}</div>
-      <div class="group-label">How much real estate do you sell in a year?</div>
-      <div class="opts compact">${optRows('sales_volume', ['Under $1M','$1M to $5M','$5M to $10M','$10M to $25M','$25M+'])}</div>
+      <div class="field" style="margin-top:26px;">
+        <label>How much real estate do you sell in a year? <span class="optional">(USD)</span></label>
+        <input type="text" id="sales_volume" inputmode="numeric" maxlength="14" autocomplete="off">
+      </div>
       <div class="group-label">Years in the market</div>
       <div class="opts compact">${optRows('years', ['Less than 2 years','2 to 5 years','5 to 10 years','10+ years'])}</div>`;
+    wireMoney('sales_volume');
   } else {
     kicker.textContent = 'Your brand';
     title.textContent = 'Tell us about your brand.';
@@ -807,7 +826,11 @@ function fromAbout() {
 
   if (path === 'agent') {
     if (!state.calibre) { setErr('err-about','Please select the calibre of properties you list.'); return; }
-    if (!state.sales_volume) { setErr('err-about','Please select how much you sell in a year.'); return; }
+    const svEl = document.getElementById('sales_volume');
+    const svDigits = svEl.value.replace(/\D/g, '');
+    if (!svDigits) { svEl.classList.add('error'); setErr('err-about','Please share how much you sell in a year.'); return; }
+    svEl.classList.remove('error');
+    state.sales_volume = Number(svDigits).toLocaleString('en-US');
   } else {
     const indEl = document.getElementById('industry');
     const ind = indEl.value.trim();
@@ -868,10 +891,7 @@ function budgetFloor() { return isIdaho(state.location) ? 5000 : 7000; }
 function budgetRange() { return isIdaho(state.location) ? '$5,000 and $15,000' : '$7,000 and $18,000'; }
 
 // live formatting: digits only, comma-separated
-document.getElementById('budget').addEventListener('input', function () {
-  const d = this.value.replace(/\D/g, '').slice(0, 9);
-  this.value = d ? Number(d).toLocaleString('en-US') : '';
-});
+wireMoney('budget');
 
 function fromBudget() {
   const el = document.getElementById('budget');
@@ -899,7 +919,7 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
 
 function closeLowModal() {
   closeModal('modal-low');
-  go('s-final-chloe');
+  go('s-final-low');
 }
 function closeFitModal() { closeModal('modal-fit'); }
 function confirmFit() {
