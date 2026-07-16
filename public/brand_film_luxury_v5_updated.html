@@ -354,6 +354,80 @@
   }
 
   /* ------------------------------------------------------------
+     Modals: the investment gate pop-ups
+  ------------------------------------------------------------ */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(45,41,38,0.42);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 60;
+    padding: 22px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    max-width: 480px;
+    width: 100%;
+    padding: 44px 42px 38px;
+    text-align: center;
+    box-shadow: 0 34px 90px rgba(45,41,38,0.28);
+    animation: pop 0.4s cubic-bezier(.22,.9,.3,1) both;
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .m-seal {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    border: 1px solid var(--copper);
+    background: var(--tint);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+  }
+  .m-seal svg { width: 22px; height: 22px; }
+  .m-kicker {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--copper);
+    margin-bottom: 12px;
+  }
+  .m-title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .m-body {
+    font-family: var(--garamond);
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--umber);
+    margin-bottom: 30px;
+  }
+  .m-body b { color: var(--ink); font-weight: 600; }
+  .modal .btn-primary { width: 100%; }
+  .modal .btn-back { margin-top: 12px; }
+  @media (max-width: 560px) {
+    .modal { padding: 34px 26px 30px; border-radius: 18px; }
+    .m-title { font-size: 22px; }
+    .m-body { font-size: 17px; }
+  }
+
+  /* ------------------------------------------------------------
      Accessibility, reduced motion, mobile
   ------------------------------------------------------------ */
   .opt:focus-visible,
@@ -472,17 +546,28 @@
     </div>
   </section>
 
-  <!-- SCREEN 5: A few last details -->
+  <!-- SCREEN 5: The investment -->
+  <section class="screen" id="s-budget">
+    <div class="kicker">The investment</div>
+    <h1 class="title">What is your budget for this film?</h1>
+    <p class="lede">We don't do packages. Every film is scoped per project.</p>
+    <div class="field">
+      <label>Your budget <span class="optional">(USD)</span></label>
+      <input type="text" id="budget" inputmode="numeric" maxlength="11" autocomplete="off">
+    </div>
+    <div class="err-msg" id="err-budget"></div>
+    <div class="actions">
+      <button class="btn-primary" onclick="fromBudget()">Continue <span class="arrow">&rarr;</span></button>
+      <button class="btn-back" onclick="go('s-objectives')">&larr;&nbsp;&nbsp;Back</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 6: A few last details -->
   <section class="screen" id="s-details">
     <div class="kicker">Almost there</div>
     <h1 class="title">A few last details.</h1>
     <p class="lede">So we can prepare the right conversation.</p>
-    <div class="field">
-      <label>What is your budget for this video?</label>
-      <input type="text" id="budget" inputmode="numeric" maxlength="40">
-      <p style="font-family:var(--garamond);font-style:italic;font-size:16px;color:var(--umber);margin-top:8px;">We don't do packages. Every film is scoped per project.</p>
-    </div>
-    <div class="group-label">When are you hoping to film?</div>
+    <div class="group-label" style="margin-top:0;">When are you hoping to film?</div>
     <div class="opts compact" id="timeline-opts">
       <div class="opt" tabindex="0" onclick="pickOpt(this,'timeline','Ready to start now')"><div class="marker"></div><div class="otext"><div class="oname">Ready to start now</div></div></div>
       <div class="opt" tabindex="0" onclick="pickOpt(this,'timeline','Within the next month')"><div class="marker"></div><div class="otext"><div class="oname">Within the next month</div></div></div>
@@ -509,6 +594,29 @@
 
 </div>
 
+<!-- MODAL: below $7,000 -->
+<div class="modal-overlay" id="modal-low" role="dialog" aria-modal="true" aria-labelledby="ml-title">
+  <div class="modal">
+    <div class="m-seal"><svg viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="#9A6B4E" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+    <div class="m-kicker">Before we continue</div>
+    <h3 class="m-title" id="ml-title">An honest word.</h3>
+    <p class="m-body">Thank you for being upfront. Jose takes on one film at a time, shaped around your personal brand, scoped between <b id="ml-range">$7,000 and $18,000</b> depending on the film. At this level, we are likely not the right fit today. If the moment changes, we would be glad to hear from you.</p>
+    <button class="btn-primary" onclick="closeLowModal()">Understood</button>
+  </div>
+</div>
+
+<!-- MODAL: $7,000 or above — the confirmation -->
+<div class="modal-overlay" id="modal-fit" role="dialog" aria-modal="true" aria-labelledby="mf-title">
+  <div class="modal">
+    <div class="m-seal"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="#9A6B4E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="m-kicker">The discovery call</div>
+    <h3 class="m-title" id="mf-title">One film at a time.</h3>
+    <p class="m-body">A discovery call with Jose is reserved for those ready to move forward. He takes on one film at a time, and meets only when the investment is already set aside. By continuing, <b>you confirm this investment is available to you now</b>. If it is, we will reach out to set your time.</p>
+    <button class="btn-primary" onclick="confirmFit()">I confirm &mdash; continue <span class="arrow">&rarr;</span></button>
+    <button class="btn-back" onclick="closeFitModal()">Not yet</button>
+  </div>
+</div>
+
 <script>
 /* ============================================================
    CONFIGURATION  (set before deploying)
@@ -521,7 +629,7 @@ const LEAD_ENDPOINT = "/lead";      // full Railway URL if cross-origin
 const state = {
   lead_type: null,
   first_name: "", last_name: "", email: "", phone: "", instagram: "", location: "",
-  calibre: null, years: null,
+  calibre: null, years: null, sales_volume: null,
   industry: "", revenue: null, role: null,
   objective: null,           // single main goal
   something_else_text: "",
@@ -558,7 +666,7 @@ const GOALS = {
 /* ============================================================
    NAVIGATION + PROGRESS
    ============================================================ */
-const STEP_OF = { 's-you':1, 's-describe':2, 's-about':3, 's-objectives':4, 's-details':5 };
+const STEP_OF = { 's-you':1, 's-describe':2, 's-about':3, 's-objectives':4, 's-budget':5, 's-details':6 };
 
 function go(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -567,8 +675,8 @@ function go(id) {
   if (STEP_OF[id]) {
     topbar.classList.remove('done');
     const step = STEP_OF[id];
-    document.getElementById('progressFill').style.width = (step / 5 * 100) + '%';
-    document.getElementById('progressLabel').textContent = step + ' of 5';
+    document.getElementById('progressFill').style.width = (step / 6 * 100) + '%';
+    document.getElementById('progressLabel').textContent = step + ' of 6';
   } else {
     topbar.classList.add('done');
   }
@@ -641,6 +749,8 @@ function buildAbout() {
       </div>
       <div class="group-label">Calibre of properties you list</div>
       <div class="opts compact">${optRows('calibre', ['Under $1M','$1M to $2M','$2M to $5M','$5M to $10M','$10M+'])}</div>
+      <div class="group-label">How much real estate do you sell in a year?</div>
+      <div class="opts compact">${optRows('sales_volume', ['Under $1M','$1M to $5M','$5M to $10M','$10M to $25M','$25M+'])}</div>
       <div class="group-label">Years in the market</div>
       <div class="opts compact">${optRows('years', ['Less than 2 years','2 to 5 years','5 to 10 years','10+ years'])}</div>`;
   } else {
@@ -697,6 +807,7 @@ function fromAbout() {
 
   if (path === 'agent') {
     if (!state.calibre) { setErr('err-about','Please select the calibre of properties you list.'); return; }
+    if (!state.sales_volume) { setErr('err-about','Please select how much you sell in a year.'); return; }
   } else {
     const indEl = document.getElementById('industry');
     const ind = indEl.value.trim();
@@ -740,7 +851,93 @@ function fromObjectives() {
     setErr('err-objectives','Tell us a little about what you have in mind.'); return;
   }
   setErr('err-objectives','');
+  go('s-budget');
+}
+
+/* ============================================================
+   SCREEN 5: THE INVESTMENT GATE ($7,000 floor, thousands only)
+   ============================================================ */
+let coldSent = false;
+
+/* Idaho detection: local clients (no travel cost) get a lower floor and range. */
+function isIdaho(loc) {
+  const s = String(loc || '').toLowerCase();
+  return /\bidaho\b|\bid\b|boise|nampa|meridian|caldwell|eagle\b|coeur d'alene|idaho falls|twin falls|pocatello/.test(s);
+}
+function budgetFloor() { return isIdaho(state.location) ? 5000 : 7000; }
+function budgetRange() { return isIdaho(state.location) ? '$5,000 and $15,000' : '$7,000 and $18,000'; }
+
+// live formatting: digits only, comma-separated
+document.getElementById('budget').addEventListener('input', function () {
+  const d = this.value.replace(/\D/g, '').slice(0, 9);
+  this.value = d ? Number(d).toLocaleString('en-US') : '';
+});
+
+function fromBudget() {
+  const el = document.getElementById('budget');
+  const digits = el.value.replace(/\D/g, '');
+  if (digits.length < 4) {
+    el.classList.add('error');
+    setErr('err-budget', 'Please enter an amount in the thousands.');
+    return;
+  }
+  el.classList.remove('error');
+  setErr('err-budget', '');
+  const n = parseInt(digits, 10);
+  state.budget = n.toLocaleString('en-US');
+  document.getElementById('ml-range').textContent = budgetRange();
+  if (n < budgetFloor()) {
+    openModal('modal-low');
+    sendColdLead();
+  } else {
+    openModal('modal-fit');
+  }
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function closeLowModal() {
+  closeModal('modal-low');
+  go('s-final-chloe');
+}
+function closeFitModal() { closeModal('modal-fit'); }
+function confirmFit() {
+  closeModal('modal-fit');
   go('s-details');
+}
+
+// Below the floor: save the contact anyway (nurture, future course audience).
+async function sendColdLead() {
+  if (coldSent) return;
+  coldSent = true;
+  try {
+    await fetch(LEAD_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        lead_type: state.lead_type,
+        first_name: clamp(state.first_name, 80),
+        last_name: clamp(state.last_name, 80),
+        email: clamp(state.email, 254),
+        phone: clamp(state.phone, 40),
+        instagram: clamp(state.instagram, 200),
+        location: clamp(state.location, 120),
+        calibre: state.calibre,
+        years: state.years,
+        sales_volume: state.sales_volume,
+        industry: clamp(state.industry, 200),
+        revenue: state.revenue,
+        role: state.role,
+        objective: state.objective,
+        something_else_text: clamp(state.something_else_text, 2000),
+        budget: clamp(state.budget, 40),
+        timeline: null,
+        additional_context: 'Stopped at the investment gate (below $7,000).',
+        elapsed_ms: Date.now() - FORM_LOADED_AT
+      })
+    });
+  } catch (e) { console.error('Cold lead post failed:', e); }
 }
 
 /* ============================================================
@@ -790,21 +987,15 @@ function safeFloat(t) { const n = parseFloat(t); return isNaN(n) ? null : n; }
    SCREEN 5 -> SUBMIT
    ============================================================ */
 async function submitForm() {
-  const budgetRaw = document.getElementById('budget').value.trim();
-  if (!budgetRaw) {
-    document.getElementById('budget').classList.add('error');
-    setErr('err-details','Please share a budget.'); return;
-  }
-  document.getElementById('budget').classList.remove('error');
-  state.budget = budgetRaw;
+  if (!state.budget) { go('s-budget'); return; }
   state.additional_context = document.getElementById('additional_context').value.trim();
 
   const btn = document.getElementById('btn-send');
   btn.disabled = true;
   btn.innerHTML = 'Sending&hellip;';
 
-  const budgetNum = extractBudget(budgetRaw);
-  const qualifies = budgetNum !== null && budgetNum >= 10000;
+  const budgetNum = extractBudget(state.budget);
+  const qualifies = budgetNum !== null && budgetNum >= budgetFloor();
 
   /* Honeypot: humans never see this field. */
   const hpEl = document.getElementById('company_website');
@@ -822,6 +1013,7 @@ async function submitForm() {
     location: clamp(state.location, 120),
     calibre: state.calibre,
     years: state.years,
+    sales_volume: state.sales_volume,
     industry: clamp(state.industry, 200),
     revenue: state.revenue,
     role: state.role,
