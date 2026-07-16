@@ -265,14 +265,16 @@ async function sendEmail(subject, html) {
 }
 
 // monta o assunto: "Marcus, Miami — 🔥 Hot lead ($10,000) - 🏠 Agent"
+//              ou: "Marcus, Miami — 🚫 Disqualified ($4,000) - 🏠 Agent"
 function buildSubject(d, budgetNum) {
-  const t = tier(budgetNum, gateFor(d));
+  const qualifies = budgetNum !== null && budgetNum >= gateFor(d);
+  const statusLabel = qualifies ? '🔥 Hot lead' : '🚫 Disqualified';
   const isFounder = (d.lead_type || '').toLowerCase().indexOf('founder') !== -1;
   const typeEmoji = isFounder ? '🎬' : '🏠';
   const typeWord = isFounder ? 'Founder' : 'Agent';
   const name = d.first_name || 'novo lead';
   const city = d.location ? `, ${d.location}` : '';
-  return `${name}${city} — ${t.name} (${money(budgetNum, d.budget)}) - ${typeEmoji} ${typeWord}`;
+  return `${name}${city} — ${statusLabel} (${money(budgetNum, d.budget)}) - ${typeEmoji} ${typeWord}`;
 }
 
 // ---------- rotas ----------
