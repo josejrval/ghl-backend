@@ -230,7 +230,7 @@ async function sendEmail(subject, html) {
     const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
       from: 'Leads <onboarding@resend.dev>',
-      to: 'chloe@joseoliveirafilms.com',
+      to: ['chloe@joseoliveirafilms.com', 'contact@joseoliveirafilms.com'],
       subject,
       html
     });
