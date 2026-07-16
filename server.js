@@ -226,17 +226,31 @@ function bookedEmail(d) {
 }
 
 async function sendEmail(subject, html) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const RECIPIENTS = ['chloe@joseoliveirafilms.com', 'contact@joseoliveirafilms.com'];
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    await resend.emails.send({
+    const r = await resend.emails.send({
       from: 'Leads <onboarding@resend.dev>',
-      to: ['chloe@joseoliveirafilms.com', 'contact@joseoliveirafilms.com'],
+      to: RECIPIENTS,
       subject,
       html
     });
-    console.log('📩 Email enviado via Resend:', subject);
+    if (r && r.error) throw new Error(r.error.message || JSON.stringify(r.error));
+    console.log('📩 Email enviado via Resend (2 destinatários):', subject);
   } catch (err) {
-    console.log('❌ Erro Resend:', err.message);
+    console.log('⚠️ Falhou com 2 destinatários (' + err.message + ') — tentando só Chloe');
+    try {
+      const r2 = await resend.emails.send({
+        from: 'Leads <onboarding@resend.dev>',
+        to: 'chloe@joseoliveirafilms.com',
+        subject,
+        html
+      });
+      if (r2 && r2.error) throw new Error(r2.error.message || JSON.stringify(r2.error));
+      console.log('📩 Email enviado via Resend (só Chloe):', subject);
+    } catch (err2) {
+      console.log('❌ Erro Resend:', err2.message);
+    }
   }
 }
 
