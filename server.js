@@ -36,7 +36,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 // GATE — recalculado no servidor (nunca confiar no navegador)
 // Mesma lógica robusta do form: trata "10k", "10,000", "10.000", "$10k".
 // ============================================================
-const GATE_THRESHOLD = 10000;
+const GATE_THRESHOLD = 7000;
+const GATE_THRESHOLD_IDAHO = 5000;
+
+// Idaho clients (no travel cost) have a lower floor
+function isIdaho(loc) {
+  const s = String(loc || '').toLowerCase();
+  return /\bidaho\b|\bid\b|boise|nampa|meridian|caldwell|eagle\b|coeur d'alene|idaho falls|twin falls|pocatello/.test(s);
+}
+function gateFor(d) { return isIdaho(d && d.location) ? GATE_THRESHOLD_IDAHO : GATE_THRESHOLD; }
 
 function extractBudget(raw) {
   if (raw == null) return null;
@@ -82,9 +90,10 @@ function esc(v) {
 }
 
 // temperatura: 🔥 se qualifica (>= $10k), senão frio. Sem número → frio.
-function tier(budgetNum) {
-  if (budgetNum !== null && budgetNum >= GATE_THRESHOLD) {
-    return { name: '🔥 Hot lead', note: 'Priority · calendar shown', bg: '#EAF3DE', fg: '#3B6D11' };
+function tier(budgetNum, threshold) {
+  const thr = threshold || GATE_THRESHOLD;
+  if (budgetNum !== null && budgetNum >= thr) {
+    return { name: '🔥 Hot lead', note: 'Priority', bg: '#EAF3DE', fg: '#3B6D11' };
   }
   return { name: '❄️ Cool lead', note: 'For Chloe · follow-up', bg: '#F1EFE8', fg: '#5F5E5A' };
 }
@@ -128,7 +137,7 @@ function emailShell(subtitle, innerHtml) {
 
 // Email 1 — Novo lead
 function newLeadEmail(d, budgetNum) {
-  const t = tier(budgetNum);
+  const t = tier(budgetNum, gateFor(d));
   const fullName = `${esc(d.first_name)} ${esc(d.last_name)}`.trim();
   const isFounder = (d.lead_type || '').toLowerCase().indexOf('founder') !== -1;
 
@@ -149,6 +158,7 @@ function newLeadEmail(d, budgetNum) {
     : `${sectionLabel('Their market')}
        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
          ${row('Property calibre', d.calibre)}
+         ${row('Annual sales volume', d.sales_volume)}
          ${row('Years in market', d.years)}
        </table>`;
 
@@ -256,7 +266,7 @@ async function sendEmail(subject, html) {
 
 // monta o assunto: "Marcus, Miami — 🔥 Hot lead ($10,000) - 🏠 Agent"
 function buildSubject(d, budgetNum) {
-  const t = tier(budgetNum);
+  const t = tier(budgetNum, gateFor(d));
   const isFounder = (d.lead_type || '').toLowerCase().indexOf('founder') !== -1;
   const typeEmoji = isFounder ? '🎬' : '🏠';
   const typeWord = isFounder ? 'Founder' : 'Agent';
@@ -283,7 +293,7 @@ app.post('/lead', async (req, res) => {
 
   // Gate recalculado no servidor (não confia no que veio do navegador).
   const budgetNum = extractBudget(d.budget);
-  const qualifies = budgetNum !== null && budgetNum >= GATE_THRESHOLD;
+  const qualifies = budgetNum !== null && budgetNum >= gateFor(d);
 
   console.log('🔥 NOVO LEAD:', d.first_name, d.last_name, '·', d.location || '—', '·', d.budget || '—', '→', qualifies ? 'HOT (calendário)' : 'para Chloe');
 
