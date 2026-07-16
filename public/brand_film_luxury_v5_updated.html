@@ -245,98 +245,6 @@
   }
   .opts.compact .opt.selected .oname { color: var(--copper-dk); font-weight: 500; }
 
-  /* ------------------------------------------------------------
-     Accordion: multi-select, auto-collapse after each pick
-  ------------------------------------------------------------ */
-  .panel {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    margin-bottom: 12px;
-    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
-  }
-  .panel:hover { background: var(--tint-hover); border-color: #D8CFBF; }
-  .panel.open { border-color: var(--copper); background: var(--card); }
-  .panel.has-selection {
-    border-color: var(--copper);
-    box-shadow: inset 0 0 0 1px var(--copper);
-  }
-  .panel-head {
-    padding: 22px 24px;
-    cursor: pointer;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 18px;
-  }
-  .panel-head .ptext { flex: 1; }
-  .panel-head h3 {
-    font-family: var(--serif);
-    font-weight: 400;
-    font-size: 21px;
-    line-height: 1.2;
-    transition: color 0.2s;
-  }
-  .panel.open .panel-head h3 { color: var(--copper-dk); }
-  .panel-head .psub {
-    font-family: var(--garamond);
-    font-style: italic;
-    font-size: 17px;
-    color: var(--umber);
-    margin-top: 3px;
-  }
-  .panel-head .pchosen {
-    display: none;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--copper);
-    margin-top: 10px;
-    line-height: 1.7;
-  }
-  .panel.has-selection .panel-head .pchosen { display: block; }
-  .cross {
-    flex-shrink: 0;
-    position: relative;
-    width: 14px; height: 14px;
-    margin-top: 7px;
-  }
-  .cross::before, .cross::after {
-    content: "";
-    position: absolute;
-    background: var(--copper);
-    transition: transform 0.32s cubic-bezier(.25,.8,.25,1), opacity 0.28s;
-  }
-  .cross::before { left: 0; top: 6.5px; width: 14px; height: 1px; }
-  .cross::after  { left: 6.5px; top: 0; width: 1px; height: 14px; }
-  .panel.open .cross::after { transform: rotate(90deg); opacity: 0; }
-
-  .panel-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.45s cubic-bezier(.25,.8,.25,1);
-  }
-  .panel.open .panel-body { max-height: 1000px; }
-  .panel-inner { padding: 0 24px 22px; }
-  .panel-inner .opt {
-    background: #FBF9F5;
-    padding: 15px 18px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-  }
-  .panel-inner .opt:hover { background: var(--tint-hover); }
-  .panel-inner .opt:last-child { margin-bottom: 0; }
-  .panel-inner .opt.selected { background: var(--tint); }
-  .panel-inner .opt .oname { font-size: 18px; }
-  .panel-inner .opt .odesc { font-size: 16px; }
-  .hint {
-    font-family: var(--garamond);
-    font-style: italic;
-    font-size: 16px;
-    color: var(--whisper);
-    margin: -22px 0 26px;
-  }
   .else-field { padding-top: 4px; }
 
   /* ------------------------------------------------------------
@@ -437,7 +345,6 @@
     font-size: 25px;
     margin-bottom: 8px;
   }
-  #cal-inline { width: 100%; min-height: 560px; margin-top: 26px; }
   .held-note {
     font-family: var(--garamond);
     font-style: italic;
@@ -449,7 +356,7 @@
   /* ------------------------------------------------------------
      Accessibility, reduced motion, mobile
   ------------------------------------------------------------ */
-  .opt:focus-visible, .panel-head:focus-visible,
+  .opt:focus-visible,
   .btn-primary:focus-visible, .btn-back:focus-visible {
     outline: 1.5px solid var(--copper);
     outline-offset: 3px;
@@ -463,7 +370,6 @@
     h1.title { font-size: 27px; }
     .lede { font-size: 18px; margin-bottom: 30px; }
     .row { flex-direction: column; gap: 0; }
-    .panel-inner { padding: 0 18px 18px; }
   }
 </style>
 </head>
@@ -553,13 +459,12 @@
     </div>
   </section>
 
-  <!-- SCREEN 4: What are you looking to do? (multi-select accordion) -->
+  <!-- SCREEN 4: Main goal (single select, no products) -->
   <section class="screen" id="s-objectives">
     <div class="kicker">Your intention</div>
-    <h1 class="title">What are you looking to do?</h1>
-    <p class="lede">Open an intention, choose the film within it.</p>
-    <p class="hint">You may choose more than one.</p>
-    <div class="accordion" id="accordion"></div>
+    <h1 class="title">What would we create for you?</h1>
+    <p class="lede">Choose one. We shape it around you on our call.</p>
+    <div class="opts" id="goals"></div>
     <div class="err-msg" id="err-objectives"></div>
     <div class="actions">
       <button class="btn-primary" onclick="fromObjectives()">Continue <span class="arrow">&rarr;</span></button>
@@ -573,8 +478,9 @@
     <h1 class="title">A few last details.</h1>
     <p class="lede">So we can prepare the right conversation.</p>
     <div class="field">
-      <label>What is your budget?</label>
-      <input type="text" id="budget" inputmode="numeric" placeholder="10,000" maxlength="40">
+      <label>What is your budget for this video?</label>
+      <input type="text" id="budget" inputmode="numeric" maxlength="40">
+      <p style="font-family:var(--garamond);font-style:italic;font-size:16px;color:var(--umber);margin-top:8px;">We don't do packages. Every film is scoped per project.</p>
     </div>
     <div class="group-label">When are you hoping to film?</div>
     <div class="opts compact" id="timeline-opts">
@@ -594,19 +500,7 @@
     </div>
   </section>
 
-  <!-- FINAL A: Scheduling (budget >= 10k) -->
-  <section class="screen final" id="s-final-schedule">
-    <div class="seal"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="#9A6B4E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <h1>Your application is in.</h1>
-    <p class="sub">Thank you. One last step.</p>
-    <div class="divider"></div>
-    <h2>Choose your time</h2>
-    <p class="sub">Your application is complete once you pick a time below.</p>
-    <div id="cal-inline"></div>
-    <p class="held-note">Your time is held privately until Jose confirms it.</p>
-  </section>
-
-  <!-- FINAL B: Message to Chloe (budget < 10k) -->
+  <!-- FINAL: single confirmation for everyone -->
   <section class="screen final" id="s-final-chloe">
     <div class="seal"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="#9A6B4E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <h1>Your application is in.</h1>
@@ -620,7 +514,6 @@
    CONFIGURATION  (set before deploying)
    ============================================================ */
 const LEAD_ENDPOINT = "/lead";      // full Railway URL if cross-origin
-const CAL_LINK = "jose-oliveira-ehscu6/discovery-call-with-jose-oliveira";
 
 /* ============================================================
    STATE
@@ -630,7 +523,7 @@ const state = {
   first_name: "", last_name: "", email: "", phone: "", instagram: "", location: "",
   calibre: null, years: null,
   industry: "", revenue: null, role: null,
-  selections: [],            // [{objective, name}] - multi-select
+  objective: null,           // single main goal
   something_else_text: "",
   budget: "",
   timeline: null,
@@ -639,49 +532,26 @@ const state = {
 let path = null; // 'agent' | 'founder'
 
 /* Security: timing signal for bot detection (server rejects sub-3s fills)
-   and a hard cap on every string leaving the browser, so a tampered DOM
-   (maxlength removed via devtools) still cannot ship oversized payloads. */
+   and a hard cap on every string leaving the browser. */
 const FORM_LOADED_AT = Date.now();
 function clamp(v, max) { return String(v == null ? '' : v).trim().slice(0, max); }
 
 /* ============================================================
-   OBJECTIVES + PRODUCTS
+   MAIN GOALS (no product names — the right film is Jose's call)
    ============================================================ */
-const OBJECTIVES = {
+const GOALS = {
   agent: [
-    { title:'Sell a specific property', sub:'Make a listing impossible to ignore.', products:[
-      {name:'The Listing Film', desc:'A single property, shown as an experience.'},
-      {name:'The Just Sold Video', desc:'The story behind the sale.'},
-      {name:'The Lifestyle Video', desc:'The city, the way you sell it.'}
-    ]},
-    { title:'Build my personal brand', sub:'Become the name your market remembers.', products:[
-      {name:'Classic Bio Realtor Video', desc:'A short film your personal brand is built around. Who you are, what you stand for, and why a client trusts you before you ever meet.'},
-      {name:'The Talking Head', desc:'You, speaking to your market directly.'},
-      {name:'The Lifestyle Video', desc:'The city, the way you sell it.'}
-    ]},
-    { title:'Tell my story', sub:'Show the person behind the listings.', products:[
-      {name:'The Realtor Documentary', desc:"Your story, told with depth. The life behind the name, and a client's own words."},
-      {name:'The Case Study Film', desc:'A result told as a story, with your client as the hero.'}
-    ]},
-    { title:'Show up all year', sub:'Cinematic presence, every listing.', products:[
-      {name:'The Listing Coverage Program', desc:'Across listings, all year.'}
-    ]},
-    { title:'Something else', sub:'Tell us what you have in mind.', products:[], isElse:true }
+    { title:'The Cinematic Listing Film', sub:'Capturing the style and sophistication of luxury homes. A cinema-quality film that captivates buyers, accelerates showings, and elevates your brand with every listing.' },
+    { title:'The Real Estate Agent Bio Film', sub:'Who you are, what you stand for, and why clients trust you. A cinematic introduction that builds trust before the first meeting, wins listing presentations, and anchors your personal brand.' },
+    { title:'The Realtor Documentary', sub:'Your journey, told with documentary depth. A film that turns years of quiet work into visible stature, and makes your market feel they already know you.' },
+    { title:'Something else', sub:'A different vision. Tell us what you have in mind, and we will shape the film around it.', isElse:true }
   ],
   founder: [
-    { title:'Show my company', sub:'Settle a first impression on its own.', products:[
-      {name:'Brand Video Production', desc:'Your company and the standard behind it.'}
-    ]},
-    { title:'Tell my story', sub:'The story that makes people believe.', products:[
-      {name:'The One Episode Documentary', desc:'One episode: founder, brand, or client journey.'}
-    ]},
-    { title:'Document a development', sub:'Vision, becoming real.', products:[
-      {name:'The Property Development Documentary', desc:'Your development, followed as it rises. Presence and permanence, before the doors open.'}
-    ]},
-    { title:'The complete story', sub:'Trust, built across three chapters.', products:[
-      {name:'The Signature Documentary Series', desc:'Three connected chapters: founder, brand, client. The flagship.'}
-    ]},
-    { title:'Something else', sub:'Tell us what you have in mind.', products:[], isElse:true }
+    { title:'The Brand Film', sub:'Your company and the standard behind it. A cinema-quality film that settles first impressions, anchors your homepage, and opens every meeting for you.' },
+    { title:'The Founder Documentary', sub:'The story that makes people believe. One episode with real narrative depth: your history, your vision, and a real voice that vouches for it.' },
+    { title:'The Development Documentary', sub:'Your project, witnessed as it rises. Stage-by-stage coverage that builds anticipation, reassures investors, and sells before the doors open.' },
+    { title:'The Signature Documentary Series', sub:'The complete story, across three connected chapters: founder, brand, and client. Trust built episode by episode, and impossible to imitate.' },
+    { title:'Something else', sub:'A different vision. Tell us what you have in mind.', isElse:true }
   ]
 };
 
@@ -741,9 +611,9 @@ function pickType(t) {
 function fromDescribe() {
   if (!path) { setErr('err-describe','Please choose one.'); return; }
   state.lead_type = path === 'agent' ? 'Real estate agent' : 'Founder or brand';
-  state.selections = []; state.something_else_text = '';
+  state.objective = null; state.something_else_text = '';
   buildAbout();
-  buildAccordion();
+  buildGoals();
   go('s-about');
 }
 
@@ -839,100 +709,35 @@ function fromAbout() {
 }
 
 /* ============================================================
-   SCREEN 4: Multi-select accordion
-   Selecting a film registers it, then the panel folds back up
-   so the person can open the next intention. Click again to
-   deselect. Selections stay visible on each closed panel.
+   SCREEN 4: Main goal — single select, no product names.
+   "Something else" reveals a text field.
    ============================================================ */
-function buildAccordion() {
-  const acc = document.getElementById('accordion');
-  const list = OBJECTIVES[path];
-  acc.innerHTML = list.map((obj, i) => {
-    const products = obj.isElse
-      ? `<div class="else-field field">
-           <textarea id="else-text" placeholder="Tell us what you have in mind." maxlength="2000" oninput="onElseInput(${i})"></textarea>
-         </div>`
-      : obj.products.map(p => {
-          const safe = p.name.replace(/'/g, "\\'");
-          return `<div class="opt" tabindex="0" onclick="pickProduct(${i}, this, '${safe}')" onkeydown="if(event.key==='Enter')pickProduct(${i}, this, '${safe}')">
-            <div class="marker"></div>
-            <div class="otext"><div class="oname">${p.name}</div><div class="odesc">${p.desc}</div></div>
-          </div>`;
-        }).join('');
-    return `
-      <div class="panel" data-i="${i}">
-        <div class="panel-head" tabindex="0" onclick="togglePanel(${i})" onkeydown="if(event.key==='Enter')togglePanel(${i})">
-          <div class="ptext">
-            <h3>${obj.title}</h3>
-            <div class="psub">${obj.sub}</div>
-            <div class="pchosen" id="chosen-${i}"></div>
-          </div>
-          <div class="cross"></div>
-        </div>
-        <div class="panel-body"><div class="panel-inner">${products}</div></div>
-      </div>`;
-  }).join('');
+function buildGoals() {
+  const wrap = document.getElementById('goals');
+  wrap.innerHTML = GOALS[path].map((g, i) => `
+    <div class="opt" id="goal-${i}" tabindex="0" onclick="pickGoal(${i})" onkeydown="if(event.key==='Enter')pickGoal(${i})">
+      <div class="marker"></div>
+      <div class="otext"><div class="oname">${g.title}</div><div class="odesc">${g.sub}</div></div>
+    </div>`).join('') + `
+    <div class="field else-field" id="else-wrap" style="display:none;margin-top:6px;">
+      <textarea id="else-text" placeholder="Tell us what you have in mind." maxlength="2000" oninput="state.something_else_text=this.value.trim()"></textarea>
+    </div>`;
 }
 
-function togglePanel(i) {
-  document.querySelectorAll('#accordion .panel').forEach(p => {
-    if (+p.dataset.i === i) p.classList.toggle('open');
-    else p.classList.remove('open');
-  });
-}
-
-function isSelected(objective, name) {
-  return state.selections.some(s => s.objective === objective && s.name === name);
-}
-
-function refreshPanelState(i) {
-  const objective = OBJECTIVES[path][i].title;
-  const panel = document.querySelector(`#accordion .panel[data-i="${i}"]`);
-  const chosen = document.getElementById('chosen-' + i);
-  const names = state.selections.filter(s => s.objective === objective).map(s => s.name);
-  if (objective === 'Something else' && state.something_else_text) names.push('In your words');
-  if (names.length) {
-    panel.classList.add('has-selection');
-    chosen.textContent = names.join('  ·  ');
-  } else {
-    panel.classList.remove('has-selection');
-    chosen.textContent = '';
-  }
-}
-
-function pickProduct(i, el, name) {
-  const objective = OBJECTIVES[path][i].title;
-  const already = isSelected(objective, name);
-
-  if (already) {
-    state.selections = state.selections.filter(s => !(s.objective === objective && s.name === name));
-    el.classList.remove('selected');
-    refreshPanelState(i);
-  } else {
-    state.selections.push({ objective: objective, name: name });
-    el.classList.add('selected');
-    refreshPanelState(i);
-    /* register the choice, then fold the panel back up so the
-       person can continue to the next intention */
-    setTimeout(() => {
-      document.querySelector(`#accordion .panel[data-i="${i}"]`).classList.remove('open');
-    }, 380);
-  }
-  setErr('err-objectives','');
-}
-
-function onElseInput(i) {
-  state.something_else_text = document.getElementById('else-text').value.trim();
-  refreshPanelState(i);
+function pickGoal(i) {
+  const g = GOALS[path][i];
+  state.objective = g.title;
+  document.querySelectorAll('#goals .opt').forEach((o, idx) => o.classList.toggle('selected', idx === i));
+  const elseWrap = document.getElementById('else-wrap');
+  elseWrap.style.display = g.isElse ? 'block' : 'none';
+  if (!g.isElse) { state.something_else_text = ''; const t = document.getElementById('else-text'); if (t) t.value = ''; }
   setErr('err-objectives','');
 }
 
 function fromObjectives() {
-  const hasFilms = state.selections.length > 0;
-  const hasElse = state.something_else_text.length > 0;
-  if (!hasFilms && !hasElse) {
-    setErr('err-objectives','Please choose at least one film, or tell us what you have in mind.');
-    return;
+  if (!state.objective) { setErr('err-objectives','Please choose your main goal.'); return; }
+  if (state.objective === 'Something else' && !state.something_else_text) {
+    setErr('err-objectives','Tell us a little about what you have in mind.'); return;
   }
   setErr('err-objectives','');
   go('s-details');
@@ -1001,23 +806,12 @@ async function submitForm() {
   const budgetNum = extractBudget(budgetRaw);
   const qualifies = budgetNum !== null && budgetNum >= 10000;
 
-  /* Honeypot: humans never see this field. If it has a value, a bot
-     filled it. Show the quiet final screen and never touch the backend. */
+  /* Honeypot: humans never see this field. */
   const hpEl = document.getElementById('company_website');
   if (hpEl && hpEl.value) { go('s-final-chloe'); return; }
 
-  /* Multi-select: film_type stays a string for backend compatibility
-     (names joined), film_types carries the array, objective carries the
-     distinct intentions. */
-  const filmNames = state.selections.map(s => s.name);
-  if (state.something_else_text) filmNames.push('Something else');
-  const objectives = [...new Set(state.selections.map(s => s.objective))];
-  if (state.something_else_text && !objectives.includes('Something else')) objectives.push('Something else');
-
   /* NOTE: budget_value and qualifies are sent for convenience only.
-     The server MUST recompute the gate from the raw budget string and
-     re-validate every field. Anything arriving from a browser can be
-     forged; server.js is the single source of truth. */
+     The server MUST recompute the gate from the raw budget string. */
   const payload = {
     lead_type: state.lead_type,
     first_name: clamp(state.first_name, 80),
@@ -1031,9 +825,9 @@ async function submitForm() {
     industry: clamp(state.industry, 200),
     revenue: state.revenue,
     role: state.role,
-    objective: objectives.join(', '),
-    film_type: filmNames.join(', '),
-    film_types: filmNames,
+    objective: state.objective,
+    film_type: '',
+    film_types: [],
     something_else_text: clamp(state.something_else_text, 2000),
     budget: clamp(state.budget, 40),
     budget_value: budgetNum,
@@ -1054,53 +848,7 @@ async function submitForm() {
     console.error('Lead post failed:', e);
   }
 
-  if (qualifies) {
-    go('s-final-schedule');
-    initCalendar();
-  } else {
-    go('s-final-chloe');
-  }
-}
-
-/* ============================================================
-   CAL.COM EMBED
-   ============================================================ */
-let calLoaded = false;
-function initCalendar() {
-  if (calLoaded) return;
-  calLoaded = true;
-  (function (C, A, L) {
-    let p = function (a, ar) { a.q.push(ar); };
-    let d = C.document;
-    C.Cal = C.Cal || function () {
-      let cal = C.Cal; let ar = arguments;
-      if (!cal.loaded) {
-        cal.ns = {}; cal.q = cal.q || [];
-        d.head.appendChild(d.createElement("script")).src = A;
-        cal.loaded = true;
-      }
-      if (ar[0] === L) {
-        const api = function () { p(api, arguments); };
-        const namespace = ar[1];
-        api.q = api.q || [];
-        if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); }
-        else p(cal, ar);
-        return;
-      }
-      p(cal, ar);
-    };
-  })(window, "https://app.cal.com/embed/embed.js", "init");
-
-  Cal("init", { origin: "https://cal.com" });
-  Cal("inline", {
-    elementOrSelector: "#cal-inline",
-    calLink: CAL_LINK,
-    layout: "month_view"
-  });
-  Cal("ui", {
-    styles: { branding: { brandColor: "#9A6B4E" } },
-    hideEventTypeDetails: false
-  });
+  go('s-final-chloe');
 }
 </script>
 </body>
